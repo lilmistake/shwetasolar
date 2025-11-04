@@ -1,0 +1,77 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9-y1boR4qmtbI7zOabT0XEqWJqPkPdUY.jpg",
+      "caption": "Everything is better when it's green. Driving India's solar leap forward.",
+      "date": "Oct 17, 2024",
+      "postUrl": "https://www.instagram.com/p/DP5wehUgaWY"
+    },
+    {
+      "id": "2",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8-iJmCQJ81gqJTJft07NN54Tha5czJfc.jpg",
+      "caption": "TOPCon Technology: The next leap in solar efficiency.",
+      "date": "Sep 28, 2024",
+      "postUrl": "https://www.instagram.com/p/DQGHztkAVuM"
+    },
+    {
+      "id": "3",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/123-clG7huDn8guSKDMbDeyd7NO1jrbeby.jpg",
+      "caption": "Non-violence shows its power in action — so does solar, silently fueling change.",
+      "date": "Oct 2, 2024",
+      "postUrl": "https://www.instagram.com/p/DPTRHJlgeVc"
+    },
+    {
+      "id": "4",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/16-14JGmxuxooRuk3K2fgnKpcuZGJbpB9.jpg",
+      "caption": "Wishing you and your family a life filled with happiness, tranquility, and countless blessings.",
+      "date": "Oct 23, 2024",
+      "postUrl": "https://www.instagram.com/p/DPS6HKAAVOl"
+    },
+    {
+      "id": "5",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6-W3wBr4Bjf0ixsULTQmgrZmwj10D0q3.jpg",
+      "caption": "Built on values. Driven by trust.",
+      "date": "Sep 19, 2024",
+      "postUrl": "https://www.instagram.com/p/DPIe-0sCH6F"
+    },
+    {
+      "id": "6",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7-T2oOOcghLYvLeHUlCgirCNPVpCr1dE.jpg",
+      "caption": "1.2 GW POWER CLEAN FUTURE BUILT IN INDIA",
+      "date": "Sep 23, 2024",
+      "postUrl": "https://www.instagram.com/p/DO7gIcuDPnG"
+    },
+    {
+      "id": "7",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/12-IrNzA4lQRSoyL0udt9n72FXEQjwZgt.jpg",
+      "caption": "This Dussehra, let light win over darkness with clean, powerful solar energy.",
+      "date": "Oct 2, 2024",
+      "postUrl": "https://www.instagram.com/p/DO2eBmWgWaL"
+    },
+    {
+      "id": "8",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/10-vkknzR6m9hCenmapPSol5DBZU9zb1o.jpg",
+      "caption": "Honor innovation this Vishwakarma Puja with solar energy driving a brighter tomorrow.",
+      "date": "Sep 17, 2024",
+      "postUrl": "https://www.instagram.com/p/DOxs6Oxgc9Y"
+    },
+    {
+      "id": "9",
+      "platform": "instagram",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/11-tR6Cu76SDzCOijV0sM9gq9JmRq1BgB.jpg",
+      "caption": "Go solar, go emission-free — make every day Zero Emissions Day.",
+      "date": "Sep 21, 2024",
+      "postUrl": "https://www.instagram.com/p/DOsoLytExpb"
+    }
+  ],
+  "lastUpdated": "2025-01-04T00:00:00.000Z"
+}

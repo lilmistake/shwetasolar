@@ -1,0 +1,21 @@
+{
+  "name": "Shweta Solar - Leading Solar Panel Manufacturer",
+  "short_name": "Shweta Solar",
+  "description": "High-efficiency Mono PERC, TopCon, and HJT solar panels for India's renewable energy future",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFDF2",
+  "theme_color": "#004636",
+  "icons": [
+    {
+      "src": "/images/logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "/images/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}
