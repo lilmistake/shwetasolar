@@ -8,8 +8,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Lock, Mail } from "lucide-react"
+
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (callback: () => void) => void
+      execute: (siteKey: string, options: { action: string }) => Promise<string>
+    }
+  }
+}
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("")
@@ -18,20 +27,51 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  useEffect(() => {
+    const script = document.createElement("script")
+    script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
-    // Check if email is admin@shwetasolar.in
     if (email !== "admin@shwetasolar.in") {
-      setError("Only admin@shwetasolar.in can access the admin dashboard")
+      setError("Invalid credentials")
       setIsLoading(false)
       return
     }
 
     try {
+      const token = await new Promise<string>((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!, { action: "login" })
+            .then(resolve)
+            .catch(reject)
+        })
+      })
+
+      const verifyResponse = await fetch("/api/verify-recaptcha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      })
+
+      const verifyData = await verifyResponse.json()
+
+      if (!verifyData.success) {
+        throw new Error("reCAPTCHA verification failed")
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -39,7 +79,6 @@ export default function AdminLoginPage() {
 
       if (error) throw error
 
-      // Redirect to dashboard on success
       router.push("/admin/dashboard")
       router.refresh()
     } catch (error: unknown) {
@@ -69,7 +108,7 @@ export default function AdminLoginPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="admin@shwetasolar.in"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
@@ -99,10 +138,6 @@ export default function AdminLoginPage() {
               <Button type="submit" className="w-full" disabled={isLoading} size="lg">
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
-
-              <p className="text-xs text-center text-muted-foreground">
-                Only admin@shwetasolar.in can access the admin dashboard
-              </p>
             </form>
           </CardContent>
         </Card>
