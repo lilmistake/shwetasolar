@@ -29,8 +29,12 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Check if accessing admin routes
-  if (request.nextUrl.pathname.startsWith("/admin")) {
+  const isAdminRoute = request.nextUrl.pathname.startsWith("/admin")
+  const isLoginPage = request.nextUrl.pathname === "/admin/login"
+  const isUnauthorizedPage = request.nextUrl.pathname === "/admin/unauthorized"
+
+  // Check if accessing admin routes (but not login or unauthorized pages)
+  if (isAdminRoute && !isLoginPage && !isUnauthorizedPage) {
     // If not logged in, redirect to admin login
     if (!user) {
       const url = request.nextUrl.clone()
@@ -44,6 +48,12 @@ export async function updateSession(request: NextRequest) {
       url.pathname = "/admin/unauthorized"
       return NextResponse.redirect(url)
     }
+  }
+
+  if (isLoginPage && user && user.email === "admin@shwetasolar.in") {
+    const url = request.nextUrl.clone()
+    url.pathname = "/admin/dashboard"
+    return NextResponse.redirect(url)
   }
 
   return supabaseResponse
