@@ -7,45 +7,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Lock, Mail } from "lucide-react"
-
-declare global {
-  interface Window {
-    grecaptcha: {
-      ready: (callback: () => void) => void
-      execute: (siteKey: string, options: { action: string }) => Promise<string>
-    }
-  }
-}
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [recaptchaSiteKey, setRecaptchaSiteKey] = useState<string>("")
   const router = useRouter()
-
-  useEffect(() => {
-    fetch("/api/recaptcha-site-key")
-      .then((res) => res.json())
-      .then((data) => setRecaptchaSiteKey(data.siteKey))
-      .catch(console.error)
-  }, [])
-
-  useEffect(() => {
-    if (!recaptchaSiteKey) return
-
-    const script = document.createElement("script")
-    script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`
-    script.async = true
-    document.body.appendChild(script)
-
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [recaptchaSiteKey])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,24 +30,6 @@ export function LoginForm() {
     }
 
     try {
-      const token = await new Promise<string>((resolve, reject) => {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(recaptchaSiteKey, { action: "login" }).then(resolve).catch(reject)
-        })
-      })
-
-      const verifyResponse = await fetch("/api/verify-recaptcha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      })
-
-      const verifyData = await verifyResponse.json()
-
-      if (!verifyData.success) {
-        throw new Error("reCAPTCHA verification failed")
-      }
-
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
