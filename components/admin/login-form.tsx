@@ -19,16 +19,20 @@ declare global {
   }
 }
 
-interface LoginFormProps {
-  recaptchaSiteKey: string
-}
-
-export function LoginForm({ recaptchaSiteKey }: LoginFormProps) {
+export function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [recaptchaSiteKey, setRecaptchaSiteKey] = useState<string>("")
   const router = useRouter()
+
+  useEffect(() => {
+    fetch("/api/recaptcha-site-key")
+      .then((res) => res.json())
+      .then((data) => setRecaptchaSiteKey(data.siteKey))
+      .catch(console.error)
+  }, [])
 
   useEffect(() => {
     if (!recaptchaSiteKey) return
