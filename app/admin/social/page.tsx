@@ -2,10 +2,18 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, ExternalLink, Edit } from "lucide-react"
+import { Plus, ExternalLink, Edit, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { DeleteSocialPostButton } from "@/components/admin/delete-social-post-button"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function AdminSocialPage() {
   const supabase = await createClient()
@@ -26,17 +34,39 @@ export default async function AdminSocialPage() {
 
   return (
     <div className="container mx-auto p-6 md:p-10">
+      <div className="mb-6">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/admin/dashboard">Admin</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Social Media</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Social Media Posts</h1>
           <p className="text-muted-foreground mt-1">Manage Instagram posts and social content</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/social/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Post
-          </Link>
-        </Button>
+        <div className="flex gap-3">
+          <Button asChild>
+            <Link href="/admin/social/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Post
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/admin/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {error && (

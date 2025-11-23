@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { LayoutDashboard, Users, FileText, ImageIcon, LogOut } from "lucide-react"
+import { LayoutDashboard, Users, FileText, ImageIcon, LogOut, ExternalLink, Database } from "lucide-react"
 import Link from "next/link"
 
 export default async function AdminDashboardPage() {
@@ -26,12 +26,24 @@ export default async function AdminDashboardPage() {
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
             <p className="text-muted-foreground mt-1">Welcome back, {user.email}</p>
           </div>
-          <form action="/api/auth/signout" method="post">
-            <Button variant="outline" type="submit">
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
+          <div className="flex items-center gap-3">
+            <Button variant="outline" asChild>
+              <Link href="https://cdn.shwetasolar.in/" target="_blank" rel="noopener noreferrer">
+                <Database className="mr-2 h-4 w-4" />
+                CDN
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
-          </form>
+            <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
+              View Site
+            </Link>
+            <form action="/api/auth/signout" method="post">
+              <Button variant="outline" type="submit">
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
+            </form>
+          </div>
         </div>
 
         {/* Dashboard Cards */}

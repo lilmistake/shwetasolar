@@ -2,9 +2,17 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, ExternalLink, Edit } from "lucide-react"
+import { Plus, ExternalLink, Edit, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { DeleteNewsButton } from "@/components/admin/delete-news-button"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 export default async function AdminNewsPage() {
   const supabase = await createClient()
@@ -24,17 +32,39 @@ export default async function AdminNewsPage() {
 
   return (
     <div className="container mx-auto p-6 md:p-10">
+      <div className="mb-6">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/admin/dashboard">Admin</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>News Articles</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">News Articles</h1>
           <p className="text-muted-foreground mt-1">Manage news coverage and press releases</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/news/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Article
-          </Link>
-        </Button>
+        <div className="flex gap-3">
+          <Button asChild>
+            <Link href="/admin/news/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Article
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/admin/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {error && (

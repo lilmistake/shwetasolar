@@ -1,6 +1,5 @@
-import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { AlbumForm } from "@/components/admin/album-form"
+import { createClient } from "@/lib/supabase/server"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,20 +8,22 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { BlogForm } from "@/components/admin/blog-form"
 
-export default async function NewAlbumPage() {
+export default async function NewBlogPage() {
   const supabase = await createClient()
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser()
 
-  if (!user || user.email !== "admin@shwetasolar.in") {
+  if (error || !user || user.email !== "admin@shwetasolar.in") {
     redirect("/admin/login")
   }
 
   return (
-    <div className="container mx-auto p-6 md:p-10 max-w-3xl">
+    <div className="container mx-auto p-6 md:p-10">
       <div className="mb-6">
         <Breadcrumb>
           <BreadcrumbList>
@@ -31,22 +32,19 @@ export default async function NewAlbumPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/admin/gallery">Event Albums</BreadcrumbLink>
+              <BreadcrumbLink href="/admin/blogs">Blog Posts</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>New Album</BreadcrumbPage>
+              <BreadcrumbPage>New Post</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Add Event Album</h1>
-        <p className="text-muted-foreground mt-1">Create a new photo album</p>
-      </div>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Create New Blog Post</h1>
 
-      <AlbumForm />
+      <BlogForm />
     </div>
   )
 }
