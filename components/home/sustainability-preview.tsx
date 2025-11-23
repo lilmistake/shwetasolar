@@ -22,7 +22,7 @@ export function SustainabilityPreview() {
           alt="Sustainability"
           fill
           className="object-cover"
-          priority={false}
+          priority={true}
           sizes="100vw"
         />
       </div>

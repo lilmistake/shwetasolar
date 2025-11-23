@@ -140,6 +140,18 @@
     color: var(--color-foreground);
     @apply bg-background text-foreground;
   }
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  * {
+    box-sizing: border-box;
+  }
 }
 
 h1,
