@@ -19,7 +19,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 pt-20">
       <main>{children}</main>
     </div>
   )

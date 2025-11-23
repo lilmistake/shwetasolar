@@ -12,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { DeleteContactButton } from "@/components/admin/delete-contact-button"
 
 export default async function ContactSubmissionsPage() {
   const supabase = await createClient()
@@ -98,6 +99,7 @@ export default async function ContactSubmissionsPage() {
                         </a>
                       </Button>
                     )}
+                    <DeleteContactButton id={submission.id} />
                   </div>
                 </div>
               </CardHeader>
