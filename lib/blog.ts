@@ -109,25 +109,32 @@ export async function getBlogCategories(): Promise<string[]> {
 export async function getAllBlogPostsStatic(): Promise<BlogPost[]> {
   const supabase = createStaticClient()
 
-  const { data, error } = await supabase.from("solar_blogs").select("*").order("published_date", { ascending: false })
+  const { data, error } = await supabase
+    .from("solar_blogs")
+    .select("*")
+    .not("slug", "is", null) // Exclude posts without slugs
+    .not("published_date", "is", null) // Exclude posts without dates
+    .order("published_date", { ascending: false })
 
   if (error) {
-    console.error("Error fetching blog posts:", error)
+    console.error("Error fetching blog posts for sitemap:", error)
     return []
   }
 
-  return data.map((post) => ({
-    id: post.id,
-    title: post.title,
-    slug: post.slug,
-    excerpt: post.excerpt,
-    content: post.content,
-    image: post.image,
-    category: post.category,
-    readTime: post.read_time,
-    publishedDate: post.published_date,
-    keyTakeaways: post.key_takeaways, // Map key takeaways from database
-  }))
+  return data
+    .filter((post) => post.slug && post.title && post.published_date) // Double-check required fields
+    .map((post) => ({
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      image: post.image,
+      category: post.category,
+      readTime: post.read_time,
+      publishedDate: post.published_date,
+      keyTakeaways: post.key_takeaways,
+    }))
 }
 
 export async function getRecentPosts(limit = 5): Promise<BlogPost[]> {

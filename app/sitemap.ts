@@ -5,15 +5,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://shwetasolar.in"
 
   // Get all blog posts for dynamic routes
-  const blogPosts = await getAllBlogPostsStatic()
-  const blogUrls = blogPosts
-    .filter((post) => post.publishedDate) // Filter out posts without dates
-    .map((post) => ({
-      url: `${baseUrl}/newsroom/blog/${post.slug}`,
-      lastModified: new Date(post.publishedDate),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }))
+  let blogUrls: MetadataRoute.Sitemap = []
+  try {
+    const blogPosts = await getAllBlogPostsStatic()
+    blogUrls = blogPosts
+      .filter((post) => post.publishedDate && post.slug) // Ensure both date and slug exist
+      .map((post) => ({
+        url: `${baseUrl}/newsroom/blog/${post.slug}`,
+        lastModified: new Date(post.publishedDate),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      }))
+  } catch (error) {
+    console.error("Error generating blog URLs for sitemap:", error)
+    // Return empty array if error occurs to prevent sitemap generation failure
+    blogUrls = []
+  }
 
   return [
     {
