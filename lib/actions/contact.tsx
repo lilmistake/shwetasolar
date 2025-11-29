@@ -15,10 +15,36 @@ interface ContactFormData {
   product?: string
   quantity?: string
   message: string
+  recaptchaToken?: string
 }
 
 export async function submitContactForm(data: ContactFormData) {
   try {
+    if (data.recaptchaToken) {
+      const verifyResponse = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${data.recaptchaToken}`,
+      })
+
+      const verifyData = await verifyResponse.json()
+
+      if (!verifyData.success || verifyData.score < 0.5) {
+        console.error("reCAPTCHA verification failed:", verifyData)
+        return {
+          success: false,
+          error: "reCAPTCHA verification failed. Please try again.",
+        }
+      }
+    } else {
+      return {
+        success: false,
+        error: "Please complete the reCAPTCHA verification.",
+      }
+    }
+
     const supabase = createClient()
 
     // Store in database

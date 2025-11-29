@@ -90,11 +90,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Site keys are meant to be public and visible in client-side code
+  const recaptchaSiteKey = "6Lde6uorAAAAAJp3jMWTOndLVqJ6k1BgXjOmJSJq"
+
   return (
     <html lang="en" className={poppins.variable}>
       <head>
         <link rel="preload" as="image" href="/images/solar-hero.jpg" />
         <link rel="preload" as="image" href="/images/logo.webp" />
+        <Script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`} strategy="lazyOnload" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
