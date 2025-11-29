@@ -91,7 +91,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || ""
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""
 
   return (
     <html lang="en" className={poppins.variable}>
