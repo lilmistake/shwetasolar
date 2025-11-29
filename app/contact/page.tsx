@@ -11,7 +11,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MapPin, Clock, MessageCircle, Building2, Users, Package } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { useRecaptcha } from "@/lib/hooks/use-recaptcha" // Added reCAPTCHA hook
 
 const inquiryTypes = [
   { id: "product", label: "Product Inquiry", icon: Package },
@@ -25,7 +24,6 @@ export default function ContactPage() {
   const [selectedInquiry, setSelectedInquiry] = useState<string>("")
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { executeRecaptcha } = useRecaptcha() // Initialize reCAPTCHA hook
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -35,8 +33,6 @@ export default function ContactPage() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    const recaptchaToken = await executeRecaptcha("contact_form")
-
     const data = {
       name: `${formData.get("firstName")} ${formData.get("lastName")}`,
       email: formData.get("email") as string,
@@ -45,7 +41,6 @@ export default function ContactPage() {
       inquiryType: selectedInquiry,
       subject: formData.get("subject") as string,
       message: formData.get("message") as string,
-      recaptchaToken: recaptchaToken || undefined, // Include reCAPTCHA token
     }
 
     const result = await submitContactForm(data)

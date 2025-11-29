@@ -10,13 +10,11 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MessageSquare } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { useRecaptcha } from "@/lib/hooks/use-recaptcha" // Added reCAPTCHA hook
 
 export function EnquirySection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { executeRecaptcha } = useRecaptcha() // Initialize reCAPTCHA hook
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -26,15 +24,12 @@ export function EnquirySection() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    const recaptchaToken = await executeRecaptcha("enquiry_form")
-
     const data = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       phone: formData.get("phone") as string,
       message: formData.get("message") as string,
       inquiryType: "general",
-      recaptchaToken: recaptchaToken || undefined, // Include reCAPTCHA token
     }
 
     const result = await submitContactForm(data)

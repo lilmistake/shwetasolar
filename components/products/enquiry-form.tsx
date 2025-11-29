@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { useRecaptcha } from "@/lib/hooks/use-recaptcha" // Added reCAPTCHA hook
 
 interface EnquiryFormProps {
   productName: string
@@ -20,7 +19,6 @@ export function EnquiryForm({ productName, onSuccess }: EnquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { executeRecaptcha } = useRecaptcha() // Initialize reCAPTCHA hook
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -29,8 +27,6 @@ export function EnquiryForm({ productName, onSuccess }: EnquiryFormProps) {
 
     const form = e.currentTarget
     const formData = new FormData(form)
-
-    const recaptchaToken = await executeRecaptcha("product_enquiry")
 
     const data = {
       name: formData.get("name") as string,
@@ -41,7 +37,6 @@ export function EnquiryForm({ productName, onSuccess }: EnquiryFormProps) {
       quantity: formData.get("quantity") as string,
       message: formData.get("message") as string,
       inquiryType: "product",
-      recaptchaToken: recaptchaToken || undefined, // Include reCAPTCHA token
     }
 
     const result = await submitContactForm(data)

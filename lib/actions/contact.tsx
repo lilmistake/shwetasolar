@@ -5,39 +5,6 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-async function verifyRecaptcha(token: string): Promise<boolean> {
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY
-
-  if (!secretKey) {
-    console.error("reCAPTCHA secret key is not configured")
-    return false
-  }
-
-  try {
-    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `secret=${secretKey}&response=${token}`,
-    })
-
-    const data = await response.json()
-
-    // For reCAPTCHA v3, check the score (0.0 - 1.0)
-    // Score > 0.5 is generally considered human
-    if (data.success && data.score >= 0.5) {
-      return true
-    }
-
-    console.error("reCAPTCHA verification failed:", data)
-    return false
-  } catch (error) {
-    console.error("reCAPTCHA verification error:", error)
-    return false
-  }
-}
-
 interface ContactFormData {
   name: string
   email: string
@@ -48,21 +15,10 @@ interface ContactFormData {
   product?: string
   quantity?: string
   message: string
-  recaptchaToken?: string // Added recaptcha token field
 }
 
 export async function submitContactForm(data: ContactFormData) {
   try {
-    if (data.recaptchaToken) {
-      const isHuman = await verifyRecaptcha(data.recaptchaToken)
-      if (!isHuman) {
-        return {
-          success: false,
-          error: "reCAPTCHA verification failed. Please try again.",
-        }
-      }
-    }
-
     const supabase = createClient()
 
     // Store in database
