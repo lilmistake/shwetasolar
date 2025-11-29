@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server"
 
 export async function GET() {
-  const siteKey = process.env.RECAPTCHA_SITE_KEY
-
-  if (!siteKey) {
-    return NextResponse.json({ error: "reCAPTCHA not configured" }, { status: 500 })
-  }
+  // This is safe because site keys are designed to be public
+  const siteKey = "6Lde6uorAAAAAJp3jMWTOndLVqJ6k1BgXjOmJSJq"
 
   return NextResponse.json({ siteKey })
 }
