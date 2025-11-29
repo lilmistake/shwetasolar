@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,23 +10,53 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MessageSquare } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { useRecaptcha } from "@/lib/hooks/use-recaptcha" // Added reCAPTCHA hook
 
 export function EnquirySection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { executeRecaptcha } = useRecaptcha() // Initialize reCAPTCHA hook
+  const [recaptchaReady, setRecaptchaReady] = useState(false)
+
+  useEffect(() => {
+    const loadRecaptcha = async () => {
+      try {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+
+        if (!siteKey) return
+
+        const script = document.createElement("script")
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+        script.async = true
+        script.defer = true
+        script.onload = () => setRecaptchaReady(true)
+        document.head.appendChild(script)
+      } catch (error) {
+        console.error("[v0] Failed to load reCAPTCHA:", error)
+      }
+    }
+
+    loadRecaptcha()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
 
+    let recaptchaToken = ""
+    if (recaptchaReady && window.grecaptcha) {
+      try {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" })
+      } catch (err) {
+        console.error("[v0] reCAPTCHA execution failed:", err)
+      }
+    }
+
     const form = e.currentTarget
     const formData = new FormData(form)
-
-    const recaptchaToken = await executeRecaptcha("enquiry_form")
 
     const data = {
       name: formData.get("name") as string,
@@ -34,7 +64,7 @@ export function EnquirySection() {
       phone: formData.get("phone") as string,
       message: formData.get("message") as string,
       inquiryType: "general",
-      recaptchaToken: recaptchaToken || undefined, // Include reCAPTCHA token
+      recaptchaToken,
     }
 
     const result = await submitContactForm(data)

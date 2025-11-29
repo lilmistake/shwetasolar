@@ -8,7 +8,6 @@ import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { NavigationLoader } from "@/components/navigation-loader"
 import { Suspense } from "react"
-import { RecaptchaProvider } from "@/lib/contexts/recaptcha-context"
 import Script from "next/script"
 
 const poppins = Poppins({
@@ -91,16 +90,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || ""
-
   return (
     <html lang="en" className={poppins.variable}>
       <head>
         <link rel="preload" as="image" href="/images/solar-hero.jpg" />
         <link rel="preload" as="image" href="/images/logo.webp" />
-        {recaptchaSiteKey && (
-          <script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`} async defer />
-        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -163,18 +157,16 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <RecaptchaProvider siteKey={recaptchaSiteKey}>
-          <Suspense fallback={null}>
-            <NavigationLoader />
-          </Suspense>
-          <ScrollToTop />
-          <Navigation />
-          <main id="main-content" className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
-          <WhatsAppFloat />
-        </RecaptchaProvider>
+        <Suspense fallback={null}>
+          <NavigationLoader />
+        </Suspense>
+        <ScrollToTop />
+        <Navigation />
+        <main id="main-content" className="min-h-screen">
+          {children}
+        </main>
+        <Footer />
+        <WhatsAppFloat />
       </body>
     </html>
   )

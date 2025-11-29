@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +11,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MapPin, Clock, MessageCircle, Building2, Users, Package } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { useRecaptcha } from "@/lib/hooks/use-recaptcha" // Added reCAPTCHA hook
 
 const inquiryTypes = [
   { id: "product", label: "Product Inquiry", icon: Package },
@@ -25,17 +24,58 @@ export default function ContactPage() {
   const [selectedInquiry, setSelectedInquiry] = useState<string>("")
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { executeRecaptcha } = useRecaptcha() // Initialize reCAPTCHA hook
+  const [recaptchaReady, setRecaptchaReady] = useState(false)
+
+  useEffect(() => {
+    const loadRecaptcha = async () => {
+      try {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+
+        if (!siteKey) {
+          console.error("[v0] reCAPTCHA site key not available")
+          return
+        }
+
+        // Load reCAPTCHA script
+        const script = document.createElement("script")
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+        script.async = true
+        script.defer = true
+        script.onload = () => {
+          setRecaptchaReady(true)
+          console.log("[v0] reCAPTCHA loaded successfully")
+        }
+        document.head.appendChild(script)
+      } catch (error) {
+        console.error("[v0] Failed to load reCAPTCHA:", error)
+      }
+    }
+
+    loadRecaptcha()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
 
+    let recaptchaToken = ""
+    if (recaptchaReady && window.grecaptcha) {
+      try {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" })
+      } catch (err) {
+        console.error("[v0] reCAPTCHA execution failed:", err)
+        setError("Please try again. Security verification failed.")
+        setIsSubmitting(false)
+        return
+      }
+    }
+
     const form = e.currentTarget
     const formData = new FormData(form)
-
-    const recaptchaToken = await executeRecaptcha("contact_form")
 
     const data = {
       name: `${formData.get("firstName")} ${formData.get("lastName")}`,
@@ -45,7 +85,7 @@ export default function ContactPage() {
       inquiryType: selectedInquiry,
       subject: formData.get("subject") as string,
       message: formData.get("message") as string,
-      recaptchaToken: recaptchaToken || undefined, // Include reCAPTCHA token
+      recaptchaToken,
     }
 
     const result = await submitContactForm(data)

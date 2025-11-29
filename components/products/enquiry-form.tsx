@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { useRecaptcha } from "@/lib/hooks/use-recaptcha" // Added reCAPTCHA hook
 
 interface EnquiryFormProps {
   productName: string
@@ -20,17 +19,48 @@ export function EnquiryForm({ productName, onSuccess }: EnquiryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { executeRecaptcha } = useRecaptcha() // Initialize reCAPTCHA hook
+  const [recaptchaReady, setRecaptchaReady] = useState(false)
+
+  useEffect(() => {
+    const loadRecaptcha = async () => {
+      try {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+
+        if (!siteKey) return
+
+        const script = document.createElement("script")
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+        script.async = true
+        script.defer = true
+        script.onload = () => setRecaptchaReady(true)
+        document.head.appendChild(script)
+      } catch (error) {
+        console.error("[v0] Failed to load reCAPTCHA:", error)
+      }
+    }
+
+    loadRecaptcha()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
 
+    let recaptchaToken = ""
+    if (recaptchaReady && window.grecaptcha) {
+      try {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" })
+      } catch (err) {
+        console.error("[v0] reCAPTCHA execution failed:", err)
+      }
+    }
+
     const form = e.currentTarget
     const formData = new FormData(form)
-
-    const recaptchaToken = await executeRecaptcha("product_enquiry")
 
     const data = {
       name: formData.get("name") as string,
@@ -41,7 +71,7 @@ export function EnquiryForm({ productName, onSuccess }: EnquiryFormProps) {
       quantity: formData.get("quantity") as string,
       message: formData.get("message") as string,
       inquiryType: "product",
-      recaptchaToken: recaptchaToken || undefined, // Include reCAPTCHA token
+      recaptchaToken,
     }
 
     const result = await submitContactForm(data)
