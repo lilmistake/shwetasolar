@@ -18,30 +18,38 @@ interface ContactFormData {
   recaptchaToken?: string
 }
 
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  if (!token) return false
+
+  try {
+    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+    })
+
+    const data = await response.json()
+
+    // reCAPTCHA v3 returns a score from 0.0 to 1.0
+    // Consider scores above 0.5 as legitimate
+    return data.success && data.score >= 0.5
+  } catch (error) {
+    console.error("[v0] reCAPTCHA verification failed:", error)
+    return false
+  }
+}
+
 export async function submitContactForm(data: ContactFormData) {
   try {
     if (data.recaptchaToken) {
-      const verifyResponse = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${data.recaptchaToken}`,
-      })
-
-      const verifyData = await verifyResponse.json()
-
-      if (!verifyData.success || verifyData.score < 0.5) {
-        console.error("reCAPTCHA verification failed:", verifyData)
+      const isValid = await verifyRecaptcha(data.recaptchaToken)
+      if (!isValid) {
         return {
           success: false,
-          error: "reCAPTCHA verification failed. Please try again.",
+          error: "Security verification failed. Please try again.",
         }
-      }
-    } else {
-      return {
-        success: false,
-        error: "Please complete the reCAPTCHA verification.",
       }
     }
 
