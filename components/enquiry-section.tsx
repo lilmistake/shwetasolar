@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MessageSquare } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
+import { RECAPTCHA_SITE_KEY } from "@/lib/config/recaptcha"
 
 export function EnquirySection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -18,18 +19,16 @@ export function EnquirySection() {
   const [recaptchaReady, setRecaptchaReady] = useState(false)
 
   useEffect(() => {
-    const loadRecaptcha = async () => {
+    const loadRecaptcha = () => {
       try {
-        const response = await fetch("/api/recaptcha-config")
-        const { siteKey } = await response.json()
-
-        if (!siteKey) return
+        if (!RECAPTCHA_SITE_KEY) return
 
         const script = document.createElement("script")
-        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+        script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
         script.async = true
         script.defer = true
         script.onload = () => setRecaptchaReady(true)
+        script.onerror = () => console.error("[v0] Failed to load reCAPTCHA script")
         document.head.appendChild(script)
       } catch (error) {
         console.error("[v0] Failed to load reCAPTCHA:", error)
@@ -47,9 +46,7 @@ export function EnquirySection() {
     let recaptchaToken = ""
     if (recaptchaReady && window.grecaptcha) {
       try {
-        const response = await fetch("/api/recaptcha-config")
-        const { siteKey } = await response.json()
-        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" })
+        recaptchaToken = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "submit" })
       } catch (err) {
         console.error("[v0] reCAPTCHA execution failed:", err)
       }

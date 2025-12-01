@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server"
+import { RECAPTCHA_SITE_KEY } from "@/lib/config/recaptcha"
 
 export async function GET() {
-  // This is safe because site keys are designed to be public
-  const siteKey = "6Lde6uorAAAAAJp3jMWTOndLVqJ6k1BgXjOmJSJq"
-
-  return NextResponse.json({ siteKey })
+  return NextResponse.json({ siteKey: RECAPTCHA_SITE_KEY })
 }
