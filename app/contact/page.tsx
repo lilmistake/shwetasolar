@@ -60,6 +60,9 @@ export default function ContactPage() {
     setIsSubmitting(true)
     setError(null)
 
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
     let recaptchaToken = ""
     if (recaptchaReady && window.grecaptcha) {
       try {
@@ -73,9 +76,6 @@ export default function ContactPage() {
         return
       }
     }
-
-    const form = e.currentTarget
-    const formData = new FormData(form)
 
     const data = {
       name: `${formData.get("firstName")} ${formData.get("lastName")}`,
