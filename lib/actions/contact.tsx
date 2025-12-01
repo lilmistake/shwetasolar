@@ -22,12 +22,14 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
   if (!token) return false
 
   try {
+    const secretKey = "6Lde6uorAAAAAJp3jMWTOndLVqJ6k1BgXjOmJSJq"
+
     const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+      body: `secret=${secretKey}&response=${token}`,
     })
 
     const data = await response.json()

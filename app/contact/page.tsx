@@ -11,7 +11,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MapPin, Clock, MessageCircle, Building2, Users, Package } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
-import { RECAPTCHA_SITE_KEY } from "@/lib/config/recaptcha"
 
 const inquiryTypes = [
   { id: "product", label: "Product Inquiry", icon: Package },
@@ -28,24 +27,24 @@ export default function ContactPage() {
   const [recaptchaReady, setRecaptchaReady] = useState(false)
 
   useEffect(() => {
-    const loadRecaptcha = () => {
+    const loadRecaptcha = async () => {
       try {
-        if (!RECAPTCHA_SITE_KEY) {
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+
+        if (!siteKey) {
           console.error("[v0] reCAPTCHA site key not available")
           return
         }
 
         // Load reCAPTCHA script
         const script = document.createElement("script")
-        script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
         script.async = true
         script.defer = true
         script.onload = () => {
           setRecaptchaReady(true)
           console.log("[v0] reCAPTCHA loaded successfully")
-        }
-        script.onerror = () => {
-          console.error("[v0] Failed to load reCAPTCHA script")
         }
         document.head.appendChild(script)
       } catch (error) {
@@ -64,7 +63,9 @@ export default function ContactPage() {
     let recaptchaToken = ""
     if (recaptchaReady && window.grecaptcha) {
       try {
-        recaptchaToken = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "submit" })
+        const response = await fetch("/api/recaptcha-config")
+        const { siteKey } = await response.json()
+        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" })
       } catch (err) {
         console.error("[v0] reCAPTCHA execution failed:", err)
         setError("Please try again. Security verification failed.")

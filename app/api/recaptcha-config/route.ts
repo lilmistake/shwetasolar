@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
-import { RECAPTCHA_SITE_KEY } from "@/lib/config/recaptcha"
 
 export async function GET() {
-  return NextResponse.json({ siteKey: RECAPTCHA_SITE_KEY })
+  const siteKey = "6Lde6uorAAAAAB_fwxNOcTembn96Nov2AkIzJvNU"
+
+  return NextResponse.json({ siteKey })
 }
