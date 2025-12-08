@@ -161,4 +161,4 @@ Every Shweta Solar panel you install is a vote for sustainable manufacturing. To
 *Learn more about our [sustainability initiatives](/sustainability) or [visit our facility](/contact).*
 \`\`\`
 
-```json file="" isHidden
+\`\`\`json file="" isHidden
