@@ -34,6 +34,8 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 
     const data = await response.json()
 
+    console.log("[v0] reCAPTCHA verification response:", data)
+
     // reCAPTCHA v3 returns a score from 0.0 to 1.0
     // Consider scores above 0.5 as legitimate
     return data.success && data.score >= 0.5
@@ -45,8 +47,14 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
 
 export async function submitContactForm(data: ContactFormData) {
   try {
+    console.log("[v0] Starting form submission with data:", {
+      ...data,
+      recaptchaToken: data.recaptchaToken ? "present" : "missing",
+    })
+
     if (data.recaptchaToken) {
       const isValid = await verifyRecaptcha(data.recaptchaToken)
+      console.log("[v0] reCAPTCHA validation result:", isValid)
       if (!isValid) {
         return {
           success: false,
@@ -55,7 +63,8 @@ export async function submitContactForm(data: ContactFormData) {
       }
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
+    console.log("[v0] Supabase client created")
 
     // Store in database
     const { error: dbError } = await supabase.from("contact_submissions").insert({
@@ -70,15 +79,18 @@ export async function submitContactForm(data: ContactFormData) {
     })
 
     if (dbError) {
-      console.error("Database error:", dbError)
+      console.error("[v0] Database error:", dbError)
       return {
         success: false,
         error: "Failed to save your enquiry. Please try again.",
       }
     }
 
+    console.log("[v0] Data saved to database successfully")
+
     // Send email notification using Resend
     try {
+      console.log("[v0] Attempting to send email notification")
       await resend.emails.send({
         from: "Shweta Solar <onboarding@resend.dev>",
         to: "rasinrohit@gmail.com",
@@ -97,15 +109,19 @@ export async function submitContactForm(data: ContactFormData) {
           <p>${data.message}</p>
         `,
       })
+      console.log("[v0] Email sent successfully")
     } catch (emailError) {
-      console.error("Email sending failed:", emailError)
+      console.error("[v0] Email sending failed:", emailError)
       // Don't fail the entire operation if email fails
       // The data is already saved in the database
     }
 
+    console.log("[v0] Form submission completed successfully")
     return { success: true }
   } catch (error) {
-    console.error("Form submission error:", error)
+    console.error("[v0] Form submission error:", error)
+    console.error("[v0] Error details:", error instanceof Error ? error.message : String(error))
+    console.error("[v0] Error stack:", error instanceof Error ? error.stack : "No stack trace")
     return {
       success: false,
       error: "An unexpected error occurred. Please try again.",
