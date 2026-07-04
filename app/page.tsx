@@ -14,7 +14,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Shweta Solar - Leading Solar Panel Manufacturer in India",
   description:
-    "Shweta Solar manufactures high-efficiency Mono PERC, TopCon, and HJT solar panels. Powering India's renewable energy future with sustainable solar solutions.",
+    "Shweta Solar manufactures high-efficiency Mono PERC and TopCon solar panels. Powering India's renewable energy future with sustainable solar solutions from our 1.2 GW facility.",
   openGraph: {
     title: "Shweta Solar - Leading Solar Panel Manufacturer in India",
     description: "High-efficiency solar panels for India's renewable energy future",

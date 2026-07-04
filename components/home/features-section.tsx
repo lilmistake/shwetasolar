@@ -7,22 +7,22 @@ const features = [
   {
     icon: Zap,
     title: "High Efficiency",
-    description: "Industry-leading efficiency ratings with our advanced TopCon and HJT technology.",
+    description: "Industry-leading efficiency ratings with our advanced Mono PERC and TopCon technology.",
   },
   {
     icon: Shield,
     title: "Proven Reliability",
-    description: "25+ year performance warranty backed by rigorous quality testing.",
+    description: "25+ year performance warranty backed by rigorous quality testing at every stage.",
   },
   {
     icon: Leaf,
     title: "Sustainable Manufacturing",
-    description: "Eco-friendly production processes minimizing environmental impact.",
+    description: "Eco-friendly production processes that minimise environmental impact throughout.",
   },
   {
     icon: TrendingUp,
     title: "Future-Ready",
-    description: "Cutting-edge technology preparing India for tomorrow's energy needs.",
+    description: "Cutting-edge technology preparing India for tomorrow's energy demands today.",
   },
 ]
 
@@ -33,46 +33,43 @@ export function FeaturesSection() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
+        if (entry.isIntersecting) setIsVisible(true)
       },
       { threshold: 0.1 },
     )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-20 bg-card">
+    <section ref={sectionRef} className="py-20 bg-white border-b border-border">
       <div className="container mx-auto px-4">
         <div
-          className={`text-center mb-16 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+          className={`text-center mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
         >
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">Why Shweta Solar?</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
+          <p className="text-olive text-sm tracking-widest uppercase font-sans mb-3">Why Shweta Solar</p>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-4">
+            Built for India&apos;s Energy Future
+          </h2>
+          <p className="text-lg text-olive max-w-2xl mx-auto text-pretty font-sans">
             Advanced solar technology combined with decades of manufacturing excellence
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-border">
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className={`text-center transition-all duration-1000 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              className={`bg-white p-8 flex flex-col gap-4 transition-all duration-700 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
-              style={{ transitionDelay: `${index * 150}ms` }}
+              style={{ transitionDelay: `${index * 120}ms` }}
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                <feature.icon className="h-8 w-8 text-primary" />
+              <div className="w-12 h-12 rounded-lg bg-forest/8 flex items-center justify-center">
+                <feature.icon className="h-6 w-6 text-forest" />
               </div>
-              <h3 className="font-display text-xl font-semibold text-foreground mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground text-pretty">{feature.description}</p>
+              <h3 className="font-display text-xl font-semibold text-forest">{feature.title}</h3>
+              <p className="text-olive text-sm leading-relaxed font-sans">{feature.description}</p>
             </div>
           ))}
         </div>

@@ -2,14 +2,13 @@
 
 import { motion } from "framer-motion"
 import { Zap, Shield, Leaf, TrendingUp } from "lucide-react"
-import { Card } from "@/components/ui/card"
 
 const technologies = [
   {
     icon: Zap,
     title: "Advanced Cell Technology",
     description:
-      "Utilizing cutting-edge Mono PERC, TopCon, and HJT technologies for maximum efficiency and performance.",
+      "Utilising cutting-edge Mono PERC and TopCon technologies for maximum efficiency and performance in all conditions.",
   },
   {
     icon: Shield,
@@ -20,7 +19,7 @@ const technologies = [
     icon: Leaf,
     title: "Sustainable Manufacturing",
     description:
-      "Eco-friendly production processes that minimize environmental impact while maximizing output quality.",
+      "Eco-friendly production processes that minimise environmental impact while maximising output quality.",
   },
   {
     icon: TrendingUp,
@@ -31,36 +30,43 @@ const technologies = [
 
 export function TechnologySection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[#f5f5f0]">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <h2 className="font-display text-4xl md:text-6xl font-bold text-forest mb-6">Cutting-Edge Technology</h2>
-          <p className="text-xl text-olive max-w-3xl mx-auto">
-            Innovation at every layer, from cell to module, ensuring superior performance and longevity
-          </p>
+          <p className="text-olive text-sm tracking-widest uppercase font-sans mb-3">Engineering</p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest max-w-xl text-balance">
+              Cutting-Edge Technology
+            </h2>
+            <p className="text-olive max-w-sm font-sans text-pretty">
+              Innovation at every layer — from cell to module — ensuring superior performance and longevity.
+            </p>
+          </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Horizontal divider */}
+        <div className="w-full h-px bg-forest/10 mb-0" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-x divide-y md:divide-y-0 divide-forest/10 border-b border-forest/10">
           {technologies.map((tech, index) => (
             <motion.div
               key={tech.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
+              className="p-8 flex flex-col gap-4 bg-[#f5f5f0] hover:bg-white transition-colors duration-300"
             >
-              <Card className="p-8 h-full hover:shadow-xl transition-all border-sage/20 bg-cream/50">
-                <div className="w-16 h-16 rounded-full bg-forest/10 flex items-center justify-center mb-6">
-                  <tech.icon className="h-8 w-8 text-forest" />
-                </div>
-                <h3 className="font-display text-xl font-bold text-forest mb-3">{tech.title}</h3>
-                <p className="text-olive leading-relaxed">{tech.description}</p>
-              </Card>
+              <div className="w-10 h-10 rounded-lg border border-forest/20 flex items-center justify-center">
+                <tech.icon className="h-5 w-5 text-forest" />
+              </div>
+              <h3 className="font-display text-xl font-bold text-forest">{tech.title}</h3>
+              <p className="text-olive text-sm leading-relaxed font-sans">{tech.description}</p>
             </motion.div>
           ))}
         </div>
