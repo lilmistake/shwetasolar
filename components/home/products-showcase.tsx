@@ -23,14 +23,7 @@ const products = [
     image: "/images/topcon.jpg",
     href: "/products/topcon",
   },
-  {
-    name: "HJT",
-    description: "Heterojunction technology combining crystalline and thin-film for ultimate efficiency.",
-    efficiency: "Up to 25.5%",
-    warranty: "30 Years",
-    image: "/images/hjt.jpg",
-    href: "/products/hjt",
-  },
+
 ]
 
 export function ProductsShowcase() {

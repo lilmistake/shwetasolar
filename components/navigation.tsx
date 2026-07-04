@@ -23,12 +23,11 @@ const navItems = [
     submenu: [
       { label: "Mono PERC", href: "/products/mono-perc" },
       { label: "TopCon", href: "/products/topcon" },
-      { label: "HJT", href: "/products/hjt" },
     ],
   },
   {
     label: "Investors",
-    href: "/investors",
+    href: "/investors/board",
     submenu: [
       { label: "Board of Directors", href: "/investors/board" },
       { label: "Policies", href: "/investors/policies" },
