@@ -21,25 +21,51 @@ export default function SolarCalculatorPage() {
 
     if (!bill || !area) return
 
-    // Simplified calculations
-    const avgCostPerUnit = 7 // INR per kWh
-    const monthlyConsumption = bill / avgCostPerUnit
-    const annualConsumption = monthlyConsumption * 12
+    // --- Assumptions (India, rooftop solar) ---
+    const avgCostPerUnit = 7 // INR per kWh (average residential tariff)
+    const costPerWatt = 45 // INR installed cost per Wp
+    const panelSizeKW = 0.55 // 550W panels
+    const performanceRatio = 0.78 // real-world losses: inverter, wiring, heat, dust, downtime
+    const areaPerKW = 100 // sq ft of usable roof required per kW installed
+    const co2PerKWh = 0.82 // kg CO2 displaced from the grid per kWh generated
 
-    // System sizing (assuming 4-5 peak sun hours in India)
-    const systemSizeKW = (monthlyConsumption * 12) / (4.5 * 365)
-    const panelsNeeded = Math.ceil(systemSizeKW / 0.54) // 540W panels
+    // Peak sun hours (kWh/m²/day) vary by region of India
+    const peakSunHoursByRegion: Record<string, number> = {
+      north: 5.0,
+      south: 5.3,
+      east: 4.5,
+      west: 5.8,
+      central: 5.5,
+    }
+    const peakSunHours = peakSunHoursByRegion[location] ?? 5.0
 
-    // Cost estimation
-    const costPerWatt = 45 // INR
+    // --- Consumption ---
+    const monthlyConsumption = bill / avgCostPerUnit // kWh/month
+    const annualConsumption = monthlyConsumption * 12 // kWh/year
+
+    // --- System sizing ---
+    // Size required to fully offset consumption, accounting for the performance ratio.
+    const requiredSizeKW = annualConsumption / (peakSunHours * 365 * performanceRatio)
+    // Cap the system by how much actually fits on the available roof.
+    const maxSizeByRoofKW = area / areaPerKW
+    const systemSizeKW = Math.min(requiredSizeKW, maxSizeByRoofKW)
+    const roofLimited = maxSizeByRoofKW < requiredSizeKW
+
+    const panelsNeeded = Math.max(1, Math.ceil(systemSizeKW / panelSizeKW))
+
+    // --- Generation (what the sized system actually produces) ---
+    const annualGeneration = systemSizeKW * peakSunHours * 365 * performanceRatio
+    // Can't save more than you consume; excess export is ignored for a conservative estimate.
+    const usableGeneration = Math.min(annualGeneration, annualConsumption)
+    const energyOffset = Math.min(100, (annualGeneration / annualConsumption) * 100)
+
+    // --- Cost, savings & payback ---
     const systemCost = systemSizeKW * 1000 * costPerWatt
+    const annualSavings = usableGeneration * avgCostPerUnit
+    const paybackPeriod = annualSavings > 0 ? systemCost / annualSavings : 0
 
-    // Savings
-    const annualSavings = annualConsumption * avgCostPerUnit * 0.9 // 90% offset
-    const paybackPeriod = systemCost / annualSavings
-
-    // Environmental impact
-    const co2Offset = annualConsumption * 0.82 // kg CO2 per kWh
+    // --- Environmental impact (based on actual generation) ---
+    const co2Offset = annualGeneration * co2PerKWh // kg CO2 per year
 
     setResults({
       systemSizeKW: systemSizeKW.toFixed(2),
@@ -49,6 +75,8 @@ export default function SolarCalculatorPage() {
       paybackPeriod: paybackPeriod.toFixed(1),
       co2Offset: (co2Offset / 1000).toFixed(2), // Convert to tonnes
       monthlyConsumption: monthlyConsumption.toFixed(0),
+      energyOffset: energyOffset.toFixed(0),
+      roofLimited,
     })
   }
 
@@ -136,6 +164,13 @@ export default function SolarCalculatorPage() {
                   <h3 className="font-display text-xl font-bold mb-2">Recommended System Size</h3>
                   <p className="text-4xl font-bold">{results.systemSizeKW} kW</p>
                   <p className="text-cream/80 mt-2">{results.panelsNeeded} solar panels needed</p>
+                  <p className="text-cream/80 mt-1">Covers ~{results.energyOffset}% of your electricity use</p>
+                  {results.roofLimited && (
+                    <p className="text-cream/90 mt-3 text-sm bg-white/10 rounded-md p-3">
+                      Your available roof area limits the system size, so it won&apos;t fully offset your bill. A larger
+                      roof or higher-efficiency panels would allow a bigger system.
+                    </p>
+                  )}
                 </Card>
 
                 <Card className="p-6">

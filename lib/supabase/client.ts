@@ -1,5 +1,24 @@
 import { createBrowserClient } from "@supabase/ssr"
+import type { SupabaseClient } from "@supabase/supabase-js"
+
+/**
+ * Browser-side Supabase client.
+ *
+ * Uses a module-level singleton so that repeated calls within the browser
+ * reuse the same client instance (recommended pattern to avoid creating
+ * multiple GoTrue clients in the same context).
+ */
+let browserClient: SupabaseClient | undefined
 
 export function createClient() {
-  return createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  if (browserClient) {
+    return browserClient
+  }
+
+  browserClient = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  )
+
+  return browserClient
 }
