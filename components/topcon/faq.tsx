@@ -1,4 +1,10 @@
-import { ChevronDown } from "lucide-react"
+"use client"
+
+import { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { Plus } from "lucide-react"
+import { Reveal } from "@/components/topcon/reveal"
+import { cn } from "@/lib/utils"
 
 const FAQS = [
   {
@@ -28,25 +34,64 @@ const FAQS = [
 ]
 
 export function Faq() {
+  const [open, setOpen] = useState<number | null>(0)
+
   return (
-    <section id="faq" className="bg-background">
-      <div className="mx-auto max-w-3xl px-4 py-16 md:py-20">
-        <h2 className="text-balance text-center text-3xl font-bold text-forest md:text-4xl">
-          Frequently asked questions
-        </h2>
+    <section id="faq" className="bg-muted/40">
+      <div className="mx-auto max-w-3xl px-4 py-20 md:py-28">
+        <div className="text-center">
+          <Reveal>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-olive">FAQ</span>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-3 text-balance text-3xl font-bold text-forest md:text-5xl">
+              Frequently asked questions
+            </h2>
+          </Reveal>
+        </div>
+
         <div className="mt-10 space-y-3">
-          {FAQS.map((item) => (
-            <details key={item.q} className="group rounded-xl border border-border bg-card p-5 shadow-sm">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left font-semibold text-forest">
-                {item.q}
-                <ChevronDown
-                  className="h-5 w-5 shrink-0 text-olive transition-transform group-open:rotate-180"
-                  aria-hidden="true"
-                />
-              </summary>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
-            </details>
-          ))}
+          {FAQS.map((item, i) => {
+            const isOpen = open === i
+            return (
+              <Reveal key={item.q} delay={i * 0.04}>
+                <div
+                  className={cn(
+                    "overflow-hidden rounded-2xl border bg-card shadow-sm transition-colors",
+                    isOpen ? "border-sage" : "border-border",
+                  )}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-forest"
+                  >
+                    {item.q}
+                    <Plus
+                      className={cn(
+                        "h-5 w-5 shrink-0 text-olive transition-transform duration-300",
+                        isOpen && "rotate-45",
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </Reveal>
+            )
+          })}
         </div>
       </div>
     </section>

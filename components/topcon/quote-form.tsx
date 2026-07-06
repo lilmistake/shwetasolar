@@ -204,7 +204,7 @@ export function QuoteForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-6 py-4 text-lg font-semibold text-forest shadow-sm transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-sage px-6 py-4 text-lg font-semibold text-forest shadow-lg shadow-sage/20 transition-colors hover:bg-[#b8c49a] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {status === "submitting" ? (
           <>

@@ -1,45 +1,58 @@
+"use client"
+
 import Image from "next/image"
-import { Phone, MessageCircle } from "lucide-react"
-import { LOGO_SRC, PHONE_DISPLAY } from "@/lib/topcon/constants"
-import { QuoteButton, CallLink, WhatsAppLink } from "@/components/topcon/cta-buttons"
+import { useEffect, useState } from "react"
+import { Phone } from "lucide-react"
+import { motion } from "framer-motion"
+import { LOGO_SRC, PHONE_HREF, PHONE_DISPLAY } from "@/lib/topcon/constants"
+import { trackCallClick } from "@/lib/topcon/tracking"
+import { QuoteButton } from "@/components/topcon/cta-buttons"
+import { cn } from "@/lib/utils"
 
 export function LpHeader() {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-        <a href="#top" className="flex items-center" aria-label="Shweta Solar home">
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        scrolled ? "border-b border-white/10 bg-forest/85 backdrop-blur-md" : "bg-transparent",
+      )}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
+        <a href="#top" className="flex items-center gap-2" aria-label="Shweta Solar home">
           <Image
             src={LOGO_SRC || "/placeholder.svg"}
             alt="Shweta Solar"
-            width={150}
+            width={140}
             height={40}
+            className="h-9 w-auto brightness-0 invert"
             priority
-            className="h-8 w-auto md:h-9"
           />
         </a>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <CallLink
-            source="header"
-            className="hidden items-center gap-2 text-sm font-medium text-forest hover:text-olive md:inline-flex"
+          <a
+            href={PHONE_HREF}
+            onClick={() => trackCallClick("header")}
+            className="hidden items-center gap-2 text-sm font-medium text-white/90 transition-colors hover:text-white sm:inline-flex"
           >
-            <Phone className="h-4 w-4" aria-hidden="true" />
-            <span>{PHONE_DISPLAY}</span>
-          </CallLink>
-
-          <WhatsAppLink
-            source="header"
-            className="hidden items-center gap-2 rounded-lg border border-forest/20 px-3 py-2 text-sm font-medium text-forest hover:bg-muted md:inline-flex"
-          >
-            <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            <span>WhatsApp</span>
-          </WhatsAppLink>
-
-          <QuoteButton source="header" className="px-4 py-2 text-sm md:text-base">
-            Get Quote
-          </QuoteButton>
+            <Phone className="h-4 w-4 text-sage" aria-hidden="true" />
+            {PHONE_DISPLAY}
+          </a>
+          <QuoteButton source="header">Get a Quote</QuoteButton>
         </div>
       </div>
-    </header>
+    </motion.header>
   )
 }
