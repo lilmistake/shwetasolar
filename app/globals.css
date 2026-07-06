@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+/* Shweta Solar theme */
 
 @font-face {
   font-family: "Agency";
@@ -11,26 +12,26 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Updated color tokens to use white instead of cream */
+/* Brand color tokens - cream (#FFFDF2) background per Shweta Solar guidelines */
 :root {
-  --background: #ffffff; /* White */
+  --background: #fffdf2; /* Cream */
   --foreground: #004636; /* Forest Green */
-  --card: #ffffff;
+  --card: #ffffff; /* Crisp white cards pop against cream */
   --card-foreground: #004636;
   --popover: #ffffff;
   --popover-foreground: #004636;
   --primary: #004636; /* Forest Green */
-  --primary-foreground: #ffffff; /* White */
+  --primary-foreground: #fffdf2; /* Cream */
   --secondary: #a9b489; /* Sage Green */
   --secondary-foreground: #004636;
-  --muted: #f5f5f5;
+  --muted: #f2efe0; /* Warm cream tint */
   --muted-foreground: #5e7153; /* Olive */
   --accent: #5e7153; /* Olive */
-  --accent-foreground: #ffffff;
+  --accent-foreground: #fffdf2;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: #e5e5e5;
-  --input: #e5e5e5;
+  --border: #e6e2d2;
+  --input: #e6e2d2;
   --ring: #a9b489;
   --chart-1: #004636;
   --chart-2: #a9b489;
@@ -38,13 +39,13 @@
   --chart-4: #7a8f6d;
   --chart-5: #c4d1b0;
   --radius: 0.625rem;
-  --sidebar: #ffffff;
+  --sidebar: #fffdf2;
   --sidebar-foreground: #004636;
   --sidebar-primary: #004636;
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary-foreground: #fffdf2;
   --sidebar-accent: #a9b489;
   --sidebar-accent-foreground: #004636;
-  --sidebar-border: #e5e5e5;
+  --sidebar-border: #e6e2d2;
   --sidebar-ring: #a9b489;
 }
 
@@ -88,8 +89,8 @@
   --font-sans: "Poppins", system-ui, sans-serif;
   --font-display: "Agency", system-ui, sans-serif;
 
-  /* Updated Shweta Solar Brand Colors - replaced cream with white */
-  --color-cream: #ffffff;
+  /* Shweta Solar Brand Colors */
+  --color-cream: #fffdf2;
   --color-forest: #004636;
   --color-sage: #a9b489;
   --color-olive: #5e7153;

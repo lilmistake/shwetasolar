@@ -90,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={poppins.variable}>
+    <html lang="en" className={`${poppins.variable} bg-background`}>
       <head>
         <link rel="preload" as="image" href="/images/solar-hero.jpg" />
         <link rel="preload" as="image" href="/images/logo.webp" />
