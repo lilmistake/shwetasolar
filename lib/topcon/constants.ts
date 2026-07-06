@@ -7,7 +7,7 @@ export const WHATSAPP_NUMBER = "919289969501"
 export const WHATSAPP_TEXT = "Hi Shweta Solar, I'd like a quote for TOPCon G2G modules."
 export const WHATSAPP_HREF = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_TEXT)}`
 
-export const SALES_EMAIL = "sales@shwetasolar.in"
+export const SALES_EMAIL = "rasinrohit@gmail.com"
 
 export const LOGO_SRC = "/images/logo.webp"
 export const HERO_IMAGE = "/images/topcon.jpg"
