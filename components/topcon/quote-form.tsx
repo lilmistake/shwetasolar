@@ -16,8 +16,10 @@ export function QuoteForm() {
 
   // Pre-select buyer type when a segment card CTA is clicked.
   useEffect(() => {
+    console.log("[v0] QuoteForm listener attached")
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail as string
+      console.log("[v0] topcon:buyer received:", detail)
       if (detail) setBuyerType(detail)
     }
     window.addEventListener("topcon:buyer", handler)
