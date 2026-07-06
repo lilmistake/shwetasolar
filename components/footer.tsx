@@ -62,7 +62,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/investors" className="hover:text-sage transition-colors">
+                <Link href="/investors/board" className="hover:text-sage transition-colors">
                   Investors
                 </Link>
               </li>
@@ -91,11 +91,6 @@ export function Footer() {
               <li>
                 <Link href="/products/topcon" className="hover:text-sage transition-colors">
                   TopCon Panels
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/hjt" className="hover:text-sage transition-colors">
-                  HJT Panels
                 </Link>
               </li>
               <li>

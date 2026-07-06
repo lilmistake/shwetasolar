@@ -9,7 +9,7 @@ const technologies = [
     icon: Zap,
     title: "Advanced Cell Technology",
     description:
-      "Utilizing cutting-edge Mono PERC, TopCon, and HJT technologies for maximum efficiency and performance.",
+      "Utilizing cutting-edge Mono PERC and TopCon technologies for maximum efficiency and performance.",
   },
   {
     icon: Shield,

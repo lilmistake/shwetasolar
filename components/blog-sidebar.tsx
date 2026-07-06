@@ -235,14 +235,6 @@ export function BlogSidebar({ currentSlug, allPosts }: BlogSidebarProps) {
               size="sm"
               className="w-full border-forest text-forest hover:bg-forest hover:text-cream bg-transparent"
             >
-              <Link href="/products/hjt">HJT Panels</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="w-full border-forest text-forest hover:bg-forest hover:text-cream bg-transparent"
-            >
               <Link href="/products/mono-perc">Mono PERC</Link>
             </Button>
           </div>

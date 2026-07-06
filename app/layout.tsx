@@ -24,13 +24,12 @@ export const metadata: Metadata = {
     template: "%s | Shweta Solar",
   },
   description:
-    "Shweta Solar manufactures high-efficiency Mono PERC, TopCon, and HJT solar panels. Powering India's renewable energy future with sustainable solar solutions.",
+    "Shweta Solar manufactures high-efficiency Mono PERC and TopCon solar panels. Powering India's renewable energy future with sustainable solar solutions.",
   keywords: [
     "solar panels",
     "solar energy",
     "Mono PERC",
     "TopCon",
-    "HJT",
     "renewable energy",
     "India",
     "solar manufacturer",
@@ -45,7 +44,7 @@ export const metadata: Metadata = {
     siteName: "Shweta Solar",
     title: "Shweta Solar - Leading Solar Panel Manufacturer in India",
     description:
-      "Shweta Solar manufactures high-efficiency Mono PERC, TopCon, and HJT solar panels. Powering India's renewable energy future.",
+      "Shweta Solar manufactures high-efficiency Mono PERC and TopCon solar panels. Powering India's renewable energy future.",
     images: [
       {
         url: "/images/logo.webp",
@@ -105,7 +104,7 @@ export default function RootLayout({
               url: "https://shwetasolar.in",
               logo: "https://shwetasolar.in/images/logo.webp",
               description:
-                "Leading solar panel manufacturer in India specializing in Mono PERC, TopCon, and HJT solar panels",
+                "Leading solar panel manufacturer in India specializing in Mono PERC and TopCon solar panels",
               address: {
                 "@type": "PostalAddress",
                 addressCountry: "IN",

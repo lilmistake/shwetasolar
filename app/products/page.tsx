@@ -35,18 +35,6 @@ export default function ProductsPage() {
       image: "/topcon-solar-panel-advanced.jpg",
       features: ["Higher efficiency", "Lower degradation", "Better temperature coefficient", "Enhanced durability"],
     },
-    {
-      name: "HJT",
-      slug: "hjt",
-      tagline: "Premium Performance",
-      description:
-        "Heterojunction Technology combining crystalline and amorphous silicon for maximum efficiency and minimal power loss in all conditions.",
-      efficiency: "Up to 24.5%",
-      power: "620W - 650W",
-      warranty: "30 Years",
-      image: "/hjt-heterojunction-solar-panel.jpg",
-      features: ["Highest efficiency", "Bifacial design", "Superior low-light performance", "Minimal degradation"],
-    },
   ]
 
   return (
@@ -66,7 +54,7 @@ export default function ProductsPage() {
       {/* Products Grid */}
       <section className="py-20 bg-cream">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {products.map((product, index) => (
               <Card
                 key={product.slug}
@@ -140,7 +128,6 @@ export default function ProductsPage() {
                   <th className="text-left py-4 px-4 font-display text-forest">Feature</th>
                   <th className="text-center py-4 px-4 font-display text-forest">Mono PERC</th>
                   <th className="text-center py-4 px-4 font-display text-forest">TopCon</th>
-                  <th className="text-center py-4 px-4 font-display text-forest">HJT</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,31 +135,26 @@ export default function ProductsPage() {
                   <td className="py-4 px-4 text-olive font-medium">Efficiency Range</td>
                   <td className="py-4 px-4 text-center text-forest">20-21.5%</td>
                   <td className="py-4 px-4 text-center text-forest">22-23.5%</td>
-                  <td className="py-4 px-4 text-center text-forest">23.5-24.5%</td>
                 </tr>
                 <tr className="border-b border-sage/20">
                   <td className="py-4 px-4 text-olive font-medium">Temperature Coefficient</td>
                   <td className="py-4 px-4 text-center text-forest">-0.35%/°C</td>
                   <td className="py-4 px-4 text-center text-forest">-0.30%/°C</td>
-                  <td className="py-4 px-4 text-center text-forest">-0.24%/°C</td>
                 </tr>
                 <tr className="border-b border-sage/20">
                   <td className="py-4 px-4 text-olive font-medium">Degradation (Year 1)</td>
                   <td className="py-4 px-4 text-center text-forest">2%</td>
                   <td className="py-4 px-4 text-center text-forest">1%</td>
-                  <td className="py-4 px-4 text-center text-forest">0.5%</td>
                 </tr>
                 <tr className="border-b border-sage/20">
                   <td className="py-4 px-4 text-olive font-medium">Bifacial Capability</td>
                   <td className="py-4 px-4 text-center text-forest">Optional</td>
-                  <td className="py-4 px-4 text-center text-forest">Yes</td>
                   <td className="py-4 px-4 text-center text-forest">Yes</td>
                 </tr>
                 <tr className="border-b border-sage/20">
                   <td className="py-4 px-4 text-olive font-medium">Best For</td>
                   <td className="py-4 px-4 text-center text-forest text-sm">Budget-conscious projects</td>
                   <td className="py-4 px-4 text-center text-forest text-sm">Commercial installations</td>
-                  <td className="py-4 px-4 text-center text-forest text-sm">Premium applications</td>
                 </tr>
               </tbody>
             </table>

@@ -7,7 +7,7 @@ const features = [
   {
     icon: Zap,
     title: "High Efficiency",
-    description: "Industry-leading efficiency ratings with our advanced TopCon and HJT technology.",
+    description: "Industry-leading efficiency ratings with our advanced Mono PERC and TopCon technology.",
   },
   {
     icon: Shield,

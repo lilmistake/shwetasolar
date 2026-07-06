@@ -131,74 +131,10 @@ const productsData = {
       "Future-proof technology with strong industry backing",
     ],
   },
-  hjt: {
-    name: "HJT",
-    tagline: "Premium Performance",
-    description:
-      "Heterojunction Technology combining crystalline and amorphous silicon for maximum efficiency and minimal power loss in all conditions.",
-    longDescription:
-      "HJT (Heterojunction) technology represents the pinnacle of solar panel innovation. By combining crystalline silicon with ultra-thin amorphous silicon layers, HJT cells achieve exceptional passivation on both sides, resulting in the highest efficiency and lowest degradation rates available. This premium technology delivers maximum energy yield and long-term performance, making it ideal for applications where space is limited and performance is critical.",
-    efficiency: "Up to 24.5%",
-    power: "620W - 650W",
-    warranty: "30 Years",
-    image: "/hjt-heterojunction-solar-panel.jpg",
-    features: [
-      {
-        title: "Highest Efficiency",
-        description: "Industry-leading 23.5-24.5% efficiency for maximum power generation",
-      },
-      {
-        title: "Bifacial Design",
-        description: "Captures reflected light from both sides for up to 30% additional energy",
-      },
-      {
-        title: "Superior Low-Light Performance",
-        description: "Exceptional energy generation in dawn, dusk, and cloudy conditions",
-      },
-      {
-        title: "Minimal Degradation",
-        description: "Only 0.5% first-year degradation, maintaining 95% output after 25 years",
-      },
-    ],
-    specifications: {
-      "Cell Type": "N-Type HJT (Heterojunction)",
-      "Module Efficiency": "23.5% - 24.5%",
-      "Power Output": "620W - 650W",
-      "Voltage at Pmax": "43.8V - 44.5V",
-      "Current at Pmax": "14.1A - 14.6A",
-      "Open Circuit Voltage": "52.5V - 53.2V",
-      "Short Circuit Current": "15.0A - 15.3A",
-      "Temperature Coefficient (Pmax)": "-0.24%/°C",
-      "Operating Temperature": "-40°C to +85°C",
-      "Maximum System Voltage": "1500V DC",
-      Dimensions: "2278mm × 1134mm × 35mm",
-      Weight: "29.0kg",
-      Frame: "Anodized Aluminum Alloy",
-      Glass: "2.0mm + 2.0mm Double Glass (Bifacial)",
-      "Junction Box": "IP68 Rated",
-      Connectors: "MC4 Compatible",
-      "Bifacial Factor": "85% - 90%",
-    },
-    applications: [
-      "Premium residential installations",
-      "High-performance commercial projects",
-      "Space-constrained urban installations",
-      "Bifacial ground-mount and carport systems",
-      "Applications requiring maximum energy density",
-    ],
-    benefits: [
-      "Highest energy yield per square meter",
-      "Best performance in hot climates",
-      "Lowest degradation rate ensures long-term value",
-      "Superior bifacial performance for additional energy",
-      "Excellent low-light and diffuse light performance",
-      "Reduced balance of system costs due to higher power output",
-    ],
-  },
 }
 
 export function generateStaticParams() {
-  return [{ slug: "mono-perc" }, { slug: "topcon" }, { slug: "hjt" }]
+  return [{ slug: "mono-perc" }, { slug: "topcon" }]
 }
 
 export default function ProductDetailPage({ params }: { params: { slug: string } }) {
