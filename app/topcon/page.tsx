@@ -41,12 +41,22 @@ export default function TopConLandingPage() {
         <Applications />
 
         {/* Quote form — conversion centerpiece */}
-        <section id="quote" className="scroll-mt-16 bg-background">
-          <div className="mx-auto max-w-3xl px-4 py-16 md:py-20">
+        <section id="quote" className="relative scroll-mt-16 overflow-hidden bg-forest">
+          <div className="bg-grid-forest absolute inset-0 opacity-60 mask-radial-fade" aria-hidden="true" />
+          <div
+            className="animate-float-slow absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-sage/20 blur-3xl"
+            aria-hidden="true"
+          />
+          <div className="relative mx-auto max-w-3xl px-4 py-16 md:py-24">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-balance text-3xl font-bold text-forest md:text-4xl">Request your quote</h2>
-              <p className="mt-3 text-pretty text-muted-foreground">
-                Get pricing within 24 hours. No obligation.
+              <span className="inline-flex items-center gap-2 rounded-full border border-sage/30 bg-sage/10 px-4 py-1.5 text-sm font-medium text-sage">
+                Free quote · No obligation
+              </span>
+              <h2 className="mt-5 text-balance font-display text-4xl font-bold text-cream md:text-5xl">
+                Request your quote
+              </h2>
+              <p className="mt-4 text-pretty text-lg text-cream/70">
+                Tell us what you need and our team sends pricing within 24 hours.
               </p>
             </div>
             <div className="mt-10">

@@ -2,24 +2,20 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { CheckCircle2, Loader2, MessageCircle } from "lucide-react"
-import { submitContactForm } from "@/lib/actions/contact"
-import { BUYER_TYPES } from "@/lib/topcon/constants"
+import { submitTopConLead } from "@/lib/actions/topcon-lead"
+import { BUYER_TYPES, type BuyerTypeValue } from "@/lib/topcon/constants"
 import { trackLead } from "@/lib/topcon/tracking"
 import { WhatsAppLink } from "@/components/topcon/cta-buttons"
 
-const buyerLabel = (value: string) => BUYER_TYPES.find((b) => b.value === value)?.label ?? value
-
 export function QuoteForm() {
-  const [buyerType, setBuyerType] = useState("")
+  const [buyerType, setBuyerType] = useState<BuyerTypeValue | "">("")
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
   const [errorMsg, setErrorMsg] = useState("")
 
   // Pre-select buyer type when a segment card CTA is clicked.
   useEffect(() => {
-    console.log("[v0] QuoteForm listener attached")
     const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail as string
-      console.log("[v0] topcon:buyer received:", detail)
+      const detail = (e as CustomEvent).detail as BuyerTypeValue
       if (detail) setBuyerType(detail)
     }
     window.addEventListener("topcon:buyer", handler)
@@ -35,38 +31,30 @@ export function QuoteForm() {
     const name = String(data.get("name") || "").trim()
     const phone = String(data.get("phone") || "").trim()
     const email = String(data.get("email") || "").trim()
-    const selectedBuyer = String(data.get("buyerType") || "").trim()
-    const requirement = String(data.get("requirement") || "").trim()
-    const location = String(data.get("location") || "").trim()
+    const selectedBuyer = String(data.get("buyerType") || "").trim() as BuyerTypeValue | ""
+    const capacity = String(data.get("requirement") || "").trim()
+    const city = String(data.get("location") || "").trim()
     const message = String(data.get("message") || "").trim()
 
-    // Validation
+    // Client-side validation
     if (!name) return setErrorMsg("Please enter your name.")
     const phoneDigits = phone.replace(/[^0-9]/g, "").replace(/^91/, "")
     if (!/^[6-9]\d{9}$/.test(phoneDigits)) {
       return setErrorMsg("Please enter a valid 10-digit Indian mobile number.")
     }
+    if (!email) return setErrorMsg("Please enter your email address.")
     if (!selectedBuyer) return setErrorMsg("Please select the option that best describes you.")
 
     setStatus("submitting")
 
-    const composedMessage = [
-      requirement ? `Requirement / capacity: ${requirement}` : "",
-      location ? `Location: ${location}` : "",
-      message ? `Message: ${message}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n")
-
-    const result = await submitContactForm({
+    const result = await submitTopConLead({
       name,
-      phone,
       email,
-      company: location || undefined,
-      inquiryType: buyerLabel(selectedBuyer),
-      product: "N-Type TOPCon G2G Module",
-      quantity: requirement || undefined,
-      message: composedMessage || "TOPCon quote request (landing page).",
+      phone,
+      buyerType: selectedBuyer,
+      city,
+      capacity,
+      message,
     })
 
     if (result.success) {
@@ -105,14 +93,14 @@ export function QuoteForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor="name" className="text-sm font-medium text-forest">
-            Name <span className="text-amber-600">*</span>
+            Name <span className="text-olive">*</span>
           </label>
           <input id="name" name="name" required autoComplete="name" className={fieldClass} placeholder="Your full name" />
         </div>
 
         <div>
           <label htmlFor="phone" className="text-sm font-medium text-forest">
-            Phone <span className="text-amber-600">*</span>
+            Phone <span className="text-olive">*</span>
           </label>
           <input
             id="phone"
@@ -127,12 +115,13 @@ export function QuoteForm() {
 
         <div>
           <label htmlFor="email" className="text-sm font-medium text-forest">
-            Email
+            Email <span className="text-olive">*</span>
           </label>
           <input
             id="email"
             name="email"
             type="email"
+            required
             autoComplete="email"
             className={fieldClass}
             placeholder="you@company.com"
@@ -141,14 +130,14 @@ export function QuoteForm() {
 
         <div>
           <label htmlFor="buyerType" className="text-sm font-medium text-forest">
-            I am a <span className="text-amber-600">*</span>
+            I am a <span className="text-olive">*</span>
           </label>
           <select
             id="buyerType"
             name="buyerType"
             required
             value={buyerType}
-            onChange={(e) => setBuyerType(e.target.value)}
+            onChange={(e) => setBuyerType(e.target.value as BuyerTypeValue)}
             className={fieldClass}
           >
             <option value="" disabled>
