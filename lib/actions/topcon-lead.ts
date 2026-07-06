@@ -105,7 +105,7 @@ export async function submitTopConLead(lead: TopConLead): Promise<LeadResult> {
       const { error: emailError } = await resend.emails.send({
         from: "Shweta Solar Leads <onboarding@resend.dev>",
         to: SALES_EMAIL,
-        replyTo: email,
+        replyTo: SALES_EMAIL,
         subject: `New TOPCon Lead: ${name} (${buyer})`,
         html: `
           <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden">
