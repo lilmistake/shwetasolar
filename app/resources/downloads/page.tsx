@@ -7,7 +7,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Resource Downloads - Datasheets, Manuals & Certifications",
   description:
-    "Download Shweta Solar product datasheets, installation manuals, IEC certifications, test reports, and brand assets. Access technical documentation for Mono PERC, TopCon, and HJT solar panels.",
+    "Download Shweta Solar product datasheets, installation manuals, IEC certifications, test reports, and brand assets. Access technical documentation for Mono PERC and TopCon solar panels.",
   openGraph: {
     title: "Download Solar Panel Resources - Technical Docs & Certifications",
     description:
@@ -24,7 +24,6 @@ const downloadCategories = [
       { name: "Product Catalogue 2024", size: "5.8 MB", format: "PDF" },
       { name: "Mono PERC Datasheet", size: "1.2 MB", format: "PDF" },
       { name: "TopCon Datasheet", size: "1.3 MB", format: "PDF" },
-      { name: "HJT Datasheet", size: "1.4 MB", format: "PDF" },
     ],
   },
   {

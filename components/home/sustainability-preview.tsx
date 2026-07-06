@@ -1,66 +1,68 @@
-"use client"
-
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Leaf, Droplets, Recycle, Wind } from "lucide-react"
+import { Leaf, Droplets, Recycle, Wind, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
 const initiatives = [
-  { icon: Leaf, label: "Carbon Neutral by 2030" },
-  { icon: Droplets, label: "Water Conservation" },
-  { icon: Recycle, label: "Zero Waste Manufacturing" },
-  { icon: Wind, label: "100% Renewable Energy" },
+  { icon: Leaf, label: "Carbon Neutral by 2030", description: "A clear roadmap to net-zero operations." },
+  { icon: Droplets, label: "Water Conservation", description: "Closed-loop systems recycle 90% of water." },
+  { icon: Recycle, label: "Zero Waste Manufacturing", description: "95% of waste diverted from landfill." },
+  { icon: Wind, label: "100% Renewable Energy", description: "Our facility runs entirely on clean power." },
 ]
 
 export function SustainabilityPreview() {
   return (
-    <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <Image
-          src="/solar-panels-on-green-factory-roof-with-trees.jpg"
-          alt="Sustainability"
-          fill
-          className="object-cover"
-          priority={true}
-          sizes="100vw"
-        />
-      </div>
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">Committed to Sustainability</h2>
-          <p className="text-xl text-cream/90 max-w-3xl mx-auto">
-            Building a greener future through responsible manufacturing and environmental stewardship
-          </p>
-        </motion.div>
+    <section className="py-20 lg:py-28 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left: image */}
+          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+            <Image
+              src="/solar-panels-on-green-factory-roof-with-trees.jpg"
+              alt="Solar panels on a green factory roof surrounded by trees"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/40 to-transparent" aria-hidden="true" />
+          </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          {initiatives.map((initiative, index) => (
-            <motion.div
-              key={initiative.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mx-auto mb-4">
-                <initiative.icon className="h-8 w-8 text-sage" />
-              </div>
-              <p className="font-medium">{initiative.label}</p>
-            </motion.div>
-          ))}
-        </div>
+          {/* Right: content */}
+          <div>
+            <span className="inline-block text-sm font-semibold tracking-wide uppercase text-olive mb-4">
+              Good for business, better for earth
+            </span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-5 text-balance">
+              Committed to Sustainability
+            </h2>
+            <p className="text-lg text-olive leading-relaxed mb-8 text-pretty">
+              We build a greener future through responsible manufacturing and genuine environmental stewardship
+              &mdash; from the energy that powers our facility to the water and materials we reclaim.
+            </p>
 
-        <div className="text-center">
-          <Button asChild size="lg" className="bg-sage text-forest hover:bg-sage/90">
-            <Link href="/sustainability">Learn More About Our Initiatives</Link>
-          </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              {initiatives.map((initiative) => (
+                <div
+                  key={initiative.label}
+                  className="flex gap-4 rounded-xl bg-card border border-border p-4"
+                >
+                  <div className="w-11 h-11 shrink-0 rounded-full bg-sage/25 flex items-center justify-center">
+                    <initiative.icon className="h-5 w-5 text-forest" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-forest leading-tight">{initiative.label}</p>
+                    <p className="text-sm text-olive mt-1 leading-snug">{initiative.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Button asChild size="lg" className="bg-forest text-cream hover:bg-olive">
+              <Link href="/sustainability">
+                Learn More About Our Initiatives <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

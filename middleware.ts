@@ -1,11 +1,19 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { updateSession } from "@/lib/supabase/proxy"
+import { type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
-  // Just pass through - authentication is handled in admin layout and pages
-  return NextResponse.next()
+  return await updateSession(request)
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - image asset files
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 }

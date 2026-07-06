@@ -19,27 +19,56 @@ export default function SolarCalculatorPage() {
     const bill = Number.parseFloat(monthlyBill)
     const area = Number.parseFloat(roofArea)
 
-    if (!bill || !area) return
+    // All three inputs are required for an accurate estimate
+    if (!bill || !area || !location) return
 
-    // Simplified calculations
+    // --- Consumption ---
     const avgCostPerUnit = 7 // INR per kWh
-    const monthlyConsumption = bill / avgCostPerUnit
-    const annualConsumption = monthlyConsumption * 12
+    const monthlyConsumption = bill / avgCostPerUnit // kWh/month
+    const annualConsumption = monthlyConsumption * 12 // kWh/year
 
-    // System sizing (assuming 4-5 peak sun hours in India)
-    const systemSizeKW = (monthlyConsumption * 12) / (4.5 * 365)
+    // --- Location: average daily peak sun hours by region in India ---
+    const peakSunHoursByRegion: Record<string, number> = {
+      north: 5.0,
+      south: 5.5,
+      east: 4.5,
+      west: 5.5,
+      central: 5.2,
+    }
+    const peakSunHours = peakSunHoursByRegion[location] ?? 5.0
+
+    // Annual generation per installed kW, including a ~78% performance ratio
+    const performanceRatio = 0.78
+    const annualGenPerKW = peakSunHours * 365 * performanceRatio // kWh per kW per year
+
+    // --- System sizing ---
+    // Size needed to offset the yearly consumption
+    const idealSystemKW = annualConsumption / annualGenPerKW
+
+    // Roof constraint: ~100 sq ft of usable roof per kW installed
+    const sqftPerKW = 100
+    const maxSystemByRoof = area / sqftPerKW
+
+    // Actual recommended system is limited by whichever is smaller
+    const systemSizeKW = Math.max(0, Math.min(idealSystemKW, maxSystemByRoof))
+    const roofLimited = maxSystemByRoof < idealSystemKW
+
     const panelsNeeded = Math.ceil(systemSizeKW / 0.54) // 540W panels
 
-    // Cost estimation
+    // --- Cost estimation ---
     const costPerWatt = 45 // INR
     const systemCost = systemSizeKW * 1000 * costPerWatt
 
-    // Savings
-    const annualSavings = annualConsumption * avgCostPerUnit * 0.9 // 90% offset
-    const paybackPeriod = systemCost / annualSavings
+    // --- Generation, savings & offset ---
+    const annualGeneration = systemSizeKW * annualGenPerKW // kWh/year produced
+    // Only the energy that offsets consumption translates into bill savings
+    const usableGeneration = Math.min(annualGeneration, annualConsumption)
+    const offsetPercentage = annualConsumption > 0 ? (usableGeneration / annualConsumption) * 100 : 0
+    const annualSavings = usableGeneration * avgCostPerUnit
+    const paybackPeriod = annualSavings > 0 ? systemCost / annualSavings : 0
 
-    // Environmental impact
-    const co2Offset = annualConsumption * 0.82 // kg CO2 per kWh
+    // --- Environmental impact (all generation displaces grid power) ---
+    const co2Offset = annualGeneration * 0.82 // kg CO2 per kWh (India grid factor)
 
     setResults({
       systemSizeKW: systemSizeKW.toFixed(2),
@@ -49,6 +78,8 @@ export default function SolarCalculatorPage() {
       paybackPeriod: paybackPeriod.toFixed(1),
       co2Offset: (co2Offset / 1000).toFixed(2), // Convert to tonnes
       monthlyConsumption: monthlyConsumption.toFixed(0),
+      offsetPercentage: Math.round(offsetPercentage),
+      roofLimited,
     })
   }
 
@@ -121,7 +152,12 @@ export default function SolarCalculatorPage() {
                   </Select>
                 </div>
 
-                <Button onClick={calculateSolar} className="w-full bg-forest text-cream hover:bg-olive" size="lg">
+                <Button
+                  onClick={calculateSolar}
+                  disabled={!monthlyBill || !roofArea || !location}
+                  className="w-full bg-forest text-cream hover:bg-olive"
+                  size="lg"
+                >
                   <Calculator className="mr-2 h-5 w-5" />
                   Calculate Solar Potential
                 </Button>
@@ -136,6 +172,13 @@ export default function SolarCalculatorPage() {
                   <h3 className="font-display text-xl font-bold mb-2">Recommended System Size</h3>
                   <p className="text-4xl font-bold">{results.systemSizeKW} kW</p>
                   <p className="text-cream/80 mt-2">{results.panelsNeeded} solar panels needed</p>
+                  <p className="text-cream/80 mt-2">Offsets ~{results.offsetPercentage}% of your electricity use</p>
+                  {results.roofLimited && (
+                    <p className="text-cream/70 mt-3 text-sm">
+                      Note: Your available roof area is the limiting factor. A larger roof would allow a bigger system
+                      and higher savings.
+                    </p>
+                  )}
                 </Card>
 
                 <Card className="p-6">

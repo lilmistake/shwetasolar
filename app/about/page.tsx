@@ -27,7 +27,7 @@ const faqs = [
   {
     question: "What is Shweta Solar's manufacturing capacity?",
     answer:
-      "We operate a state-of-the-art 1.2GW capacity manufacturing facility producing Mono PERC, TopCon, and HJT solar panels.",
+      "We operate a state-of-the-art 1.2GW capacity manufacturing facility producing Mono PERC and TopCon solar panels.",
   },
   {
     question: "Where is Shweta Solar located?",
@@ -92,7 +92,7 @@ export default function AboutPage() {
                     <p>
                       From humble beginnings in FMCG retail in 1979, our founders have built a legacy of trust and
                       excellence. Today, Shweta Solar stands at the forefront of India's solar revolution, manufacturing
-                      high-efficiency Mono PERC, TopCon, and HJT solar panels at our state-of-the-art 1.2GW capacity
+                      high-efficiency Mono PERC and TopCon solar panels at our state-of-the-art 1.2GW capacity
                       facility.
                     </p>
                     <p>

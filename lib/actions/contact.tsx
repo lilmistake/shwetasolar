@@ -53,7 +53,7 @@ export async function submitContactForm(data: ContactFormData) {
       }
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Store in database
     const { error: dbError } = await supabase.from("contact_submissions").insert({

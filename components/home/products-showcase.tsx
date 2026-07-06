@@ -23,14 +23,6 @@ const products = [
     image: "/images/topcon.jpg",
     href: "/products/topcon",
   },
-  {
-    name: "HJT",
-    description: "Heterojunction technology combining crystalline and thin-film for ultimate efficiency.",
-    efficiency: "Up to 25.5%",
-    warranty: "30 Years",
-    image: "/images/hjt.jpg",
-    href: "/products/hjt",
-  },
 ]
 
 export function ProductsShowcase() {
@@ -66,7 +58,7 @@ export function ProductsShowcase() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {products.map((product, index) => (
             <Card
               key={product.name}

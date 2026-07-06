@@ -37,7 +37,7 @@ export function HeroSection() {
               Powering Today, Shaping Tomorrow
             </h1>
             <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 leading-relaxed max-w-2xl text-pretty">
-              Leading manufacturer of high-efficiency Mono PERC, TopCon, and HJT solar panels. Driving India's renewable
+              Leading manufacturer of high-efficiency Mono PERC and TopCon solar panels. Driving India's renewable
               energy revolution.
             </p>
             <div className="flex flex-wrap gap-4">
