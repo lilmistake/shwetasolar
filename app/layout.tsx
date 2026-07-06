@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { NavigationLoader } from "@/components/navigation-loader"
+import { ConditionalChrome, ConditionalMain } from "@/components/conditional-chrome"
 import { Suspense } from "react"
 import Script from "next/script"
 
@@ -160,12 +161,14 @@ export default function RootLayout({
           <NavigationLoader />
         </Suspense>
         <ScrollToTop />
-        <Navigation />
-        <main id="main-content" className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <WhatsAppFloat />
+        <ConditionalChrome>
+          <Navigation />
+        </ConditionalChrome>
+        <ConditionalMain>{children}</ConditionalMain>
+        <ConditionalChrome>
+          <Footer />
+          <WhatsAppFloat />
+        </ConditionalChrome>
       </body>
     </html>
   )
