@@ -2,8 +2,8 @@ import Image from "next/image"
 import { Reveal } from "@/components/topcon/reveal"
 
 const LEADERSHIP = [
-  { name: "Vinod Sharma", photo: "/images/vinod-sharma.jpg" },
-  { name: "Sanjay Garg", photo: "/images/sanjay-garg.jpg" },
+  { name: "Vinod Sharma", photo: "/images/leadership/vinod-sharma.webp" },
+  { name: "Sanjay Garg", photo: "/images/leadership/sanjay-garg.webp" },
 ]
 
 export function DirectorsSection() {
@@ -17,15 +17,15 @@ export function DirectorsSection() {
           </h2>
         </Reveal>
 
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <ul className="grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8">
           {LEADERSHIP.map((person, i) => (
             <Reveal as="li" key={person.name} delay={i * 0.08} className="group flex flex-col gap-5">
-              <div className="relative isolate aspect-[4/3] overflow-hidden rounded-3xl bg-muted">
+              <div className="relative isolate aspect-square overflow-hidden rounded-3xl bg-muted">
                 <Image
                   src={person.photo || "/placeholder.svg"}
                   alt={`Portrait of ${person.name}`}
                   fill
-                  sizes="(min-width: 1280px) 600px, (min-width: 640px) 50vw, 100vw"
+                  sizes="(min-width: 1024px) 440px, (min-width: 640px) 50vw, 100vw"
                   className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>

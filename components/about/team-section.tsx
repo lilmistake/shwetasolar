@@ -3,11 +3,26 @@ import { ArrowUpRight } from "lucide-react"
 import { Reveal } from "@/components/topcon/reveal"
 
 const TEAM = [
-  { name: "Rohit Garg", email: "rohit.garg@shwetasolar.in", photo: "/images/team/rohit-garg.jpg" },
-  { name: "Abhishek Garg", email: "abhishek.garg@shwetasolar.in", photo: "/images/team/abhishek-garg.jpg" },
-  { name: "Yukta Garg", email: "yukta.garg@shwetasolar.in", photo: "/images/team/yukta-garg.jpg" },
-  { name: "Sandeep Sharma", email: "sandeep.sharma@shwetasolar.in", photo: "/images/team/sandeep-sharma.jpg" },
-  { name: "Mohit Chaudhary", email: "mohit.chaudhary@shwetasolar.in", photo: "/images/team/mohit-chaudhary.jpg" },
+  {
+    name: "Sandeep Sharma",
+    email: "sandeep.sharma@shwetasolar.in",
+    photo: "/images/team/sandeep-sharma.jpg",
+    focus: "42% 30%",
+  },
+  {
+    name: "Mohit Chaudhary",
+    email: "mohit.chaudhary@shwetasolar.in",
+    photo: "/images/team/mohit-chaudhary.jpg",
+    focus: "66% 40%",
+  },
+  { name: "Yukta Garg", email: "yukta.garg@shwetasolar.in", photo: "/images/team/yukta-garg.png", focus: "50% 30%" },
+  { name: "Rohit Garg", email: "rohit.garg@shwetasolar.in", photo: "/images/team/rohit-garg.webp", focus: "68% 30%" },
+  {
+    name: "Abhishek Garg",
+    email: "abhishek.garg@shwetasolar.in",
+    photo: "/images/team/abhishek-garg.jpg",
+    focus: "55% 25%",
+  },
 ]
 
 export function TeamSection() {
@@ -37,8 +52,9 @@ export function TeamSection() {
                     src={person.photo || "/placeholder.svg"}
                     alt={`Portrait of ${person.name}`}
                     fill
-                    sizes="80px"
-                    className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-110"
+                    sizes="160px"
+                    style={{ objectPosition: person.focus }}
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                   />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
