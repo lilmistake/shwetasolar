@@ -2,26 +2,15 @@ import Image from "next/image"
 import { Reveal } from "@/components/topcon/reveal"
 
 const TEAM = [
-  {
-    name: "Sandeep Sharma",
-    email: "sandeep.sharma@shwetasolar.in",
-    photo: "/images/team/sandeep-sharma.jpg",
-    focus: "42% 30%",
-  },
+  { name: "Sandeep Sharma", email: "sandeep.sharma@shwetasolar.in", photo: "/images/team/portrait-sandeep-sharma.jpg" },
   {
     name: "Mohit Chaudhary",
     email: "mohit.chaudhary@shwetasolar.in",
-    photo: "/images/team/mohit-chaudhary.jpg",
-    focus: "66% 40%",
+    photo: "/images/team/portrait-mohit-chaudhary.jpg",
   },
-  { name: "Yukta Garg", email: "yukta.garg@shwetasolar.in", photo: "/images/team/yukta-garg.png", focus: "50% 30%" },
-  { name: "Rohit Garg", email: "rohit.garg@shwetasolar.in", photo: "/images/team/rohit-garg.webp", focus: "68% 30%" },
-  {
-    name: "Abhishek Garg",
-    email: "abhishek.garg@shwetasolar.in",
-    photo: "/images/team/abhishek-garg.jpg",
-    focus: "55% 25%",
-  },
+  { name: "Yukta Garg", email: "yukta.garg@shwetasolar.in", photo: "/images/team/portrait-yukta-garg.jpg" },
+  { name: "Rohit Garg", email: "rohit.garg@shwetasolar.in", photo: "/images/team/portrait-rohit-garg.jpg" },
+  { name: "Abhishek Garg", email: "abhishek.garg@shwetasolar.in", photo: "/images/team/portrait-abhishek-garg.jpg" },
 ]
 
 export function TeamSection() {
@@ -49,7 +38,7 @@ export function TeamSection() {
                     alt={`Portrait of ${person.name}`}
                     fill
                     sizes="(min-width: 1024px) 240px, (min-width: 640px) 33vw, 50vw"
-                    style={{ objectPosition: person.focus }}
+                    quality={90}
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 </div>
