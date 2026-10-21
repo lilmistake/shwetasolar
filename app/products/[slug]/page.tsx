@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Check, Download } from "lucide-react"
-import { Breadcrumbs } from "@/components/site/breadcrumbs"
+import { ArrowRight, Check, Download } from "lucide-react"
+import { PageHero } from "@/components/site/page-hero"
+import { ClosingCta } from "@/components/home/closing-cta"
 import { COMMON_SPECS, SEGMENTS, WARRANTY, familiesFor, getSegment, type SegmentSlug } from "@/lib/products"
 import { jsonLd, productSchema } from "@/lib/seo"
 
@@ -39,67 +39,78 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(families.map((f) => productSchema(f, segment)))} />
 
-      <section className="bg-background pt-20">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:px-6 md:py-20 lg:grid-cols-2 lg:items-center">
-          <div className="flex flex-col gap-6">
-            <Breadcrumbs
-              items={[
-                { name: "Home", path: "/" },
-                { name: "Products", path: "/products" },
-                { name: segment.name, path: `/products/${segment.slug}` },
-              ]}
-            />
-            <h1 className="font-semibold tracking-tight text-5xl leading-[1.05] text-forest text-balance md:text-6xl">
-              {segment.name} TOPCon modules
-            </h1>
-            <p className="font-semibold tracking-tight text-5xl text-olive">{segment.powerRange}</p>
-            <p className="max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">{segment.description}</p>
-            <ul className="flex flex-col gap-2">
-              {segment.useCases.map((u) => (
-                <li key={u} className="flex gap-3">
-                  <Check className="mt-1 h-4 w-4 shrink-0 text-olive" aria-hidden="true" />
-                  <span className="text-forest">{u}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                href="/contact"
-                className="rounded-full bg-forest px-6 py-3.5 font-semibold text-primary-foreground transition-colors hover:bg-olive"
-              >
-                Get a quote
-              </Link>
-              <a
-                href={segment.datasheet}
-                className="inline-flex items-center gap-2 rounded-full border border-forest px-6 py-3.5 font-semibold text-forest transition-colors hover:bg-forest hover:text-primary-foreground"
-              >
-                <Download className="h-4 w-4" aria-hidden="true" />
-                {segment.shortName} datasheet
-              </a>
-            </div>
+      <PageHero
+        eyebrow="Products"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Products", path: "/products" },
+          { name: segment.name, path: `/products/${segment.slug}` },
+        ]}
+        title={`${segment.name} TOPCon modules`}
+        intro={segment.description}
+        image={segment.image}
+        actions={
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/contact"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-forest px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive"
+            >
+              Get a quote
+            </Link>
+            <a
+              href={segment.datasheet}
+              download
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border px-7 text-sm font-semibold text-foreground transition-colors hover:border-foreground/40"
+            >
+              <Download className="size-4" aria-hidden="true" />
+              Datasheet
+            </a>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-            <Image src={segment.image.src} alt={segment.image.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+        }
+      />
+
+      <section aria-label="Overview" className="bg-background pb-16 md:pb-24">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 md:grid-cols-3 md:px-6">
+          <div className="flex flex-col justify-between gap-10 rounded-3xl bg-forest p-7 text-primary-foreground md:p-10">
+            <p className="text-sm font-medium text-primary-foreground/70">Power range</p>
+            <p className="whitespace-nowrap text-4xl font-semibold lg:text-5xl">{segment.powerRange}</p>
           </div>
+          <ul className="grid gap-x-8 rounded-3xl border border-border bg-muted p-7 sm:grid-cols-2 md:col-span-2 md:p-10">
+            {segment.useCases.map((u) => (
+              <li key={u} className="flex gap-3 border-b border-border py-3 last:border-0 sm:[&:nth-last-child(2)]:border-0">
+                <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-background text-primary">
+                  <Check className="size-3.5" aria-hidden="true" />
+                </span>
+                <span className="leading-relaxed text-foreground">{u}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <section aria-labelledby="families-heading" className="bg-muted py-16 md:py-24">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
-          <h2 id="families-heading" className="font-semibold tracking-tight text-4xl text-forest">
-            Module families
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2">
+      <section aria-labelledby="families-heading" className="border-t border-border bg-background py-16 md:py-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-medium text-muted-foreground">Specifications</p>
+            <h2 id="families-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
+              Module families
+            </h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
             {families.map((f) => (
-              <article key={f.model} id={f.model.toLowerCase()} className="flex scroll-mt-28 flex-col gap-5 rounded-2xl bg-card p-6 md:p-8">
+              <article
+                key={f.model}
+                id={f.model.toLowerCase()}
+                className="flex scroll-mt-28 flex-col gap-6 rounded-3xl border border-border bg-muted p-7 md:p-8"
+              >
                 <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-semibold tracking-tight text-3xl text-forest">{f.model}</h3>
-                    <p className="text-sm text-olive">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-3xl font-semibold text-foreground">{f.model}</h3>
+                    <p className="text-sm text-muted-foreground">
                       {f.cells}-cell · {f.platform} · {f.busbars}
                     </p>
                   </div>
-                  <p className="text-right font-semibold tracking-tight text-3xl text-olive">
+                  <p className="shrink-0 rounded-full bg-background px-4 py-2 text-sm font-semibold text-foreground">
                     {f.minW}–{f.maxW} W
                   </p>
                 </div>
@@ -115,8 +126,8 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
                     ["Per pallet", `${f.palletPcs} pcs`],
                   ].map(([label, value]) => (
                     <div key={label} className="flex flex-col gap-0.5 border-b border-border py-2.5">
-                      <dt className="text-xs uppercase tracking-wider text-olive">{label}</dt>
-                      <dd className="text-sm font-medium text-forest">{value}</dd>
+                      <dt className="text-xs text-muted-foreground">{label}</dt>
+                      <dd className="text-sm font-medium text-foreground">{value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -126,10 +137,11 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      <section aria-labelledby="shared-heading" className="bg-background py-16 md:py-24">
+      <section aria-labelledby="shared-heading" className="border-t border-border bg-background py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-3">
-          <div className="flex flex-col gap-3">
-            <h2 id="shared-heading" className="font-semibold tracking-tight text-4xl text-forest text-balance">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-medium text-muted-foreground">Shared across the range</p>
+            <h2 id="shared-heading" className="text-balance text-4xl font-semibold text-foreground">
               Construction and warranty
             </h2>
             <p className="leading-relaxed text-muted-foreground">
@@ -140,28 +152,42 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
           <dl className="grid gap-x-8 sm:grid-cols-2 lg:col-span-2">
             {COMMON_SPECS.map((s) => (
               <div key={s.label} className="flex flex-col gap-0.5 border-b border-border py-3">
-                <dt className="text-xs uppercase tracking-wider text-olive">{s.label}</dt>
-                <dd className="text-sm font-medium text-forest">{s.value}</dd>
+                <dt className="text-xs text-muted-foreground">{s.label}</dt>
+                <dd className="text-sm font-medium text-foreground">{s.value}</dd>
               </div>
             ))}
           </dl>
         </div>
       </section>
 
-      <section aria-label="Other applications" className="border-t border-border bg-background py-12">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 md:px-6">
-          <span className="text-sm text-olive">Also see:</span>
-          {others.map((o) => (
-            <Link
-              key={o.slug}
-              href={`/products/${o.slug}`}
-              className="rounded-full border border-border px-4 py-2 text-sm font-medium text-forest transition-colors hover:border-forest"
-            >
-              {o.name} · {o.powerRange}
-            </Link>
-          ))}
+      <section aria-labelledby="others-heading" className="border-t border-border bg-background py-16 md:py-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
+          <h2 id="others-heading" className="text-2xl font-semibold text-foreground">
+            Other applications
+          </h2>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {others.map((o) => (
+              <li key={o.slug}>
+                <Link
+                  href={`/products/${o.slug}`}
+                  className="group flex items-center justify-between gap-6 rounded-3xl border border-border bg-muted p-7 transition-colors hover:border-foreground/30"
+                >
+                  <span className="flex flex-col gap-1">
+                    <span className="text-xl font-semibold text-foreground">{o.name}</span>
+                    <span className="text-sm text-muted-foreground">{o.powerRange}</span>
+                  </span>
+                  <ArrowRight
+                    className="size-5 text-foreground transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
+
+      <ClosingCta />
     </>
   )
 }

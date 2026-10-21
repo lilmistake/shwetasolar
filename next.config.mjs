@@ -15,8 +15,9 @@ const nextConfig = {
       { source: "/products/mono-perc", destination: "/products", permanent: true },
       { source: "/products/topcon", destination: "/products", permanent: true },
       { source: "/products/hjt", destination: "/products", permanent: true },
-      { source: "/investors/financials", destination: "/investors/board", permanent: true },
-      { source: "/newsroom/social", destination: "/newsroom", permanent: true },
+      { source: "/investors/:path*", destination: "/about", permanent: true },
+      { source: "/newsroom/:path*", destination: "/", permanent: true },
+      { source: "/newsroom", destination: "/", permanent: true },
     ]
   },
   async headers() {

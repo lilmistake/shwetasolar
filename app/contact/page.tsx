@@ -1,24 +1,35 @@
 "use client"
 
 import type React from "react"
-import { useEffect } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
+import { Building2, Clock, Mail, MessageCircle, Package, Phone, Users } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Mail, Phone, MapPin, Clock, MessageCircle, Building2, Users, Package } from "lucide-react"
-import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
 import { PageHero } from "@/components/site/page-hero"
+import { SITE } from "@/lib/site"
 
 const inquiryTypes = [
-  { id: "product", label: "Product Inquiry", icon: Package },
+  { id: "product", label: "Product enquiry", icon: Package },
   { id: "partnership", label: "Partnership", icon: Users },
-  { id: "investor", label: "Investor Relations", icon: Building2 },
-  { id: "other", label: "Other", icon: MessageCircle },
+  { id: "investor", label: "Investor relations", icon: Building2 },
+  { id: "other", label: "Something else", icon: MessageCircle },
 ]
+
+const CHANNELS = [
+  { icon: Phone, label: "Call", value: SITE.phoneDisplay, href: SITE.phoneHref },
+  { icon: Mail, label: "Email", value: SITE.email, href: `mailto:${SITE.email}` },
+  { icon: MessageCircle, label: "WhatsApp", value: SITE.whatsappDisplay, href: SITE.whatsappHref, external: true },
+]
+
+const LOCATIONS = [
+  { title: "Corporate office", detail: "Near Delhi, with quick access to NCR", src: SITE.corporateMapEmbed },
+  { title: "Manufacturing facility", detail: `${SITE.capacity} TOPCon production line`, src: SITE.factoryMapEmbed },
+]
+
+const fieldClass = "h-12 rounded-xl bg-background"
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -32,24 +43,16 @@ export default function ContactPage() {
       try {
         const response = await fetch("/api/recaptcha-config")
         const { siteKey } = await response.json()
+        if (!siteKey) return
 
-        if (!siteKey) {
-          console.error("[v0] reCAPTCHA site key not available")
-          return
-        }
-
-        // Load reCAPTCHA script
         const script = document.createElement("script")
         script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
         script.async = true
         script.defer = true
-        script.onload = () => {
-          setRecaptchaReady(true)
-          console.log("[v0] reCAPTCHA loaded successfully")
-        }
+        script.onload = () => setRecaptchaReady(true)
         document.head.appendChild(script)
-      } catch (error) {
-        console.error("[v0] Failed to load reCAPTCHA:", error)
+      } catch (err) {
+        console.error("Failed to load reCAPTCHA:", err)
       }
     }
 
@@ -68,7 +71,7 @@ export default function ContactPage() {
         const { siteKey } = await response.json()
         recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" })
       } catch (err) {
-        console.error("[v0] reCAPTCHA execution failed:", err)
+        console.error("reCAPTCHA execution failed:", err)
         setError("Please try again. Security verification failed.")
         setIsSubmitting(false)
         return
@@ -78,7 +81,7 @@ export default function ContactPage() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    const data = {
+    const result = await submitContactForm({
       name: `${formData.get("firstName")} ${formData.get("lastName")}`,
       email: formData.get("email") as string,
       phone: formData.get("phone") as string,
@@ -87,9 +90,7 @@ export default function ContactPage() {
       subject: formData.get("subject") as string,
       message: formData.get("message") as string,
       recaptchaToken,
-    }
-
-    const result = await submitContactForm(data)
+    })
 
     if (result.success) {
       setShowSuccessDialog(true)
@@ -103,18 +104,22 @@ export default function ContactPage() {
   }
 
   return (
-    <div>
+    <>
       <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Thank You!</DialogTitle>
+            <DialogTitle>Thank you</DialogTitle>
             <DialogDescription>
-              Your message has been received. Our team will get back to you within 24 hours.
+              Your message has been received. Our team will get back to you within one working day.
             </DialogDescription>
           </DialogHeader>
-          <Button onClick={() => setShowSuccessDialog(false)} className="bg-forest text-cream hover:bg-olive">
+          <button
+            type="button"
+            onClick={() => setShowSuccessDialog(false)}
+            className="inline-flex h-11 items-center justify-center rounded-full bg-forest px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive"
+          >
             Close
-          </Button>
+          </button>
         </DialogContent>
       </Dialog>
 
@@ -124,243 +129,159 @@ export default function ContactPage() {
           { name: "Home", path: "/" },
           { name: "Contact", path: "/contact" },
         ]}
-        title="Contact Us"
-        intro="Get in touch with our team to discuss your solar energy needs."
+        title="Let's talk solar."
+        intro="Tell us about your project and our team will recommend the right modules and send pricing within one working day."
       />
 
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div>
-              <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-6">Send us a Message</h2>
-              <Card className="p-8 border-sage/20">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <Label className="text-forest mb-3 block">What can we help you with? *</Label>
-                    <div className="grid grid-cols-2 gap-3">
-                      {inquiryTypes.map((type) => (
-                        <button
-                          key={type.id}
-                          type="button"
-                          onClick={() => setSelectedInquiry(type.id)}
-                          className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center gap-2 ${
-                            selectedInquiry === type.id
-                              ? "border-forest bg-forest/5"
-                              : "border-sage/20 hover:border-sage/40"
-                          }`}
-                        >
-                          <type.icon
-                            className={`h-6 w-6 ${selectedInquiry === type.id ? "text-forest" : "text-olive"}`}
-                          />
-                          <span
-                            className={`text-sm font-medium ${selectedInquiry === type.id ? "text-forest" : "text-olive"}`}
-                          >
-                            {type.label}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+      <section aria-label="Contact options" className="bg-background pb-16 md:pb-24">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 md:px-6 lg:grid-cols-5">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-6 rounded-3xl border border-border bg-muted p-7 md:p-10 lg:col-span-3"
+          >
+            <fieldset className="flex flex-col gap-3">
+              <legend className="mb-3 text-sm font-medium text-foreground">What can we help you with?</legend>
+              <div className="grid grid-cols-2 gap-3">
+                {inquiryTypes.map((type) => {
+                  const active = selectedInquiry === type.id
+                  return (
+                    <button
+                      key={type.id}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setSelectedInquiry(type.id)}
+                      className={`flex items-center gap-3 rounded-2xl border p-4 text-left text-sm font-medium transition-colors ${
+                        active
+                          ? "border-forest bg-forest text-primary-foreground"
+                          : "border-border bg-background text-foreground hover:border-foreground/30"
+                      }`}
+                    >
+                      <type.icon className="size-5 shrink-0" aria-hidden="true" />
+                      {type.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </fieldset>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="firstName" className="text-forest">
-                        First Name *
-                      </Label>
-                      <Input id="firstName" name="firstName" required className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="lastName" className="text-forest">
-                        Last Name *
-                      </Label>
-                      <Input id="lastName" name="lastName" required className="mt-1" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="email" className="text-forest">
-                      Email *
-                    </Label>
-                    <Input id="email" name="email" type="email" required className="mt-1" />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="phone" className="text-forest">
-                      Phone Number *
-                    </Label>
-                    <Input id="phone" name="phone" type="tel" required className="mt-1" />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="company" className="text-forest">
-                      Company Name
-                    </Label>
-                    <Input id="company" name="company" className="mt-1" />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="subject" className="text-forest">
-                      Subject *
-                    </Label>
-                    <Input id="subject" name="subject" required className="mt-1" />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="message" className="text-forest">
-                      Message *
-                    </Label>
-                    <Textarea id="message" name="message" required rows={5} className="mt-1" />
-                  </div>
-
-                  {error && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">{error}</div>
-                  )}
-
-                  <Button type="submit" className="w-full bg-forest text-cream hover:bg-olive" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
-              </Card>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="firstName">First name *</Label>
+                <Input id="firstName" name="firstName" autoComplete="given-name" required className={fieldClass} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="lastName">Last name *</Label>
+                <Input id="lastName" name="lastName" autoComplete="family-name" required className={fieldClass} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="email">Email *</Label>
+                <Input id="email" name="email" type="email" autoComplete="email" required className={fieldClass} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="phone">Phone *</Label>
+                <Input id="phone" name="phone" type="tel" autoComplete="tel" required className={fieldClass} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="company">Company</Label>
+                <Input id="company" name="company" autoComplete="organization" className={fieldClass} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="subject">Subject *</Label>
+                <Input id="subject" name="subject" required className={fieldClass} />
+              </div>
             </div>
 
-            {/* Contact Information */}
-            <div>
-              <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-6">Get in Touch</h2>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="message">Message *</Label>
+              <Textarea id="message" name="message" required rows={5} className="rounded-xl bg-background" />
+            </div>
 
-              <div className="space-y-6 mb-8">
-                <Card className="p-6 border-sage/20">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center flex-shrink-0">
-                      <Mail className="h-6 w-6 text-forest" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-forest mb-1">Email</h3>
-                      <a href="mailto:admin@shwetasolar.in" className="text-olive hover:underline">
-                        admin@shwetasolar.in
-                      </a>
-                    </div>
-                  </div>
-                </Card>
+            {error && (
+              <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+                {error}
+              </p>
+            )}
 
-                <Card className="p-6 border-sage/20">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center flex-shrink-0">
-                      <Phone className="h-6 w-6 text-forest" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-forest mb-1">Phone</h3>
-                      <a href="tel:18001204771200" className="text-olive hover:underline block">
-                        1800 120 477120
-                      </a>
-                    </div>
-                  </div>
-                </Card>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex h-12 items-center justify-center rounded-full bg-forest px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive disabled:opacity-60 sm:self-start"
+            >
+              {isSubmitting ? "Sending..." : "Send message"}
+            </button>
+          </form>
 
-                <Card className="p-6 border-sage/20 bg-[#25D366]/5">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
-                      <MessageCircle className="h-6 w-6 text-[#25D366]" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-forest mb-1">WhatsApp</h3>
-                      <a
-                        href="https://wa.me/919289969501"
-                        target="_blank"
-                        className="text-[#25D366] hover:underline block font-medium"
-                        rel="noreferrer"
-                      >
-                        Chat with us: +91 92899 69501
-                      </a>
-                      <p className="text-sm text-olive mt-1">Quick responses during business hours</p>
-                    </div>
-                  </div>
-                </Card>
+          <div className="flex flex-col gap-4 lg:col-span-2">
+            <ul className="flex flex-col gap-4">
+              {CHANNELS.map(({ icon: Icon, label, value, href, external }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="flex items-center gap-5 rounded-3xl border border-border bg-muted p-6 transition-colors hover:border-foreground/30"
+                  >
+                    <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <span className="flex min-w-0 flex-col">
+                      <span className="text-sm text-muted-foreground">{label}</span>
+                      <span className="truncate font-semibold text-foreground">{value}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
 
-                <Card className="p-6 border-sage/20">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-forest" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-forest mb-1">Corporate Office</h3>
-                      <p className="text-olive">
-                        Near Delhi, India's Capital
-                        <br />
-                        Strategic location with excellent connectivity
-                      </p>
-                    </div>
+            <div className="flex flex-1 flex-col gap-5 rounded-3xl bg-forest p-7 text-primary-foreground">
+              <span className="flex size-12 items-center justify-center rounded-2xl bg-primary-foreground/10 text-sage">
+                <Clock className="size-5" aria-hidden="true" />
+              </span>
+              <h2 className="text-lg font-semibold">Business hours</h2>
+              <dl className="flex flex-col gap-2 text-sm">
+                {[
+                  ["Monday – Friday", "9:00 AM – 6:00 PM"],
+                  ["Saturday", "9:00 AM – 2:00 PM"],
+                  ["Sunday", "Closed"],
+                ].map(([day, hours]) => (
+                  <div key={day} className="flex justify-between gap-4 border-t border-primary-foreground/15 pt-2">
+                    <dt className="text-primary-foreground/70">{day}</dt>
+                    <dd className="font-medium">{hours}</dd>
                   </div>
-                </Card>
-
-                <Card className="p-6 border-sage/20">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-6 w-6 text-forest" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-forest mb-1">Business Hours</h3>
-                      <p className="text-olive">
-                        Monday - Friday: 9:00 AM - 6:00 PM
-                        <br />
-                        Saturday: 9:00 AM - 2:00 PM
-                        <br />
-                        Sunday: Closed
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </div>
+                ))}
+              </dl>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-8 text-center">Our Locations</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="overflow-hidden border-sage/20">
-              <div className="p-4 bg-cream border-b border-sage/20">
-                <h3 className="font-semibold text-forest">Corporate Office</h3>
-                <p className="text-sm text-olive mt-1">Near Delhi, India's Capital</p>
-                <p className="text-sm text-olive mt-1">Strategic location with excellent connectivity</p>
-              </div>
-              <div className="h-[400px]">
+      <section aria-labelledby="locations-heading" className="border-t border-border bg-background py-16 md:py-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-medium text-muted-foreground">Visit us</p>
+            <h2 id="locations-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
+              Our locations
+            </h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {LOCATIONS.map((loc) => (
+              <article key={loc.title} className="flex flex-col overflow-hidden rounded-3xl border border-border bg-muted">
+                <div className="flex flex-col gap-1 p-6">
+                  <h3 className="text-lg font-semibold text-foreground">{loc.title}</h3>
+                  <p className="text-sm text-muted-foreground">{loc.detail}</p>
+                </div>
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d874.934100454796!2d77.4442717!3d28.6975308!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cf12c2c7a8b37%3A0xdc082a9319e20eca!2sShweta%20Solar%20System%20Pvt.%20Ltd.%20Corporate%20Office!5e0!3m2!1sen!2sin!4v1760470739906!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
+                  src={loc.src}
+                  className="h-80 w-full border-0 md:h-96"
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Shweta Solar Corporate Office Location"
+                  title={`Shweta Solar ${loc.title} location`}
                 />
-              </div>
-            </Card>
-            <Card className="overflow-hidden border-sage/20">
-              <div className="p-4 bg-cream border-b border-sage/20">
-                <h3 className="font-semibold text-forest">Manufacturing Facility</h3>
-                <p className="text-sm text-olive mt-1">1.2GW TopCon Production Line</p>
-              </div>
-              <div className="h-[400px]">
-                <iframe
-                  src="https://www.google.com/maps?q=28.678944,77.643083&output=embed"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Shweta Solar Manufacturing Facility Location"
-                />
-              </div>
-            </Card>
+              </article>
+            ))}
           </div>
         </div>
       </section>
-    </div>
+    </>
   )
 }

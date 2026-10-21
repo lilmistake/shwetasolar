@@ -1,286 +1,205 @@
-import { Leaf, Recycle, Sun, TreePine, Droplets, Factory, Award, TrendingUp, Calculator } from "lucide-react"
-import { Card } from "@/components/ui/card"
-import Image from "next/image"
-import { CTAWidget } from "@/components/cta-widget"
-import { EnquirySection } from "@/components/enquiry-section"
 import type { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight, Check, Droplets, Factory, Leaf, Recycle, Sun, TreePine } from "lucide-react"
 import { PageHero } from "@/components/site/page-hero"
+import { Reveal } from "@/components/topcon/reveal"
+import { ClosingCta } from "@/components/home/closing-cta"
 
 export const metadata: Metadata = {
   title: "Sustainability - Our Environmental Commitment & Green Initiatives",
   description:
-    "Discover Shweta Solar's sustainability initiatives: 100% renewable energy manufacturing, 95% material recovery, zero waste goals, and carbon neutrality by 2027. Learn about our environmental impact.",
+    "Discover Shweta Solar's sustainability initiatives: renewable-powered manufacturing, material recovery, zero waste goals, and our path to carbon neutrality.",
+  alternates: { canonical: "/sustainability" },
   openGraph: {
     title: "Shweta Solar Sustainability - Carbon Neutral Solar Manufacturing",
     description:
-      "Leading the way in sustainable solar manufacturing with circular economy practices, water conservation, reforestation programs, and commitment to carbon neutrality.",
+      "Sustainable solar manufacturing with circular economy practices, water conservation, reforestation programs, and a commitment to carbon neutrality.",
   },
 }
 
+const INITIATIVES = [
+  {
+    icon: Sun,
+    title: "Renewable energy",
+    text: "Our facilities run on renewable sources, including our own rooftop solar, keeping our carbon footprint low.",
+  },
+  {
+    icon: Recycle,
+    title: "Circular economy",
+    text: "A recycling program recovers 95% of materials from manufacturing waste and end-of-life panels.",
+  },
+  {
+    icon: Droplets,
+    title: "Water conservation",
+    text: "Closed-loop water recycling cuts consumption by 80% across our production lines.",
+  },
+  {
+    icon: Factory,
+    title: "Zero waste manufacturing",
+    text: "92% of waste is already diverted from landfill. Our goal is zero waste to landfill by 2026.",
+  },
+  {
+    icon: TreePine,
+    title: "Reforestation",
+    text: "For every megawatt we produce, we plant 1,000 trees with local communities.",
+  },
+  {
+    icon: Leaf,
+    title: "Responsible supply chain",
+    text: "We work with suppliers who meet strict environmental standards, from raw material to delivery.",
+  },
+]
+
+const IMPACT = [
+  { value: "2.5M+", label: "Tonnes of CO₂ offset annually" },
+  { value: "95%", label: "Material recovery rate" },
+  { value: "500K+", label: "Trees planted" },
+  { value: "80%", label: "Less water used" },
+]
+
+const CARBON_STEPS = [
+  "Renewable energy for all manufacturing and office facilities",
+  "Electric vehicles for logistics and employee transport",
+  "Carbon offset projects, including reforestation",
+  "Optimised supply chain logistics to cut transport emissions",
+]
+
+const GOALS = [
+  { title: "Fully circular", text: "Zero waste and 100% recyclable products." },
+  { title: "Carbon negative", text: "Remove more CO₂ than our operations emit." },
+  { title: "1 million trees", text: "Planted across India through our reforestation program." },
+  { title: "Zero water waste", text: "Closed-loop systems with no freshwater consumption." },
+]
+
 export default function SustainabilityPage() {
   return (
-    <div>
+    <>
       <PageHero
         eyebrow="Sustainability"
-        crumbs={[{ name: "Home", path: "/" }, { name: "Sustainability", path: "/sustainability" }]}
-        title="Sustainability at Shweta Solar"
-        intro="Powering a greener tomorrow through innovation, responsibility, and commitment to our planet."
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Sustainability", path: "/sustainability" },
+        ]}
+        title="Clean energy, made cleanly."
+        intro="Making solar panels should not cost the planet. We build sustainability into our factory, our supply chain and our products."
+        image={{
+          src: "/solar-panels-on-green-factory-roof-with-trees.jpg",
+          alt: "Solar panels on a factory roof surrounded by trees",
+        }}
       />
 
-      {/* Our Commitment */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-8 text-center">
-              Our Environmental Commitment
+      <section aria-labelledby="initiatives-heading" className="bg-background py-16 md:py-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 md:px-6">
+          <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex max-w-2xl flex-col gap-4">
+              <p className="text-sm font-medium text-muted-foreground">Our initiatives</p>
+              <h2 id="initiatives-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
+                Responsibility at every step of the line.
+              </h2>
+            </div>
+            <p className="max-w-md text-pretty leading-relaxed text-muted-foreground">
+              The move to renewable energy has to come with sustainable manufacturing. These are the programs that make
+              that real at Shweta Solar.
+            </p>
+          </Reveal>
+
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {INITIATIVES.map(({ icon: Icon, title, text }, i) => (
+              <Reveal
+                as="li"
+                key={title}
+                delay={0.06 + i * 0.05}
+                className="flex flex-col gap-10 rounded-3xl border border-border bg-muted p-7"
+              >
+                <span className="flex size-12 items-center justify-center rounded-2xl bg-background text-primary">
+                  <Icon className="size-6" aria-hidden="true" />
+                </span>
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section aria-labelledby="impact-heading" className="bg-background pb-16 md:pb-24">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <Reveal className="flex flex-col gap-12 rounded-3xl bg-forest p-8 text-primary-foreground md:p-14">
+            <h2 id="impact-heading" className="max-w-xl text-balance text-3xl font-semibold md:text-4xl">
+              Our environmental impact so far
             </h2>
-            <p className="text-lg text-olive leading-relaxed mb-6">
-              At Shweta Solar, sustainability is not just a buzzword—it's the foundation of everything we do. As a
-              leading manufacturer of solar panels, we recognize our responsibility to minimize environmental impact
-              while maximizing clean energy production. Our commitment extends beyond our products to encompass our
-              entire manufacturing process, supply chain, and corporate culture.
-            </p>
-            <p className="text-lg text-olive leading-relaxed">
-              We believe that the transition to renewable energy must be accompanied by sustainable manufacturing
-              practices. That's why we've invested heavily in green technologies, circular economy principles, and
-              carbon-neutral operations to ensure that every solar panel we produce contributes to a healthier planet.
-            </p>
-          </div>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+              {IMPACT.map((m) => (
+                <div key={m.label} className="flex flex-col gap-2 border-t border-primary-foreground/20 pt-5">
+                  <dt className="order-2 text-sm leading-relaxed text-primary-foreground/70">{m.label}</dt>
+                  <dd className="order-1 text-4xl font-semibold md:text-5xl">{m.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </div>
       </section>
 
-      {/* Key Initiatives */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
-            Our Sustainability Initiatives
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <Card className="p-8 hover:shadow-2xl transition-all border-sage/20">
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
-                <Sun className="h-8 w-8 text-forest" />
-              </div>
-              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">100% Renewable Energy</h3>
-              <p className="text-olive leading-relaxed">
-                Our manufacturing facilities are powered entirely by renewable energy sources, including our own solar
-                installations, reducing our carbon footprint to near zero.
-              </p>
-            </Card>
-
-            <Card className="p-8 hover:shadow-2xl transition-all border-sage/20">
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
-                <Recycle className="h-8 w-8 text-forest" />
-              </div>
-              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Circular Economy</h3>
-              <p className="text-olive leading-relaxed">
-                We've implemented a comprehensive recycling program that recovers 95% of materials from manufacturing
-                waste and end-of-life solar panels, keeping valuable resources in circulation.
-              </p>
-            </Card>
-
-            <Card className="p-8 hover:shadow-2xl transition-all border-sage/20">
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
-                <Droplets className="h-8 w-8 text-forest" />
-              </div>
-              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Water Conservation</h3>
-              <p className="text-olive leading-relaxed">
-                Advanced water recycling systems in our facilities reduce water consumption by 80%, with closed-loop
-                systems ensuring minimal waste and maximum efficiency.
-              </p>
-            </Card>
-
-            <Card className="p-8 hover:shadow-2xl transition-all border-sage/20">
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
-                <Factory className="h-8 w-8 text-forest" />
-              </div>
-              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Zero Waste Manufacturing</h3>
-              <p className="text-olive leading-relaxed">
-                Our goal is zero waste to landfill by 2026. Currently, we've achieved 92% waste diversion through
-                recycling, composting, and energy recovery programs.
-              </p>
-            </Card>
-
-            <Card className="p-8 hover:shadow-2xl transition-all border-sage/20">
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
-                <TreePine className="h-8 w-8 text-forest" />
-              </div>
-              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Reforestation Program</h3>
-              <p className="text-olive leading-relaxed">
-                For every megawatt of solar capacity we produce, we plant 1,000 trees in partnership with local
-                communities, offsetting emissions and restoring ecosystems.
-              </p>
-            </Card>
-
-            <Card className="p-8 hover:shadow-2xl transition-all border-sage/20">
-              <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
-                <Leaf className="h-8 w-8 text-forest" />
-              </div>
-              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Sustainable Supply Chain</h3>
-              <p className="text-olive leading-relaxed">
-                We work exclusively with suppliers who meet our strict environmental standards, ensuring sustainability
-                from raw material extraction to final product delivery.
-              </p>
-            </Card>
-          </div>
+      <section aria-labelledby="carbon-heading" className="bg-background pb-16 md:pb-24">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 md:px-6 lg:grid-cols-2 lg:gap-20">
+          <Reveal className="relative isolate min-h-80 overflow-hidden rounded-3xl">
+            <Image
+              src="/green-factory-with-solar-panels.jpg"
+              alt="Shweta Solar facility with rooftop solar panels"
+              fill
+              sizes="(min-width: 1024px) 600px, 100vw"
+              className="object-cover"
+            />
+          </Reveal>
+          <Reveal delay={0.1} className="flex flex-col justify-center gap-6">
+            <p className="text-sm font-medium text-muted-foreground">Carbon neutrality</p>
+            <h2 id="carbon-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
+              Carbon neutral across all operations by 2027.
+            </h2>
+            <ul className="flex flex-col gap-4">
+              {CARBON_STEPS.map((step) => (
+                <li key={step} className="flex gap-3">
+                  <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-primary">
+                    <Check className="size-3.5" aria-hidden="true" />
+                  </span>
+                  <span className="leading-relaxed text-foreground">{step}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </section>
 
-      {/* Impact Metrics */}
-      <section className="py-20 bg-gradient-to-br from-sage/20 to-olive/10">
-        <div className="container mx-auto px-4">
-          <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
-            Our Environmental Impact
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div className="text-center">
-              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">2.5M+</div>
-              <div className="text-lg text-olive font-medium">Tons of CO₂ Offset Annually</div>
-            </div>
-            <div className="text-center">
-              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">95%</div>
-              <div className="text-lg text-olive font-medium">Material Recovery Rate</div>
-            </div>
-            <div className="text-center">
-              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">500K+</div>
-              <div className="text-lg text-olive font-medium">Trees Planted</div>
-            </div>
-            <div className="text-center">
-              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">80%</div>
-              <div className="text-lg text-olive font-medium">Water Usage Reduction</div>
-            </div>
-          </div>
+      <section aria-labelledby="goals-heading" className="border-t border-border bg-background py-16 md:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 md:px-6 lg:grid-cols-3">
+          <Reveal className="flex flex-col gap-4">
+            <p className="text-sm font-medium text-muted-foreground">Looking ahead</p>
+            <h2 id="goals-heading" className="text-balance text-4xl font-semibold text-foreground">
+              Our 2030 goals
+            </h2>
+            <Link
+              href="/resources/calculator"
+              className="group mt-2 inline-flex items-center gap-2 text-sm font-semibold text-foreground"
+            >
+              Calculate your own CO₂ savings
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
+          </Reveal>
+          <dl className="grid gap-x-10 sm:grid-cols-2 lg:col-span-2">
+            {GOALS.map((g, i) => (
+              <Reveal key={g.title} delay={0.06 + i * 0.05} className="flex flex-col gap-2 border-t border-border py-6">
+                <dt className="text-xl font-semibold text-foreground">{g.title}</dt>
+                <dd className="leading-relaxed text-muted-foreground">{g.text}</dd>
+              </Reveal>
+            ))}
+          </dl>
         </div>
       </section>
 
-      {/* Carbon Neutrality */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-6">
-                  Path to Carbon Neutrality
-                </h2>
-                <p className="text-lg text-olive leading-relaxed mb-6">
-                  Shweta Solar is committed to achieving complete carbon neutrality across all operations by 2027. Our
-                  comprehensive strategy includes:
-                </p>
-                <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-forest mt-2 flex-shrink-0" />
-                    <span className="text-olive">
-                      Transitioning to 100% renewable energy for all manufacturing and office facilities
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-forest mt-2 flex-shrink-0" />
-                    <span className="text-olive">
-                      Implementing electric vehicle fleets for logistics and employee transportation
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-forest mt-2 flex-shrink-0" />
-                    <span className="text-olive">
-                      Investing in carbon offset projects including reforestation and renewable energy development
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-forest mt-2 flex-shrink-0" />
-                    <span className="text-olive">
-                      Optimizing supply chain logistics to minimize transportation emissions
-                    </span>
-                  </li>
-                </ul>
-              </div>
-              <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/solar-panels-on-green-factory-roof-with-trees.jpg"
-                  alt="Carbon Neutral Manufacturing"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Certifications */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
-            Environmental Certifications
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="p-8 text-center hover:shadow-xl transition-all border-sage/20">
-              <Award className="h-16 w-16 text-forest mx-auto mb-4" />
-              <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">ISO 14001</h3>
-              <p className="text-olive">Environmental Management System Certification</p>
-            </Card>
-            <Card className="p-8 text-center hover:shadow-xl transition-all border-sage/20">
-              <Award className="h-16 w-16 text-forest mx-auto mb-4" />
-              <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">LEED Platinum</h3>
-              <p className="text-olive">Green Building Certification for Manufacturing Facilities</p>
-            </Card>
-            <Card className="p-8 text-center hover:shadow-xl transition-all border-sage/20">
-              <Award className="h-16 w-16 text-forest mx-auto mb-4" />
-              <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">Carbon Trust Standard</h3>
-              <p className="text-olive">Verified Carbon Reduction and Management</p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Future Goals */}
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <TrendingUp className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold mb-8">Our 2030 Sustainability Goals</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-              <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">100% Circular Economy</h3>
-                <p className="text-cream/90">
-                  Achieve complete circularity in manufacturing with zero waste and 100% recyclable products
-                </p>
-              </div>
-              <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">Carbon Negative Operations</h3>
-                <p className="text-cream/90">
-                  Go beyond carbon neutral to remove more CO₂ from the atmosphere than we emit
-                </p>
-              </div>
-              <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">1 Million Trees</h3>
-                <p className="text-cream/90">Plant one million trees across India through our reforestation program</p>
-              </div>
-              <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">Zero Water Waste</h3>
-                <p className="text-cream/90">
-                  Implement closed-loop water systems achieving zero freshwater consumption
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Solar Calculator CTA Widget */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <CTAWidget
-            icon={<Calculator className="h-16 w-16" />}
-            title="Calculate Your Environmental Impact"
-            description="Discover how much CO₂ you can offset and money you can save by switching to solar energy with our interactive calculator."
-            buttonText="Calculate Now"
-            buttonHref="/resources/calculator"
-            variant="outline"
-          />
-        </div>
-      </section>
-
-      {/* Enquiry Section */}
-      <EnquirySection />
-    </div>
+      <ClosingCta />
+    </>
   )
 }

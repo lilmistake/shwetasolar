@@ -25,23 +25,12 @@ const NAV: NavItem[] = [
     children: [
       { label: "About us", href: "/about" },
       { label: "Sustainability", href: "/sustainability" },
-      { label: "Board of directors", href: "/investors/board" },
-      { label: "Policies", href: "/investors/policies" },
-    ],
-  },
-  {
-    label: "Newsroom",
-    children: [
-      { label: "Overview", href: "/newsroom" },
-      { label: "News", href: "/newsroom/news" },
-      { label: "Blog", href: "/newsroom/blog" },
-      { label: "Gallery", href: "/newsroom/gallery" },
     ],
   },
   {
     label: "Resources",
     children: [
-      { label: "Datasheets", href: "/resources/downloads" },
+      { label: "Downloads", href: "/resources/downloads" },
       { label: "Solar calculator", href: "/resources/calculator" },
     ],
   },

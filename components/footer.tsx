@@ -18,18 +18,14 @@ const COLUMNS = [
     links: [
       { label: "About us", href: "/about" },
       { label: "Sustainability", href: "/sustainability" },
-      { label: "Board of directors", href: "/investors/board" },
-      { label: "Policies", href: "/investors/policies" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Datasheets", href: "/resources/downloads" },
+      { label: "Downloads", href: "/resources/downloads" },
       { label: "Solar calculator", href: "/resources/calculator" },
-      { label: "News", href: "/newsroom/news" },
-      { label: "Blog", href: "/newsroom/blog" },
-      { label: "Gallery", href: "/newsroom/gallery" },
     ],
   },
 ]

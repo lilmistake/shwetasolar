@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next"
-import { getAllBlogPostsStatic } from "@/lib/blog"
 import { SEGMENTS } from "@/lib/products"
 import { SITE } from "@/lib/site"
 
@@ -14,15 +13,9 @@ const STATIC_ROUTES: { path: string; priority: number; changeFrequency: Entry["c
   { path: "/resources/downloads", priority: 0.8, changeFrequency: "monthly" },
   { path: "/resources/calculator", priority: 0.7, changeFrequency: "yearly" },
   { path: "/sustainability", priority: 0.6, changeFrequency: "yearly" },
-  { path: "/investors/board", priority: 0.5, changeFrequency: "yearly" },
-  { path: "/investors/policies", priority: 0.4, changeFrequency: "yearly" },
-  { path: "/newsroom", priority: 0.6, changeFrequency: "weekly" },
-  { path: "/newsroom/news", priority: 0.6, changeFrequency: "weekly" },
-  { path: "/newsroom/blog", priority: 0.6, changeFrequency: "weekly" },
-  { path: "/newsroom/gallery", priority: 0.4, changeFrequency: "monthly" },
 ]
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
   const pages: MetadataRoute.Sitemap = STATIC_ROUTES.map((r) => ({
@@ -40,20 +33,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     images: [`${SITE.url}${s.image.src}`],
   }))
 
-  let posts: MetadataRoute.Sitemap = []
-  try {
-    const blogPosts = await getAllBlogPostsStatic()
-    posts = blogPosts
-      .filter((post) => post.publishedDate && post.slug)
-      .map((post) => ({
-        url: `${SITE.url}/newsroom/blog/${post.slug}`,
-        lastModified: new Date(post.publishedDate),
-        changeFrequency: "yearly" as const,
-        priority: 0.5,
-      }))
-  } catch (error) {
-    console.error("Sitemap: failed to load blog posts", error)
-  }
-
-  return [...pages, ...segments, ...posts]
+  return [...pages, ...segments]
 }

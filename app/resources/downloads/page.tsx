@@ -1,108 +1,95 @@
 import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { Download, FileText } from "lucide-react"
-import { Breadcrumbs } from "@/components/site/breadcrumbs"
+import { ArrowDown, FileText } from "lucide-react"
+import { PageHero } from "@/components/site/page-hero"
+import { Reveal } from "@/components/topcon/reveal"
+import { ClosingCta } from "@/components/home/closing-cta"
 import { COMPLETE_DATASHEET, FAMILIES, RANGE_SUMMARY, SEGMENTS } from "@/lib/products"
-import { FACTORY_PHOTOS, SITE } from "@/lib/site"
 
 export const metadata: Metadata = {
-  title: "TOPCon Solar Panel Datasheets (PDF Download)",
+  title: "Downloads: TOPCon Solar Panel Datasheets (PDF)",
   description: `Download Shweta Solar n-type TOPCon module datasheets: residential, commercial, utility and the complete ${RANGE_SUMMARY.minW}–${RANGE_SUMMARY.maxW} W range. Electrical, mechanical and warranty specifications.`,
   alternates: { canonical: "/resources/downloads" },
 }
 
-const DOCS = [
-  {
-    title: "Complete range datasheet",
-    body: `All ${FAMILIES.length} module families, ${RANGE_SUMMARY.minW}–${RANGE_SUMMARY.maxW} W, in one document.`,
-    href: COMPLETE_DATASHEET,
-    featured: true,
-  },
-  ...SEGMENTS.map((s) => ({
-    title: `${s.name} datasheet`,
-    body: `${s.powerRange} · ${s.summary}`,
-    href: s.datasheet,
-    featured: false,
-  })),
-]
+const DOCS = SEGMENTS.map((s) => ({
+  title: `${s.name} modules`,
+  meta: s.powerRange,
+  body: s.summary,
+  href: s.datasheet,
+}))
 
 export default function DownloadsPage() {
   return (
     <>
-      <section className="bg-background pt-20">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:px-6 md:py-20 lg:grid-cols-5 lg:items-end">
-          <div className="flex flex-col gap-6 lg:col-span-3">
-            <Breadcrumbs
-              items={[
-                { name: "Home", path: "/" },
-                { name: "Datasheets", path: "/resources/downloads" },
-              ]}
-            />
-            <h1 className="font-semibold tracking-tight text-5xl leading-[1.05] text-forest text-balance md:text-6xl">
-              Module datasheets
-            </h1>
-            <p className="max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-              Electrical ratings, mechanical drawings, packing and warranty terms for every Shweta Solar TOPCon module.
-              Free to download, no sign-up.
-            </p>
-          </div>
-          <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl lg:col-span-2 lg:block">
-            <Image src={FACTORY_PHOTOS.busbarMacro.src} alt={FACTORY_PHOTOS.busbarMacro.alt} fill sizes="40vw" className="object-cover" />
-          </div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Resources"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Downloads", path: "/resources/downloads" },
+        ]}
+        title="Downloads"
+        intro="Electrical ratings, mechanical drawings, packing and warranty terms for every Shweta Solar TOPCon module. Free to download, no sign-up."
+      />
 
-      <section aria-label="Datasheet downloads" className="bg-muted py-16 md:py-20">
-        <ul className="mx-auto grid max-w-7xl gap-4 px-4 md:grid-cols-2 md:px-6">
-          {DOCS.map((d) => (
-            <li key={d.href} className={d.featured ? "md:col-span-2" : undefined}>
-              <a
-                href={d.href}
-                download
-                className={`group flex h-full items-center gap-5 rounded-2xl p-6 transition-colors md:p-8 ${
-                  d.featured ? "bg-forest text-primary-foreground hover:bg-olive" : "bg-card hover:bg-background"
-                }`}
-              >
-                <span
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${
-                    d.featured ? "bg-white/10 text-sage" : "bg-muted text-forest"
-                  }`}
-                >
-                  <FileText className="h-6 w-6" aria-hidden="true" />
+      <section aria-label="Datasheet downloads" className="bg-background pb-16 md:pb-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 md:px-6">
+          <Reveal>
+            <a
+              href={COMPLETE_DATASHEET}
+              download
+              className="group flex flex-col gap-8 rounded-3xl bg-forest p-8 text-primary-foreground transition-colors hover:bg-olive md:flex-row md:items-end md:justify-between md:p-12"
+            >
+              <div className="flex flex-col gap-4">
+                <span className="text-sm font-medium text-primary-foreground/70">Complete range · PDF</span>
+                <span className="text-balance text-3xl font-semibold md:text-5xl">
+                  Every module, {RANGE_SUMMARY.minW}–{RANGE_SUMMARY.maxW} W
                 </span>
-                <span className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className={`font-semibold tracking-tight text-2xl ${d.featured ? "" : "text-forest"}`}>{d.title}</span>
-                  <span className={`text-sm leading-relaxed ${d.featured ? "text-white/75" : "text-muted-foreground"}`}>
-                    {d.body}
-                  </span>
+                <span className="max-w-lg text-pretty leading-relaxed text-primary-foreground/75">
+                  All {FAMILIES.length} module families in one document, with full electrical and mechanical
+                  specifications.
                 </span>
-                <span className="flex items-center gap-2 text-sm font-semibold">
-                  <Download className="h-4 w-4" aria-hidden="true" />
-                  <span className="hidden sm:inline">PDF</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="bg-background py-16">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 md:flex-row md:items-center md:px-6">
-          <div className="flex flex-col gap-2">
-            <h2 className="font-semibold tracking-tight text-3xl text-forest">Need a PAN file or test report?</h2>
-            <p className="text-muted-foreground">Our engineering team shares simulation files and project documents on request.</p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/contact" className="rounded-full bg-forest px-6 py-3.5 font-semibold text-primary-foreground transition-colors hover:bg-olive">
-              Contact sales
-            </Link>
-            <a href={SITE.phoneHref} className="rounded-full border border-forest px-6 py-3.5 font-semibold text-forest transition-colors hover:bg-forest hover:text-primary-foreground">
-              {SITE.phoneDisplay}
+              </div>
+              <span className="inline-flex h-12 shrink-0 items-center gap-2 self-start rounded-full bg-sage px-6 text-sm font-semibold text-forest md:self-auto">
+                Download
+                <ArrowDown className="size-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+              </span>
             </a>
-          </div>
+          </Reveal>
+
+          <ul className="grid gap-4 md:grid-cols-3">
+            {DOCS.map((d, i) => (
+              <Reveal as="li" key={d.href} delay={0.06 + i * 0.06}>
+                <a
+                  href={d.href}
+                  download
+                  className="group flex h-full flex-col gap-10 rounded-3xl border border-border bg-muted p-7 transition-colors hover:border-foreground/30"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="flex size-12 items-center justify-center rounded-2xl bg-background text-primary">
+                      <FileText className="size-6" aria-hidden="true" />
+                    </span>
+                    <span className="text-sm font-medium text-muted-foreground">{d.meta}</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xl font-semibold text-foreground">{d.title}</span>
+                    <span className="text-sm leading-relaxed text-muted-foreground">{d.body}</span>
+                  </div>
+                  <span className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                    Download PDF
+                    <ArrowDown className="size-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+                  </span>
+                </a>
+              </Reveal>
+            ))}
+          </ul>
+
+          <p className="pt-4 text-sm text-muted-foreground">
+            Need a PAN file, test report or project documents? Our engineering team shares them on request.
+          </p>
         </div>
       </section>
+
+      <ClosingCta />
     </>
   )
 }
