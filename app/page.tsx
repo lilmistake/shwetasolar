@@ -7,7 +7,6 @@ import { FactorySection } from "@/components/home/factory-section"
 import { ReasonsSection } from "@/components/home/reasons-section"
 import { ClosingCta } from "@/components/home/closing-cta"
 import { VideoSection } from "@/components/home/video-section"
-import { StorySection } from "@/components/home/story-section"
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -23,7 +22,6 @@ export default function HomePage() {
       <FactorySection />
       <VideoSection />
       <ReasonsSection />
-      <StorySection />
       <ClosingCta />
     </div>
   )

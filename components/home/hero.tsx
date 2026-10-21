@@ -49,11 +49,11 @@ export function Hero() {
       </motion.div>
 
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/45 via-45% to-transparent to-80%"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/65 via-ink/25 via-40% to-transparent to-70%"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-ink/80 to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-10 h-1/4 bg-gradient-to-t from-ink/60 to-transparent"
         aria-hidden="true"
       />
 
