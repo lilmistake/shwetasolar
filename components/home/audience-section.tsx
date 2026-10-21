@@ -3,12 +3,9 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { motion } from "framer-motion"
 import { ArrowUpRight, Check } from "lucide-react"
 import { Reveal } from "@/components/topcon/reveal"
 import { cn } from "@/lib/utils"
-
-const ease = [0.22, 1, 0.36, 1] as const
 
 const AUDIENCES = [
   {
@@ -33,20 +30,6 @@ const AUDIENCES = [
     cta: { label: "See rooftop panels", href: "/products/commercial" },
     image: { src: "/images/stock/industrial-rooftop-aerial.png", alt: "Factory rooftop solar installation" },
   },
-  {
-    eyebrow: "Solar brands (OEM)",
-    title: "Your brand, built on our line.",
-    points: [
-      "Private-label modules with your name on them",
-      "Your cells or ours, same automated process",
-      "Same 100% testing as every Shweta panel",
-    ],
-    cta: { label: "Discuss OEM supply", href: "/contact" },
-    image: {
-      src: "/images/factory/topcon-module-on-line.jpg",
-      alt: "Finished solar module moving along the production line",
-    },
-  },
 ]
 
 export function AudienceSection() {
@@ -59,11 +42,11 @@ export function AudienceSection() {
           <div className="flex max-w-2xl flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground">Who we work with</p>
             <h2 id="audience-heading" className="text-balance text-4xl font-semibold text-foreground md:text-6xl">
-              One factory, three ways to work with us.
+              One factory, two ways to work with us.
             </h2>
           </div>
           <p className="max-w-sm text-pretty leading-relaxed text-muted-foreground">
-            Whether you install solar, run on it, or sell it under your own name, we make the panel the easy part.
+            Whether you install solar for others or run your own site on it, we make the panel the easy part.
           </p>
         </Reveal>
 
@@ -75,14 +58,14 @@ export function AudienceSection() {
                 key={a.eyebrow}
                 delay={i * 0.1}
                 className={cn(
-                  "relative min-h-[30rem] overflow-hidden rounded-3xl transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] md:min-h-0",
-                  isActive ? "md:flex-[2.2]" : "md:flex-1",
+                  "relative overflow-hidden rounded-3xl md:transition-[flex-grow] md:duration-700 md:ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  isActive ? "md:flex-[1.6]" : "md:flex-1",
                 )}
               >
                 <article
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
-                  className="group absolute inset-0 flex flex-col justify-end text-primary-foreground"
+                  className="group relative flex min-h-[28rem] flex-col justify-end text-primary-foreground md:absolute md:inset-0 md:min-h-0"
                 >
                   <Image
                     src={a.image.src}
@@ -105,12 +88,11 @@ export function AudienceSection() {
                     </span>
                     <h3 className="max-w-md text-balance text-2xl font-semibold md:text-4xl">{a.title}</h3>
 
-                    <motion.ul
-                      key={isActive ? "active" : "idle"}
-                      className={cn("flex flex-col gap-2.5", !isActive && "md:hidden")}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, ease, delay: 0.15 }}
+                    <ul
+                      className={cn(
+                        "flex flex-col gap-2.5 md:transition-all md:duration-500",
+                        isActive ? "md:translate-y-0 md:opacity-100" : "md:translate-y-3 md:opacity-0",
+                      )}
                     >
                       {a.points.map((p) => (
                         <li key={p} className="flex items-center gap-3 text-sm leading-relaxed md:text-base">
@@ -120,7 +102,7 @@ export function AudienceSection() {
                           {p}
                         </li>
                       ))}
-                    </motion.ul>
+                    </ul>
 
                     <Link
                       href={a.cta.href}
