@@ -2,135 +2,117 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { FACTORY_PHOTOS } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const STEPS = [
+const TILES = [
   {
-    title: "Built by robots",
-    text: "Cells are cut, placed and soldered by automated machines, so every panel is built exactly the same way.",
+    step: "01",
+    title: "A fully automated line",
+    text: "From raw cell to finished panel, machines do the precise work so every module is built the same way.",
+    photo: FACTORY_PHOTOS.floor,
+    className: "sm:col-span-2 lg:col-span-2 lg:row-span-2",
+    sizes: "(min-width: 1024px) 600px, 100vw",
+  },
+  {
+    step: "02",
+    title: "Robotic cell handling",
+    text: "Cells are lifted, aligned and soldered by robots, never by hand.",
     photo: FACTORY_PHOTOS.gripper,
+    className: "sm:col-span-2 lg:col-span-2",
+    sizes: "(min-width: 1024px) 600px, 100vw",
   },
   {
-    title: "Scanned for hidden cracks",
-    text: "Every panel is imaged before and after sealing, so flaws you can't see never leave the plant.",
+    step: "03",
+    title: "Scanned for cracks",
+    text: "Imaging catches flaws invisible to the eye.",
     photo: FACTORY_PHOTOS.stringerDark,
+    className: "",
+    sizes: "(min-width: 1024px) 300px, (min-width: 640px) 50vw, 100vw",
   },
   {
+    step: "04",
     title: "Tested one by one",
-    text: "Each panel is power-tested and ships with its own report and serial number.",
+    text: "Every panel ships with its own test report.",
     photo: FACTORY_PHOTOS.inspection,
+    className: "",
+    sizes: "(min-width: 1024px) 300px, (min-width: 640px) 50vw, 100vw",
   },
 ]
 
 export function FactorySection() {
-  const [active, setActive] = useState(0)
+  const reduceMotion = useReducedMotion()
 
   return (
-    <section aria-labelledby="factory-heading" className="relative bg-forest text-primary-foreground">
-      <div className="mx-auto max-w-7xl px-4 pt-24 md:px-6 md:pt-32">
-        <div className="flex max-w-2xl flex-col gap-4">
-          <p className="text-sm font-medium text-sage">Inside our factory</p>
-          <h2 id="factory-heading" className="text-balance text-4xl font-semibold md:text-6xl">
-            Made by machines. Checked by people.
-          </h2>
-          <p className="text-pretty text-lg leading-relaxed text-primary-foreground/70">
-            Our fully automated line in Uttar Pradesh builds every panel to the same standard, then our quality team
-            signs it off.
-          </p>
-        </div>
-      </div>
-
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-24 md:px-6 md:pb-32 lg:grid-cols-2 lg:gap-16">
-        <ol className="flex flex-col">
-          {STEPS.map((step, i) => (
-            <motion.li
-              key={step.title}
-              onViewportEnter={() => setActive(i)}
-              viewport={{ amount: 0.6 }}
-              className="flex flex-col gap-6 py-12 lg:min-h-[70vh] lg:justify-center lg:py-0"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl lg:hidden">
-                <Image src={step.photo.src} alt={step.photo.alt} fill sizes="100vw" className="object-cover" />
-              </div>
-              <div
-                className={cn(
-                  "flex flex-col gap-4 border-l-2 pl-6 transition-colors duration-500",
-                  active === i ? "border-sage" : "border-primary-foreground/15",
-                )}
-              >
-                <span className="font-mono text-sm text-sage">Step {i + 1} of {STEPS.length}</span>
-                <h3
-                  className={cn(
-                    "text-3xl font-semibold transition-opacity duration-500 md:text-4xl",
-                    active === i ? "opacity-100" : "lg:opacity-40",
-                  )}
-                >
-                  {step.title}
-                </h3>
-                <p
-                  className={cn(
-                    "max-w-md text-pretty text-lg leading-relaxed text-primary-foreground/70 transition-opacity duration-500",
-                    active === i ? "opacity-100" : "lg:opacity-40",
-                  )}
-                >
-                  {step.text}
-                </p>
-              </div>
-            </motion.li>
-          ))}
-          <li className="pt-4 lg:pt-0">
+    <section aria-labelledby="factory-heading" className="bg-forest py-24 text-primary-foreground md:py-32">
+      <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 md:gap-16 md:px-6">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.8, ease }}
+          className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
+        >
+          <div className="flex max-w-2xl flex-col gap-4">
+            <p className="text-sm font-medium text-sage">Inside our factory</p>
+            <h2 id="factory-heading" className="text-balance text-4xl font-semibold md:text-6xl">
+              Made by machines. Checked by people.
+            </h2>
+          </div>
+          <div className="flex max-w-sm flex-col items-start gap-6">
+            <p className="text-pretty leading-relaxed text-primary-foreground/70">
+              Our plant in Uttar Pradesh builds every panel to the same standard, then our quality team signs it off.
+            </p>
             <Link
               href="/about"
-              className="group inline-flex h-12 items-center gap-2 rounded-full border border-primary-foreground/30 px-6 text-sm font-semibold transition-colors hover:bg-primary-foreground hover:text-forest"
+              className="group inline-flex h-11 items-center gap-2 rounded-full border border-primary-foreground/30 px-5 text-sm font-semibold transition-colors hover:bg-primary-foreground hover:text-forest"
             >
               About our company
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
-          </li>
-        </ol>
-
-        <div className="hidden lg:block">
-          <div className="sticky top-24 flex h-[calc(100vh-8rem)] items-center">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-primary-foreground/5">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.div
-                  key={active}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0, scale: 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.9, ease }}
-                >
-                  <Image
-                    src={STEPS[active].photo.src}
-                    alt={STEPS[active].photo.alt}
-                    fill
-                    sizes="600px"
-                    className="object-cover"
-                  />
-                </motion.div>
-              </AnimatePresence>
-              <div className="absolute inset-x-6 bottom-6 flex gap-2" aria-hidden="true">
-                {STEPS.map((s, i) => (
-                  <span key={s.title} className="h-1 flex-1 overflow-hidden rounded-full bg-primary-foreground/25">
-                    <span
-                      className={cn(
-                        "block h-full rounded-full bg-sage transition-[width] duration-700",
-                        i <= active ? "w-full" : "w-0",
-                      )}
-                    />
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
-        </div>
+        </motion.div>
+
+        <ul className="grid auto-rows-[18rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[17rem] lg:grid-cols-4">
+          {TILES.map((tile, i) => (
+            <motion.li
+              key={tile.title}
+              initial={reduceMotion ? false : { opacity: 0, y: 40, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.9, ease, delay: i * 0.1 }}
+              className={cn(
+                "group relative isolate flex flex-col justify-end overflow-hidden rounded-3xl bg-primary-foreground/5",
+                tile.className,
+              )}
+            >
+              <Image
+                src={tile.photo.src}
+                alt={tile.photo.alt}
+                fill
+                sizes={tile.sizes}
+                className="-z-20 object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+              />
+              <div
+                className="absolute inset-0 -z-10 bg-gradient-to-t from-forest via-forest/40 to-transparent"
+                aria-hidden="true"
+              />
+              <span className="absolute left-5 top-5 rounded-full border border-primary-foreground/25 bg-forest/40 px-3 py-1 font-mono text-xs backdrop-blur">
+                {tile.step}
+              </span>
+              <div className="flex flex-col gap-2 p-6">
+                <h3 className="text-xl font-semibold md:text-2xl">{tile.title}</h3>
+                <p className="max-w-md text-pretty text-sm leading-relaxed text-primary-foreground/75 md:text-base">
+                  {tile.text}
+                </p>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
       </div>
     </section>
   )

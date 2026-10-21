@@ -38,7 +38,7 @@ export function Hero() {
           transition={{ duration: 2.4, ease }}
         >
           <Image
-            src="/images/factory/topcon-cell-busbar-macro.jpg"
+            src="/images/factory/cell-strings-layup.jpg"
             alt=""
             fill
             priority
@@ -49,11 +49,11 @@ export function Hero() {
       </motion.div>
 
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-forest via-forest/80 to-forest/10"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-forest from-10% via-forest/70 via-40% to-transparent to-75%"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-forest to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-forest/90 to-transparent"
         aria-hidden="true"
       />
 

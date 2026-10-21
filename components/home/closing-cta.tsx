@@ -10,7 +10,7 @@ export function ClosingCta() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <Reveal className="relative isolate overflow-hidden rounded-3xl bg-forest px-6 py-20 text-center text-primary-foreground md:px-14 md:py-28">
           <Image
-            src={FACTORY_PHOTOS.cellStrings.src}
+            src={FACTORY_PHOTOS.busbarMacro.src}
             alt=""
             fill
             sizes="(min-width: 1280px) 1232px, 100vw"
