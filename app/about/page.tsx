@@ -56,8 +56,8 @@ export default function AboutPage() {
         <AboutHero />
         <CompanySection />
         <ValuesSection />
-        <TeamSection />
         <DirectorsSection />
+        <TeamSection />
         <ClosingCta />
       </main>
     </>

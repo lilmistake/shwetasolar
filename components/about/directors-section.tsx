@@ -8,27 +8,28 @@ const LEADERSHIP = [
 
 export function DirectorsSection() {
   return (
-    <section aria-labelledby="leadership-heading" className="bg-background pb-24 md:pb-32">
-      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
-        <Reveal className="flex flex-col gap-3 border-t border-border pt-12">
-          <h2 id="leadership-heading" className="text-sm font-medium text-muted-foreground">
-            Leadership
+    <section aria-labelledby="leadership-heading" className="bg-background py-24 md:py-32">
+      <div className="mx-auto flex max-w-7xl flex-col gap-14 px-4 md:px-6">
+        <Reveal className="flex max-w-2xl flex-col gap-4">
+          <p className="text-sm font-medium text-muted-foreground">Leadership</p>
+          <h2 id="leadership-heading" className="text-balance text-4xl font-semibold text-foreground md:text-6xl">
+            Guided by experience.
           </h2>
         </Reveal>
 
-        <ul className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {LEADERSHIP.map((person, i) => (
-            <Reveal as="li" key={person.name} delay={i * 0.06} className="group flex flex-col gap-4">
-              <div className="relative isolate aspect-[4/5] overflow-hidden rounded-3xl bg-muted">
+            <Reveal as="li" key={person.name} delay={i * 0.08} className="group flex flex-col gap-5">
+              <div className="relative isolate aspect-[4/3] overflow-hidden rounded-3xl bg-muted">
                 <Image
                   src={person.photo || "/placeholder.svg"}
                   alt={`Portrait of ${person.name}`}
                   fill
-                  sizes="(min-width: 1024px) 240px, (min-width: 768px) 33vw, 50vw"
+                  sizes="(min-width: 1280px) 600px, (min-width: 640px) 50vw, 100vw"
                   className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">{person.name}</h3>
+              <h3 className="text-2xl font-semibold text-foreground">{person.name}</h3>
             </Reveal>
           ))}
         </ul>
