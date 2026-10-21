@@ -77,7 +77,7 @@ export function FactorySection() {
           </div>
         </motion.div>
 
-        <ul className="grid auto-rows-[18rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[17rem] lg:grid-cols-4">
+        <ul className="grid auto-rows-[24rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[22rem] lg:grid-cols-4">
           {TILES.map((tile, i) => (
             <motion.li
               key={tile.title}
@@ -86,24 +86,22 @@ export function FactorySection() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.9, ease, delay: i * 0.1 }}
               className={cn(
-                "group relative isolate flex flex-col justify-end overflow-hidden rounded-3xl bg-primary-foreground/5",
+                "group flex flex-col overflow-hidden rounded-3xl bg-primary-foreground/5 ring-1 ring-primary-foreground/10",
                 tile.className,
               )}
             >
-              <Image
-                src={tile.photo.src}
-                alt={tile.photo.alt}
-                fill
-                sizes={tile.sizes}
-                className="-z-20 object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-              />
-              <div
-                className="absolute inset-0 -z-10 bg-gradient-to-t from-forest via-forest/40 to-transparent"
-                aria-hidden="true"
-              />
-              <span className="absolute left-5 top-5 rounded-full border border-primary-foreground/25 bg-forest/40 px-3 py-1 font-mono text-xs backdrop-blur">
-                {tile.step}
-              </span>
+              <div className="relative isolate min-h-0 flex-1 overflow-hidden">
+                <Image
+                  src={tile.photo.src}
+                  alt={tile.photo.alt}
+                  fill
+                  sizes={tile.sizes}
+                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                />
+                <span className="absolute left-4 top-4 rounded-full bg-forest px-3 py-1 font-mono text-xs">
+                  {tile.step}
+                </span>
+              </div>
               <div className="flex flex-col gap-2 p-6">
                 <h3 className="text-xl font-semibold md:text-2xl">{tile.title}</h3>
                 <p className="max-w-md text-pretty text-sm leading-relaxed text-primary-foreground/75 md:text-base">

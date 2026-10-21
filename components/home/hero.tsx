@@ -49,11 +49,11 @@ export function Hero() {
       </motion.div>
 
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/65 via-ink/25 via-40% to-transparent to-70%"
+        className="absolute inset-0 -z-10 bg-ink/50 md:bg-transparent md:bg-gradient-to-r md:from-forest/90 md:via-forest/60 md:via-40% md:to-transparent md:to-70%"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-x-0 bottom-0 -z-10 h-1/4 bg-gradient-to-t from-ink/60 to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-forest/80 to-transparent"
         aria-hidden="true"
       />
 
@@ -97,7 +97,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.95 }}
-          className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/75"
+          className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/90"
         >
           High-efficiency TOPCon modules from our fully automated plant in Hapur, supplied to EPCs, developers and
           businesses across India.
@@ -139,7 +139,7 @@ export function Hero() {
           <dl className="grid grid-cols-3 gap-6 md:gap-14">
             {STATS.map((stat) => (
               <div key={stat.label} className="flex flex-col gap-1">
-                <dt className="order-2 text-xs text-primary-foreground/60 md:text-sm">{stat.label}</dt>
+                <dt className="order-2 text-xs text-primary-foreground/80 md:text-sm">{stat.label}</dt>
                 <dd className="order-1 text-2xl font-semibold tracking-tight md:text-4xl">
                   <CountUp to={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
                 </dd>
