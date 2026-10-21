@@ -57,17 +57,6 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      {!reduceMotion && (
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 -z-10 w-1/3 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent"
-          initial={{ left: "-40%" }}
-          animate={{ left: "120%" }}
-          transition={{ duration: 3.2, ease: "easeInOut", delay: 1.2, repeat: Infinity, repeatDelay: 6 }}
-          style={{ skewX: -20 }}
-        />
-      )}
-
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
         className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-12 pt-32 md:px-6 md:pt-40"
