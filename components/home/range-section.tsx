@@ -1,62 +1,53 @@
-import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
-import { SEGMENTS, familiesFor } from "@/lib/products"
+import { ArrowUpRight, Download } from "lucide-react"
+import { COMPLETE_DATASHEET } from "@/lib/products"
+
+const PATHS = [
+  { href: "/products/commercial", title: "Business rooftops", body: "Factories, warehouses, schools and offices." },
+  { href: "/products/utility", title: "Solar farms", body: "Ground-mounted and large open-land projects." },
+  { href: "/products/residential", title: "Homes and small systems", body: "House rooftops, solar pumps and small setups." },
+]
 
 export function RangeSection() {
   return (
     <section aria-labelledby="range-heading" className="bg-background py-20 md:py-28">
-      <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 md:px-6">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="flex max-w-2xl flex-col gap-3">
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-olive">The range</p>
-            <h2 id="range-heading" className="font-display text-4xl uppercase text-forest text-balance md:text-5xl">
-              One technology, sized for every roof and field
+          <div className="flex max-w-2xl flex-col gap-4">
+            <h2 id="range-heading" className="font-sans text-3xl font-semibold tracking-tight text-forest text-balance md:text-4xl">
+              Find the right panel for your project
             </h2>
+            <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
+              Tell us where it&apos;s going. Our team will recommend the best fit.
+            </p>
           </div>
-          <Link href="/products" className="font-medium text-forest underline-offset-4 hover:underline">
-            Compare all module families
-          </Link>
+          <a
+            href={COMPLETE_DATASHEET}
+            className="inline-flex items-center gap-2 self-start font-medium text-olive underline-offset-4 hover:underline md:self-auto"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Technical datasheets
+          </a>
         </div>
 
-        <ul className="grid gap-6 md:grid-cols-3">
-          {SEGMENTS.map((segment) => {
-            const families = familiesFor(segment.slug)
-            return (
-              <li key={segment.slug}>
-                <Link
-                  href={`/products/${segment.slug}`}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-xl"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={segment.image.src}
-                      alt={segment.image.alt}
-                      fill
-                      sizes="(min-width: 768px) 33vw, 100vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-4 p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex flex-col gap-1">
-                        <h3 className="font-display text-2xl uppercase text-forest">{segment.shortName}</h3>
-                        <p className="font-display text-4xl text-olive">{segment.powerRange}</p>
-                      </div>
-                      <ArrowUpRight
-                        className="h-6 w-6 shrink-0 text-forest transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <p className="leading-relaxed text-muted-foreground">{segment.summary}</p>
-                    <p className="mt-auto border-t border-border pt-4 text-sm text-olive">
-                      {families.map((f) => f.model).join(" · ")}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            )
-          })}
+        <ul className="grid gap-4 md:grid-cols-3">
+          {PATHS.map((p) => (
+            <li key={p.href}>
+              <Link
+                href={p.href}
+                className="group flex h-full flex-col gap-3 rounded-3xl border border-border p-6 transition-colors hover:border-forest md:p-8"
+              >
+                <span className="flex items-center justify-between gap-4">
+                  <span className="font-sans text-xl font-semibold text-forest">{p.title}</span>
+                  <ArrowUpRight
+                    className="h-5 w-5 text-olive transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="leading-relaxed text-muted-foreground">{p.body}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
