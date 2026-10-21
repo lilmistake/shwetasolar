@@ -8,48 +8,94 @@ import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { CountUp } from "@/components/topcon/count-up"
 
 const ease = [0.22, 1, 0.36, 1] as const
-const HEADLINE = ["Solar", "modules", "built", "for", "India's", "industry."]
+const HEADLINE = ["Solar", "panels", "built", "for", "India's", "industry."]
 
 const STATS = [
-  { value: 1.2, decimals: 1, suffix: " GW", label: "Production capacity every year" },
-  { value: 725, decimals: 0, suffix: " W", label: "Power from a single panel" },
+  { value: 1.2, decimals: 1, suffix: " GW", label: "Made every year" },
+  { value: 725, decimals: 0, suffix: " W", label: "From a single panel" },
   { value: 30, decimals: 0, suffix: " years", label: "Performance warranty" },
 ]
 
 export function Hero() {
-  const frameRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: frameRef, offset: ["start end", "end start"] })
-  const scale = useTransform(scrollYProgress, [0, 0.45], reduceMotion ? [1, 1] : [0.9, 1])
-  const imageY = useTransform(scrollYProgress, [0, 1], reduceMotion ? ["0%", "0%"] : ["-6%", "6%"])
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] })
+  const imageY = useTransform(scrollYProgress, [0, 1], reduceMotion ? ["0%", "0%"] : ["0%", "18%"])
+  const contentY = useTransform(scrollYProgress, [0, 1], reduceMotion ? ["0%", "0%"] : ["0%", "-12%"])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
   return (
-    <section aria-labelledby="hero-heading" className="overflow-hidden bg-background pt-32 md:pt-40">
-      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 text-center md:px-6">
+    <section
+      ref={sectionRef}
+      aria-labelledby="hero-heading"
+      className="relative isolate flex min-h-svh flex-col overflow-hidden bg-forest text-primary-foreground"
+    >
+      <motion.div style={{ y: imageY }} className="absolute inset-0 -z-20" aria-hidden="true">
+        <motion.div
+          className="absolute inset-0"
+          initial={reduceMotion ? false : { scale: 1.25, opacity: 0 }}
+          animate={{ scale: 1.05, opacity: 1 }}
+          transition={{ duration: 2.4, ease }}
+        >
+          <Image
+            src="/images/factory/topcon-cell-busbar-macro.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        </motion.div>
+      </motion.div>
+
+      <div
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-forest via-forest/80 to-forest/10"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-forest to-transparent"
+        aria-hidden="true"
+      />
+
+      {!reduceMotion && (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 -z-10 w-1/3 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent"
+          initial={{ left: "-40%" }}
+          animate={{ left: "120%" }}
+          transition={{ duration: 3.2, ease: "easeInOut", delay: 1.2, repeat: Infinity, repeatDelay: 6 }}
+          style={{ skewX: -20 }}
+        />
+      )}
+
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-12 pt-32 md:px-6 md:pt-40"
+      >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-1.5 text-xs font-medium text-muted-foreground md:text-sm"
+          transition={{ duration: 0.6, ease, delay: 0.3 }}
+          className="inline-flex w-fit items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-4 py-1.5 text-xs font-medium text-primary-foreground/90 backdrop-blur md:text-sm"
         >
           <span className="relative flex size-2" aria-hidden="true">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-secondary opacity-75" />
-            <span className="relative inline-flex size-2 rounded-full bg-primary" />
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-sage opacity-75" />
+            <span className="relative inline-flex size-2 rounded-full bg-sage" />
           </span>
           Now supplying next-generation TOPCon panels
         </motion.p>
 
         <h1
           id="hero-heading"
-          className="mt-8 max-w-4xl text-balance text-5xl font-semibold leading-[1.05] text-foreground md:text-7xl"
+          className="mt-8 max-w-3xl text-balance text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl"
         >
           {HEADLINE.map((word, i) => (
             <span key={word} className="inline-block overflow-hidden pb-2 align-bottom">
               <motion.span
-                className="inline-block"
+                className={i === HEADLINE.length - 1 ? "inline-block text-sage" : "inline-block"}
                 initial={{ y: "110%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.8, ease, delay: 0.15 + i * 0.07 }}
+                transition={{ duration: 0.9, ease, delay: 0.45 + i * 0.07 }}
               >
                 {word}
                 {i < HEADLINE.length - 1 ? "\u00A0" : ""}
@@ -61,29 +107,29 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.6 }}
-          className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground"
+          transition={{ duration: 0.7, ease, delay: 0.95 }}
+          className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/75"
         >
-          We design and manufacture high-efficiency solar panels in Uttar Pradesh for factories, businesses and the
-          EPC teams who build their plants.
+          High-efficiency modules designed and manufactured in Uttar Pradesh, for factories, businesses and the EPC
+          teams who build their plants.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.75 }}
-          className="mt-10 flex flex-col items-center gap-3 sm:flex-row"
+          transition={{ duration: 0.7, ease, delay: 1.1 }}
+          className="mt-10 flex flex-col gap-3 sm:flex-row"
         >
           <Link
             href="/contact"
-            className="group inline-flex h-12 items-center gap-2 rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.03]"
+            className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-sage px-7 text-sm font-semibold text-forest transition-colors hover:bg-primary-foreground"
           >
             Get a quote
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </Link>
           <Link
             href="/products"
-            className="group inline-flex h-12 items-center gap-2 rounded-full border border-border px-7 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className="group inline-flex h-12 items-center justify-center gap-2 rounded-full border border-primary-foreground/30 px-7 text-sm font-semibold transition-colors hover:bg-primary-foreground hover:text-forest"
           >
             Explore panels
             <ArrowUpRight
@@ -92,38 +138,27 @@ export function Hero() {
             />
           </Link>
         </motion.div>
-      </div>
+      </motion.div>
 
-      <div ref={frameRef} className="mx-auto mt-16 max-w-7xl px-4 md:mt-20 md:px-6">
-        <motion.div
-          style={{ scale }}
-          className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-muted sm:aspect-[16/10] md:aspect-[16/8]"
-        >
-          <motion.div style={{ y: imageY }} className="absolute -inset-y-[8%] inset-x-0">
-            <Image
-              src="/images/stock/industrial-rooftop-aerial.png"
-              alt="Aerial view of a factory rooftop covered in rows of solar panels"
-              fill
-              priority
-              sizes="(min-width: 1280px) 1232px, 100vw"
-              className="object-cover"
-            />
-          </motion.div>
-
-          <div className="absolute inset-x-3 bottom-3 md:inset-x-6 md:bottom-6">
-            <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-border/60 shadow-xl backdrop-blur sm:grid-cols-3">
-              {STATS.map((stat) => (
-                <div key={stat.label} className="flex flex-col gap-1 bg-background/90 px-5 py-4 text-left md:px-6 md:py-5">
-                  <dt className="order-2 text-xs text-muted-foreground md:text-sm">{stat.label}</dt>
-                  <dd className="order-1 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                    <CountUp to={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </motion.div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease, delay: 1.3 }}
+        className="mx-auto w-full max-w-7xl px-4 pb-8 md:px-6 md:pb-10"
+      >
+        <div className="flex flex-col gap-6 border-t border-primary-foreground/15 pt-6 md:flex-row md:items-end md:justify-between">
+          <dl className="grid grid-cols-3 gap-6 md:gap-14">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex flex-col gap-1">
+                <dt className="order-2 text-xs text-primary-foreground/60 md:text-sm">{stat.label}</dt>
+                <dd className="order-1 text-2xl font-semibold tracking-tight md:text-4xl">
+                  <CountUp to={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </motion.div>
     </section>
   )
 }
