@@ -2,8 +2,16 @@ import Image from "next/image"
 import { Reveal } from "@/components/topcon/reveal"
 
 const LEADERSHIP = [
-  { name: "Vinod Sharma", photo: "/images/leadership/vinod-sharma.webp" },
-  { name: "Sanjay Garg", photo: "/images/leadership/sanjay-garg.webp" },
+  {
+    name: "Vinod Sharma",
+    photo: "/images/leadership/vinod-sharma.webp",
+    line: "25+ years building solar modules, from a small start-up to a 300 MW plant.",
+  },
+  {
+    name: "Sanjay Garg",
+    photo: "/images/leadership/sanjay-garg.webp",
+    line: "Four decades of building businesses on one rule: the client's profit comes first.",
+  },
 ]
 
 export function DirectorsSection() {
@@ -29,7 +37,10 @@ export function DirectorsSection() {
                   className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
-              <h3 className="text-2xl font-semibold text-foreground">{person.name}</h3>
+              <div className="flex flex-col gap-2">
+                <h3 className="text-2xl font-semibold text-foreground">{person.name}</h3>
+                <p className="text-pretty leading-relaxed text-muted-foreground">{person.line}</p>
+              </div>
             </Reveal>
           ))}
         </ul>
