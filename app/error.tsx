@@ -17,7 +17,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-forest/10 mb-6">
             <AlertTriangle className="h-12 w-12 text-forest" />
           </div>
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-forest mb-4">Something Went Wrong</h1>
+          <h1 className="font-semibold tracking-tight text-4xl md:text-6xl font-bold text-forest mb-4">Something Went Wrong</h1>
           <div className="h-2 w-32 bg-olive mx-auto rounded-full mb-8" />
           <p className="text-lg md:text-xl text-olive max-w-lg mx-auto leading-relaxed mb-4">
             We encountered an unexpected error. Don't worry, our team has been notified and we're working on it.

@@ -1,19 +1,20 @@
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
 import { Mail } from "lucide-react"
+import { PageHero } from "@/components/site/page-hero"
 
 export default function BoardOfDirectorsPage() {
   return (
-    <div className="pt-20">
-      {/* Hero */}
-      <section className="py-20 bg-gradient-to-br from-primary to-accent text-primary-foreground">
-        <div className="container mx-auto px-4">
-          <h1 className="font-display text-5xl md:text-7xl font-bold mb-6">Board of Directors</h1>
-          <p className="text-xl max-w-3xl">
-            Meet the visionary leaders driving Shweta Solar's mission to power India's renewable energy future
-          </p>
-        </div>
-      </section>
+    <div>
+      <PageHero
+        eyebrow="Investors"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Board of Directors", path: "/investors/board" },
+        ]}
+        title="Board of Directors"
+        intro="Meet the leaders driving Shweta Solar's mission to power India's renewable energy future."
+      />
 
       {/* Sanjay Garg */}
       <section className="py-20 bg-background">
@@ -29,7 +30,7 @@ export default function BoardOfDirectorsPage() {
                 />
               </div>
               <div className="lg:col-span-3 p-8">
-                <h2 className="font-display text-4xl font-bold text-foreground mb-2">Sanjay Garg</h2>
+                <h2 className="font-semibold tracking-tight text-4xl font-bold text-foreground mb-2">Sanjay Garg</h2>
                 <p className="text-xl text-primary font-semibold mb-4">Director</p>
                 <p className="text-muted-foreground mb-6">40+ years in FMCG, Real Estate, and Renewable Energy</p>
 
@@ -52,7 +53,7 @@ export default function BoardOfDirectorsPage() {
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">Core Competencies</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-foreground mb-3">Core Competencies</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li>• Entrepreneurial Leadership & Business Scaling</li>
                     <li>• Strategic Growth & Market Expansion</li>
@@ -63,7 +64,7 @@ export default function BoardOfDirectorsPage() {
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">Career Highlights</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-foreground mb-3">Career Highlights</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li>• Co-led transformation of small retail shop (1979) into pan-India FMCG enterprise</li>
                     <li>• Drives innovation in solar energy manufacturing at B2B scale</li>
@@ -74,7 +75,7 @@ export default function BoardOfDirectorsPage() {
                 </div>
 
                 <div className="border-t pt-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">Philosophy</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-foreground mb-3">Philosophy</h3>
                   <blockquote className="italic text-muted-foreground border-l-4 border-primary pl-4">
                     "The profit is yours and the loss is ours. Complete Profit of the Client."
                   </blockquote>
@@ -99,7 +100,7 @@ export default function BoardOfDirectorsPage() {
                 />
               </div>
               <div className="lg:col-span-3 p-8 order-1 lg:order-2">
-                <h2 className="font-display text-4xl font-bold text-foreground mb-2">Vinod Sharma</h2>
+                <h2 className="font-semibold tracking-tight text-4xl font-bold text-foreground mb-2">Vinod Sharma</h2>
                 <p className="text-xl text-primary font-semibold mb-4">Managing Director</p>
                 <p className="text-muted-foreground mb-6">
                   Engineer Graduate (Electronics) | 25 Years of Experience in Solar & Renewable Energy
@@ -124,7 +125,7 @@ export default function BoardOfDirectorsPage() {
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">Areas of Expertise</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-foreground mb-3">Areas of Expertise</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li>• Strategic Leadership & Innovation</li>
                     <li>• Technical Expertise in Solar Technology</li>
@@ -135,7 +136,7 @@ export default function BoardOfDirectorsPage() {
                 </div>
 
                 <div className="mb-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">Vision</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-foreground mb-3">Vision</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Vinod is passionate about democratizing energy through solar and storage solutions. By capturing
                     sunlight and storing it in batteries, he helps communities move away from central grids and control
@@ -145,7 +146,7 @@ export default function BoardOfDirectorsPage() {
                 </div>
 
                 <div className="border-t pt-6">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">In His Words</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-foreground mb-3">In His Words</h3>
                   <blockquote className="italic text-muted-foreground border-l-4 border-primary pl-4">
                     "My passion for solar and storage comes from its power to democratize energy—making it accessible to
                     all. By capturing sunlight and storing it in batteries, we help communities move away from central
@@ -161,7 +162,7 @@ export default function BoardOfDirectorsPage() {
       {/* Contact Section */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl font-bold text-foreground mb-6">Investor Relations</h2>
+          <h2 className="font-semibold tracking-tight text-3xl font-bold text-foreground mb-6">Investor Relations</h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
             For investor inquiries, please contact our investor relations team
           </p>

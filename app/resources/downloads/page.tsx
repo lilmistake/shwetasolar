@@ -39,7 +39,7 @@ export default function DownloadsPage() {
                 { name: "Datasheets", path: "/resources/downloads" },
               ]}
             />
-            <h1 className="font-display text-5xl uppercase leading-[0.95] text-forest text-balance md:text-6xl">
+            <h1 className="font-semibold tracking-tight text-5xl leading-[1.05] text-forest text-balance md:text-6xl">
               Module datasheets
             </h1>
             <p className="max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
@@ -72,7 +72,7 @@ export default function DownloadsPage() {
                   <FileText className="h-6 w-6" aria-hidden="true" />
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className={`font-display text-2xl uppercase ${d.featured ? "" : "text-forest"}`}>{d.title}</span>
+                  <span className={`font-semibold tracking-tight text-2xl ${d.featured ? "" : "text-forest"}`}>{d.title}</span>
                   <span className={`text-sm leading-relaxed ${d.featured ? "text-white/75" : "text-muted-foreground"}`}>
                     {d.body}
                   </span>
@@ -90,7 +90,7 @@ export default function DownloadsPage() {
       <section className="bg-background py-16">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 md:flex-row md:items-center md:px-6">
           <div className="flex flex-col gap-2">
-            <h2 className="font-display text-3xl uppercase text-forest">Need a PAN file or test report?</h2>
+            <h2 className="font-semibold tracking-tight text-3xl text-forest">Need a PAN file or test report?</h2>
             <p className="text-muted-foreground">Our engineering team shares simulation files and project documents on request.</p>
           </div>
           <div className="flex flex-wrap gap-3">

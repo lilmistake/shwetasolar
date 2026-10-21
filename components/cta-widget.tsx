@@ -32,7 +32,7 @@ export function CTAWidget({ icon, title, description, buttonText, buttonHref, va
       <div className={`inline-flex h-16 w-16 mx-auto mb-6 ${variant === "gradient" ? "text-sage" : "text-forest"}`}>
         {icon}
       </div>
-      <h2 className={`font-display text-3xl font-bold mb-4 ${variant === "gradient" ? "text-cream" : "text-forest"}`}>
+      <h2 className={`font-semibold tracking-tight text-3xl font-bold mb-4 ${variant === "gradient" ? "text-cream" : "text-forest"}`}>
         {title}
       </h2>
       <p className={`text-xl mb-8 max-w-2xl mx-auto ${variant === "gradient" ? "text-cream/90" : "text-olive"}`}>

@@ -96,7 +96,7 @@ export function EnquirySection() {
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-4">Have Questions?</h2>
+            <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-4">Have Questions?</h2>
             <p className="text-lg text-olive max-w-2xl mx-auto">
               Our team is here to help you find the perfect solar solution for your needs
             </p>
@@ -111,7 +111,7 @@ export function EnquirySection() {
                     <Phone className="h-6 w-6 text-forest" />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold text-forest mb-1">Call Us</h3>
+                    <h3 className="font-semibold tracking-tight font-semibold text-forest mb-1">Call Us</h3>
                     <a href="tel:18001204771 20" className="text-olive hover:text-forest transition-colors">
                       1800 120 477120
                     </a>
@@ -125,7 +125,7 @@ export function EnquirySection() {
                     <Mail className="h-6 w-6 text-forest" />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold text-forest mb-1">Email Us</h3>
+                    <h3 className="font-semibold tracking-tight font-semibold text-forest mb-1">Email Us</h3>
                     <a
                       href="mailto:admin@shwetasolar.in"
                       className="text-olive hover:text-forest transition-colors break-all"
@@ -142,7 +142,7 @@ export function EnquirySection() {
                     <MessageSquare className="h-6 w-6 text-[#25D366]" />
                   </div>
                   <div>
-                    <h3 className="font-display font-semibold text-forest mb-1">WhatsApp</h3>
+                    <h3 className="font-semibold tracking-tight font-semibold text-forest mb-1">WhatsApp</h3>
                     <a
                       href="https://wa.me/919289969501"
                       target="_blank"

@@ -1,15 +1,19 @@
 import { Card } from "@/components/ui/card"
 import { FileText, Shield, Users, AlertCircle } from "lucide-react"
+import { PageHero } from "@/components/site/page-hero"
 
 export default function PoliciesPage() {
   return (
-    <div className="pt-20">
-      <section className="py-20 bg-gradient-to-br from-primary to-accent text-primary-foreground">
-        <div className="container mx-auto px-4">
-          <h1 className="font-display text-5xl md:text-7xl font-bold mb-6">Corporate Policies</h1>
-          <p className="text-xl max-w-3xl">Our commitment to ethical business practices and transparent governance</p>
-        </div>
-      </section>
+    <div>
+      <PageHero
+        eyebrow="Investors"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Corporate Policies", path: "/investors/policies" },
+        ]}
+        title="Corporate Policies"
+        intro="Our commitment to ethical business practices and transparent governance."
+      />
 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
@@ -38,7 +42,7 @@ export default function PoliciesPage() {
             ].map((policy) => (
               <Card key={policy.title} className="p-8 hover:shadow-xl transition-shadow">
                 <policy.icon className="h-12 w-12 text-primary mb-4" />
-                <h3 className="font-display text-2xl font-bold text-foreground mb-3">{policy.title}</h3>
+                <h3 className="font-semibold tracking-tight text-2xl font-bold text-foreground mb-3">{policy.title}</h3>
                 <p className="text-muted-foreground mb-4">{policy.description}</p>
                 <p className="text-sm text-muted-foreground italic">Detailed policy document coming soon</p>
               </Card>
@@ -46,7 +50,7 @@ export default function PoliciesPage() {
           </div>
 
           <Card className="p-8 mt-12">
-            <h2 className="font-display text-3xl font-bold text-foreground mb-6">Our Commitment</h2>
+            <h2 className="font-semibold tracking-tight text-3xl font-bold text-foreground mb-6">Our Commitment</h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 At Shweta Solar, we are committed to the highest standards of corporate governance and ethical business

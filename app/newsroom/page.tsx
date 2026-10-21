@@ -3,6 +3,7 @@ import { ArrowRight, FileText, ImageIcon, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Metadata } from "next"
+import { PageHero } from "@/components/site/page-hero"
 
 export const metadata: Metadata = {
   title: "Newsroom - Latest Solar Industry News, Blog & Updates",
@@ -17,16 +18,16 @@ export const metadata: Metadata = {
 
 export default function NewsroomPage() {
   return (
-    <div className="min-h-screen bg-cream pt-24">
-      {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4">
-          <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">Newsroom</h1>
-          <p className="text-xl md:text-2xl text-cream/90 max-w-3xl">
-            Stay updated with the latest news, insights, and stories from Shweta Solar
-          </p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-cream">
+      <PageHero
+        eyebrow="Newsroom"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Newsroom", path: "/newsroom" },
+        ]}
+        title="Newsroom"
+        intro="Stay updated with the latest news, insights, and stories from Shweta Solar."
+      />
 
       {/* Navigation Cards */}
       <section className="py-16">

@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Mail, Phone, MapPin, Clock, MessageCircle, Building2, Users, Package } from "lucide-react"
 import { useState } from "react"
 import { submitContactForm } from "@/lib/actions/contact"
+import { PageHero } from "@/components/site/page-hero"
 
 const inquiryTypes = [
   { id: "product", label: "Product Inquiry", icon: Package },
@@ -102,7 +103,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="pt-20">
+    <div>
       <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
         <DialogContent>
           <DialogHeader>
@@ -117,19 +118,22 @@ export default function ContactPage() {
         </DialogContent>
       </Dialog>
 
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-6">
-          <h1 className="font-display text-5xl md:text-7xl font-bold mb-6">Contact Us</h1>
-          <p className="text-xl max-w-3xl">Get in touch with our team to discuss your solar energy needs</p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Contact"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ]}
+        title="Contact Us"
+        intro="Get in touch with our team to discuss your solar energy needs."
+      />
 
       <section className="py-20 bg-cream">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div>
-              <h2 className="font-display text-3xl font-bold text-forest mb-6">Send us a Message</h2>
+              <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-6">Send us a Message</h2>
               <Card className="p-8 border-sage/20">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
@@ -222,7 +226,7 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div>
-              <h2 className="font-display text-3xl font-bold text-forest mb-6">Get in Touch</h2>
+              <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-6">Get in Touch</h2>
 
               <div className="space-y-6 mb-8">
                 <Card className="p-6 border-sage/20">
@@ -315,7 +319,7 @@ export default function ContactPage() {
       {/* Map Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <h2 className="font-display text-3xl font-bold text-forest mb-8 text-center">Our Locations</h2>
+          <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-8 text-center">Our Locations</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="overflow-hidden border-sage/20">
               <div className="p-4 bg-cream border-b border-sage/20">

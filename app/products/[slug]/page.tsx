@@ -49,10 +49,10 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
                 { name: segment.name, path: `/products/${segment.slug}` },
               ]}
             />
-            <h1 className="font-display text-5xl uppercase leading-[0.95] text-forest text-balance md:text-6xl">
+            <h1 className="font-semibold tracking-tight text-5xl leading-[1.05] text-forest text-balance md:text-6xl">
               {segment.name} TOPCon modules
             </h1>
-            <p className="font-display text-5xl text-olive">{segment.powerRange}</p>
+            <p className="font-semibold tracking-tight text-5xl text-olive">{segment.powerRange}</p>
             <p className="max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">{segment.description}</p>
             <ul className="flex flex-col gap-2">
               {segment.useCases.map((u) => (
@@ -86,7 +86,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
 
       <section aria-labelledby="families-heading" className="bg-muted py-16 md:py-24">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
-          <h2 id="families-heading" className="font-display text-4xl uppercase text-forest">
+          <h2 id="families-heading" className="font-semibold tracking-tight text-4xl text-forest">
             Module families
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
@@ -94,12 +94,12 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
               <article key={f.model} id={f.model.toLowerCase()} className="flex scroll-mt-28 flex-col gap-5 rounded-2xl bg-card p-6 md:p-8">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="font-display text-3xl uppercase text-forest">{f.model}</h3>
+                    <h3 className="font-semibold tracking-tight text-3xl text-forest">{f.model}</h3>
                     <p className="text-sm text-olive">
                       {f.cells}-cell · {f.platform} · {f.busbars}
                     </p>
                   </div>
-                  <p className="text-right font-display text-3xl text-olive">
+                  <p className="text-right font-semibold tracking-tight text-3xl text-olive">
                     {f.minW}–{f.maxW} W
                   </p>
                 </div>
@@ -129,7 +129,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
       <section aria-labelledby="shared-heading" className="bg-background py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-3">
           <div className="flex flex-col gap-3">
-            <h2 id="shared-heading" className="font-display text-4xl uppercase text-forest text-balance">
+            <h2 id="shared-heading" className="font-semibold tracking-tight text-4xl text-forest text-balance">
               Construction and warranty
             </h2>
             <p className="leading-relaxed text-muted-foreground">

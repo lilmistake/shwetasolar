@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { Download } from "lucide-react"
-import { Breadcrumbs } from "@/components/site/breadcrumbs"
+import { PageHero } from "@/components/site/page-hero"
 import { COMPLETE_DATASHEET, FAMILIES, RANGE_SUMMARY, SEGMENTS, WARRANTY, getSegment } from "@/lib/products"
 import { FACTORY_PHOTOS, SITE } from "@/lib/site"
 import { faqSchema, jsonLd } from "@/lib/seo"
@@ -45,38 +44,26 @@ export default function ProductsPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faqSchema(FAQS))} />
 
-      <section className="relative isolate overflow-hidden bg-forest pt-20 text-primary-foreground">
-        <Image
-          src={FACTORY_PHOTOS.moduleOnLine.src}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="-z-20 object-cover opacity-40"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-forest via-forest/85 to-transparent" aria-hidden="true" />
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-16 md:px-6 md:py-24">
-          <Breadcrumbs tone="dark" items={[{ name: "Home", path: "/" }, { name: "Products", path: "/products" }]} />
-          <h1 className="max-w-3xl font-display text-5xl uppercase leading-[0.95] text-balance md:text-7xl">
-            n-type TOPCon modules, {RANGE_SUMMARY.minW}–{RANGE_SUMMARY.maxW} W
-          </h1>
-          <p className="max-w-2xl text-lg leading-relaxed text-white/80 text-pretty">
-            {FAMILIES.length} bifacial glass–glass module families across {RANGE_SUMMARY.bins} power classes, from
-            compact residential panels to 725 W utility modules.
-          </p>
+      <PageHero
+        eyebrow="Products"
+        crumbs={[{ name: "Home", path: "/" }, { name: "Products", path: "/products" }]}
+        title={`n-type TOPCon modules, ${RANGE_SUMMARY.minW}–${RANGE_SUMMARY.maxW} W`}
+        intro={`${FAMILIES.length} bifacial glass–glass module families across ${RANGE_SUMMARY.bins} power classes, from compact residential panels to 725 W utility modules.`}
+        image={FACTORY_PHOTOS.moduleOnLine}
+        actions={
           <a
             href={COMPLETE_DATASHEET}
-            className="inline-flex items-center gap-2 self-start rounded-full bg-sage px-6 py-3.5 font-semibold text-forest transition-colors hover:bg-white"
+            className="inline-flex h-12 items-center gap-2 self-start rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-forest/90"
           >
-            <Download className="h-4 w-4" aria-hidden="true" />
+            <Download className="size-4" aria-hidden="true" />
             Complete range datasheet
           </a>
-        </div>
-      </section>
+        }
+      />
 
       <section aria-labelledby="segments-heading" className="bg-background py-16 md:py-24">
         <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
-          <h2 id="segments-heading" className="font-display text-4xl uppercase text-forest">
+          <h2 id="segments-heading" className="font-semibold tracking-tight text-4xl text-forest">
             Shop by application
           </h2>
           <ul className="grid gap-6 md:grid-cols-3">
@@ -84,10 +71,10 @@ export default function ProductsPage() {
               <li key={s.slug}>
                 <Link
                   href={`/products/${s.slug}`}
-                  className="group flex h-full flex-col gap-3 rounded-2xl border border-border p-6 transition-colors hover:border-forest"
+                  className="group flex h-full flex-col gap-3 rounded-3xl border border-border bg-muted p-7 transition-colors hover:border-forest"
                 >
-                  <span className="font-display text-2xl uppercase text-forest">{s.name}</span>
-                  <span className="font-display text-4xl text-olive">{s.powerRange}</span>
+                  <span className="font-semibold tracking-tight text-2xl text-forest">{s.name}</span>
+                  <span className="font-semibold tracking-tight text-4xl text-olive">{s.powerRange}</span>
                   <span className="leading-relaxed text-muted-foreground">{s.summary}</span>
                   <span className="mt-auto pt-2 text-sm font-medium text-forest group-hover:underline">
                     View {s.shortName.toLowerCase()} modules
@@ -102,12 +89,12 @@ export default function ProductsPage() {
       <section aria-labelledby="compare-heading" className="bg-muted py-16 md:py-24">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
           <div className="flex flex-col gap-2">
-            <h2 id="compare-heading" className="font-display text-4xl uppercase text-forest">
+            <h2 id="compare-heading" className="font-semibold tracking-tight text-4xl text-forest">
               Compare every module family
             </h2>
             <p className="text-muted-foreground">Front-side STC ratings. Scroll sideways on mobile.</p>
           </div>
-          <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+          <div className="overflow-x-auto rounded-3xl border border-border bg-card">
             <table className="w-full min-w-[860px] text-left text-sm">
               <caption className="sr-only">Shweta Solar TOPCon module families compared</caption>
               <thead className="bg-forest text-primary-foreground">
@@ -159,7 +146,7 @@ export default function ProductsPage() {
 
       <section aria-labelledby="faq-heading" className="bg-background py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 md:px-6 lg:grid-cols-3">
-          <h2 id="faq-heading" className="font-display text-4xl uppercase text-forest text-balance">
+          <h2 id="faq-heading" className="font-semibold tracking-tight text-4xl text-forest text-balance">
             TOPCon questions, answered
           </h2>
           <div className="flex flex-col divide-y divide-border border-y border-border lg:col-span-2">

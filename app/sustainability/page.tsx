@@ -4,6 +4,7 @@ import Image from "next/image"
 import { CTAWidget } from "@/components/cta-widget"
 import { EnquirySection } from "@/components/enquiry-section"
 import type { Metadata } from "next"
+import { PageHero } from "@/components/site/page-hero"
 
 export const metadata: Metadata = {
   title: "Sustainability - Our Environmental Commitment & Green Initiatives",
@@ -18,26 +19,19 @@ export const metadata: Metadata = {
 
 export default function SustainabilityPage() {
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center bg-gradient-to-br from-forest via-olive to-sage">
-        <div className="container mx-auto px-4 z-10 relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="font-display text-5xl md:text-7xl font-bold text-cream mb-6 animate-fade-in-up">
-              Sustainability at Shweta Solar
-            </h1>
-            <p className="text-xl md:text-2xl text-cream/90 leading-relaxed animate-fade-in">
-              Powering a greener tomorrow through innovation, responsibility, and commitment to our planet
-            </p>
-          </div>
-        </div>
-      </section>
+    <div>
+      <PageHero
+        eyebrow="Sustainability"
+        crumbs={[{ name: "Home", path: "/" }, { name: "Sustainability", path: "/sustainability" }]}
+        title="Sustainability at Shweta Solar"
+        intro="Powering a greener tomorrow through innovation, responsibility, and commitment to our planet."
+      />
 
       {/* Our Commitment */}
       <section className="py-20 bg-cream">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-8 text-center">
+            <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-8 text-center">
               Our Environmental Commitment
             </h2>
             <p className="text-lg text-olive leading-relaxed mb-6">
@@ -58,7 +52,7 @@ export default function SustainabilityPage() {
       {/* Key Initiatives */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
+          <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
             Our Sustainability Initiatives
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -66,7 +60,7 @@ export default function SustainabilityPage() {
               <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
                 <Sun className="h-8 w-8 text-forest" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-4">100% Renewable Energy</h3>
+              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">100% Renewable Energy</h3>
               <p className="text-olive leading-relaxed">
                 Our manufacturing facilities are powered entirely by renewable energy sources, including our own solar
                 installations, reducing our carbon footprint to near zero.
@@ -77,7 +71,7 @@ export default function SustainabilityPage() {
               <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
                 <Recycle className="h-8 w-8 text-forest" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-4">Circular Economy</h3>
+              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Circular Economy</h3>
               <p className="text-olive leading-relaxed">
                 We've implemented a comprehensive recycling program that recovers 95% of materials from manufacturing
                 waste and end-of-life solar panels, keeping valuable resources in circulation.
@@ -88,7 +82,7 @@ export default function SustainabilityPage() {
               <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
                 <Droplets className="h-8 w-8 text-forest" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-4">Water Conservation</h3>
+              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Water Conservation</h3>
               <p className="text-olive leading-relaxed">
                 Advanced water recycling systems in our facilities reduce water consumption by 80%, with closed-loop
                 systems ensuring minimal waste and maximum efficiency.
@@ -99,7 +93,7 @@ export default function SustainabilityPage() {
               <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
                 <Factory className="h-8 w-8 text-forest" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-4">Zero Waste Manufacturing</h3>
+              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Zero Waste Manufacturing</h3>
               <p className="text-olive leading-relaxed">
                 Our goal is zero waste to landfill by 2026. Currently, we've achieved 92% waste diversion through
                 recycling, composting, and energy recovery programs.
@@ -110,7 +104,7 @@ export default function SustainabilityPage() {
               <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
                 <TreePine className="h-8 w-8 text-forest" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-4">Reforestation Program</h3>
+              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Reforestation Program</h3>
               <p className="text-olive leading-relaxed">
                 For every megawatt of solar capacity we produce, we plant 1,000 trees in partnership with local
                 communities, offsetting emissions and restoring ecosystems.
@@ -121,7 +115,7 @@ export default function SustainabilityPage() {
               <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mb-6">
                 <Leaf className="h-8 w-8 text-forest" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-4">Sustainable Supply Chain</h3>
+              <h3 className="font-semibold tracking-tight text-2xl font-bold text-forest mb-4">Sustainable Supply Chain</h3>
               <p className="text-olive leading-relaxed">
                 We work exclusively with suppliers who meet our strict environmental standards, ensuring sustainability
                 from raw material extraction to final product delivery.
@@ -134,24 +128,24 @@ export default function SustainabilityPage() {
       {/* Impact Metrics */}
       <section className="py-20 bg-gradient-to-br from-sage/20 to-olive/10">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
+          <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
             Our Environmental Impact
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             <div className="text-center">
-              <div className="font-display text-5xl md:text-6xl font-bold text-forest mb-3">2.5M+</div>
+              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">2.5M+</div>
               <div className="text-lg text-olive font-medium">Tons of CO₂ Offset Annually</div>
             </div>
             <div className="text-center">
-              <div className="font-display text-5xl md:text-6xl font-bold text-forest mb-3">95%</div>
+              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">95%</div>
               <div className="text-lg text-olive font-medium">Material Recovery Rate</div>
             </div>
             <div className="text-center">
-              <div className="font-display text-5xl md:text-6xl font-bold text-forest mb-3">500K+</div>
+              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">500K+</div>
               <div className="text-lg text-olive font-medium">Trees Planted</div>
             </div>
             <div className="text-center">
-              <div className="font-display text-5xl md:text-6xl font-bold text-forest mb-3">80%</div>
+              <div className="font-semibold tracking-tight text-5xl md:text-6xl font-bold text-forest mb-3">80%</div>
               <div className="text-lg text-olive font-medium">Water Usage Reduction</div>
             </div>
           </div>
@@ -164,7 +158,7 @@ export default function SustainabilityPage() {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+                <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-6">
                   Path to Carbon Neutrality
                 </h2>
                 <p className="text-lg text-olive leading-relaxed mb-6">
@@ -214,23 +208,23 @@ export default function SustainabilityPage() {
       {/* Certifications */}
       <section className="py-20 bg-cream">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
+          <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold text-forest mb-16 text-center">
             Environmental Certifications
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Card className="p-8 text-center hover:shadow-xl transition-all border-sage/20">
               <Award className="h-16 w-16 text-forest mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-forest mb-2">ISO 14001</h3>
+              <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">ISO 14001</h3>
               <p className="text-olive">Environmental Management System Certification</p>
             </Card>
             <Card className="p-8 text-center hover:shadow-xl transition-all border-sage/20">
               <Award className="h-16 w-16 text-forest mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-forest mb-2">LEED Platinum</h3>
+              <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">LEED Platinum</h3>
               <p className="text-olive">Green Building Certification for Manufacturing Facilities</p>
             </Card>
             <Card className="p-8 text-center hover:shadow-xl transition-all border-sage/20">
               <Award className="h-16 w-16 text-forest mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-forest mb-2">Carbon Trust Standard</h3>
+              <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">Carbon Trust Standard</h3>
               <p className="text-olive">Verified Carbon Reduction and Management</p>
             </Card>
           </div>
@@ -242,26 +236,26 @@ export default function SustainabilityPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <TrendingUp className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-8">Our 2030 Sustainability Goals</h2>
+            <h2 className="font-semibold tracking-tight text-4xl md:text-5xl font-bold mb-8">Our 2030 Sustainability Goals</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
               <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-display text-2xl font-bold mb-3">100% Circular Economy</h3>
+                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">100% Circular Economy</h3>
                 <p className="text-cream/90">
                   Achieve complete circularity in manufacturing with zero waste and 100% recyclable products
                 </p>
               </div>
               <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-display text-2xl font-bold mb-3">Carbon Negative Operations</h3>
+                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">Carbon Negative Operations</h3>
                 <p className="text-cream/90">
                   Go beyond carbon neutral to remove more CO₂ from the atmosphere than we emit
                 </p>
               </div>
               <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-display text-2xl font-bold mb-3">1 Million Trees</h3>
+                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">1 Million Trees</h3>
                 <p className="text-cream/90">Plant one million trees across India through our reforestation program</p>
               </div>
               <div className="bg-cream/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="font-display text-2xl font-bold mb-3">Zero Water Waste</h3>
+                <h3 className="font-semibold tracking-tight text-2xl font-bold mb-3">Zero Water Waste</h3>
                 <p className="text-cream/90">
                   Implement closed-loop water systems achieving zero freshwater consumption
                 </p>

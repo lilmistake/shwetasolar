@@ -84,19 +84,16 @@ export default function SolarCalculatorPage() {
   }
 
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Calculator className="h-12 w-12" />
-            <h1 className="font-display text-5xl md:text-7xl font-bold text-balance">Solar Calculator</h1>
-          </div>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-center leading-relaxed text-pretty">
-            Estimate your solar system size, costs, and potential savings
-          </p>
-        </div>
-      </section>
+    <div>
+      <PageHero
+        eyebrow="Resources"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Solar Calculator", path: "/resources/calculator" },
+        ]}
+        title="Solar Calculator"
+        intro="Estimate your solar system size, costs, and potential savings."
+      />
 
       {/* Calculator Section */}
       <section className="py-20 bg-cream">
@@ -104,7 +101,7 @@ export default function SolarCalculatorPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Input Form */}
             <Card className="p-8">
-              <h2 className="font-display text-3xl font-bold text-forest mb-6">Enter Your Details</h2>
+              <h2 className="font-semibold tracking-tight text-3xl font-bold text-forest mb-6">Enter Your Details</h2>
               <div className="space-y-6">
                 <div>
                   <Label htmlFor="monthlyBill" className="text-forest font-medium">
@@ -169,7 +166,7 @@ export default function SolarCalculatorPage() {
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
                 <Card className="p-6 bg-gradient-to-br from-forest to-olive text-cream">
                   <Zap className="h-8 w-8 mb-3" />
-                  <h3 className="font-display text-xl font-bold mb-2">Recommended System Size</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold mb-2">Recommended System Size</h3>
                   <p className="text-4xl font-bold">{results.systemSizeKW} kW</p>
                   <p className="text-cream/80 mt-2">{results.panelsNeeded} solar panels needed</p>
                   <p className="text-cream/80 mt-2">Offsets ~{results.offsetPercentage}% of your electricity use</p>
@@ -183,7 +180,7 @@ export default function SolarCalculatorPage() {
 
                 <Card className="p-6">
                   <DollarSign className="h-8 w-8 text-forest mb-3" />
-                  <h3 className="font-display text-xl font-bold text-forest mb-2">Investment & Savings</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">Investment & Savings</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-olive">System Cost:</span>
@@ -206,14 +203,14 @@ export default function SolarCalculatorPage() {
 
                 <Card className="p-6">
                   <Leaf className="h-8 w-8 text-forest mb-3" />
-                  <h3 className="font-display text-xl font-bold text-forest mb-2">Environmental Impact</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">Environmental Impact</h3>
                   <p className="text-3xl font-bold text-forest">{results.co2Offset} tonnes</p>
                   <p className="text-olive mt-2">CO₂ offset annually</p>
                 </Card>
 
                 <Card className="p-6">
                   <TrendingDown className="h-8 w-8 text-forest mb-3" />
-                  <h3 className="font-display text-xl font-bold text-forest mb-2">Energy Consumption</h3>
+                  <h3 className="font-semibold tracking-tight text-xl font-bold text-forest mb-2">Energy Consumption</h3>
                   <p className="text-3xl font-bold text-forest">{results.monthlyConsumption} kWh</p>
                   <p className="text-olive mt-2">Average monthly usage</p>
                 </Card>
@@ -242,7 +239,7 @@ export default function SolarCalculatorPage() {
       {/* CTA Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="font-display text-4xl font-bold text-forest mb-6">Ready to Go Solar?</h2>
+          <h2 className="font-semibold tracking-tight text-4xl font-bold text-forest mb-6">Ready to Go Solar?</h2>
           <p className="text-xl text-olive mb-8 max-w-2xl mx-auto">Get a personalized quote from our solar experts</p>
           <Button asChild size="lg" className="bg-forest text-cream hover:bg-olive">
             <a href="/contact">Request a Quote</a>

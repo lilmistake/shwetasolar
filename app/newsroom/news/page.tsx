@@ -4,19 +4,23 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { getAllNews } from "@/lib/news"
 import Link from "next/link"
+import { PageHero } from "@/components/site/page-hero"
 
 export default async function NewsPage() {
   const newsAnnouncements = await getAllNews()
 
   return (
-    <div className="min-h-screen bg-cream pt-24">
-      {/* Header */}
-      <section className="py-12 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-6">
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">Company News</h1>
-          <p className="text-xl text-cream/90 max-w-2xl">Latest press coverage and announcements from Shweta Solar</p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-cream">
+      <PageHero
+        eyebrow="Newsroom"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Newsroom", path: "/newsroom" },
+          { name: "Company News", path: "/newsroom/news" },
+        ]}
+        title="Company News"
+        intro="Latest press coverage and announcements from Shweta Solar."
+      />
 
       <section className="container mx-auto px-6 py-12 max-w-5xl">
         <div className="space-y-8">
