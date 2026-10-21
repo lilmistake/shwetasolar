@@ -3,11 +3,11 @@ import { Mail } from "lucide-react"
 import { Reveal } from "@/components/topcon/reveal"
 
 const TEAM = [
-  { name: "Sandeep Sharma", role: "Director", email: "sandeep.sharma@shwetasolar.in", photo: "/images/team/sandeep-sharma.jpg" },
-  { name: "Mohit Chaudhary", role: "Vice President", email: "mohit.chaudhary@shwetasolar.in", photo: "/images/team/mohit-chaudhary.jpg" },
-  { name: "Rohit Garg", role: "Operations Head", email: "rohit.garg@shwetasolar.in", photo: "/images/team/rohit-garg.jpg" },
-  { name: "Abhishek Garg", role: "Business Development Head", email: "abhishek.garg@shwetasolar.in", photo: "/images/team/abhishek-garg.jpg" },
-  { name: "Yukta Garg", role: "Accounts Head", email: "yukta.garg@shwetasolar.in", photo: "/images/team/yukta-garg.jpg" },
+  { name: "Sandeep Sharma", email: "sandeep.sharma@shwetasolar.in", photo: "/images/team/sandeep-sharma.jpg" },
+  { name: "Mohit Chaudhary", email: "mohit.chaudhary@shwetasolar.in", photo: "/images/team/mohit-chaudhary.jpg" },
+  { name: "Rohit Garg", email: "rohit.garg@shwetasolar.in", photo: "/images/team/rohit-garg.jpg" },
+  { name: "Abhishek Garg", email: "abhishek.garg@shwetasolar.in", photo: "/images/team/abhishek-garg.jpg" },
+  { name: "Yukta Garg", email: "yukta.garg@shwetasolar.in", photo: "/images/team/yukta-garg.jpg" },
 ]
 
 export function TeamSection() {
@@ -39,10 +39,9 @@ export function TeamSection() {
               </div>
               <div className="flex flex-col gap-1">
                 <h3 className="text-lg font-semibold text-foreground">{person.name}</h3>
-                <p className="text-sm text-muted-foreground">{person.role}</p>
                 <a
                   href={`mailto:${person.email}`}
-                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                 >
                   <Mail className="size-4" aria-hidden="true" />
                   Email
