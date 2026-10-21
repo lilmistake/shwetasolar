@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
 import { Hero } from "@/components/home/hero"
+import { TrustStrip } from "@/components/home/trust-strip"
+import { AudienceSection } from "@/components/home/audience-section"
 import { RangeSection } from "@/components/home/range-section"
 import { FactorySection } from "@/components/home/factory-section"
-import { SpecsBand } from "@/components/home/specs-band"
+import { ReasonsSection } from "@/components/home/reasons-section"
 import { ClosingCta } from "@/components/home/closing-cta"
 
 export const metadata: Metadata = {
@@ -11,12 +13,14 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <>
+    <div className="home">
       <Hero />
+      <TrustStrip />
+      <AudienceSection />
       <RangeSection />
       <FactorySection />
-      <SpecsBand />
+      <ReasonsSection />
       <ClosingCta />
-    </>
+    </div>
   )
 }

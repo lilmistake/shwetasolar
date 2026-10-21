@@ -1,52 +1,51 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Download, Phone } from "lucide-react"
-import { FACTORY_PHOTOS, SITE } from "@/lib/site"
-import { COMPLETE_DATASHEET } from "@/lib/products"
+import { ArrowRight, Phone } from "lucide-react"
+import { Reveal } from "@/components/topcon/reveal"
+import { SITE } from "@/lib/site"
 
 export function ClosingCta() {
   return (
-    <section aria-labelledby="cta-heading" className="bg-background py-20 md:py-28">
+    <section aria-labelledby="cta-heading" className="bg-background pb-24 md:pb-32">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="grid overflow-hidden rounded-3xl bg-forest text-primary-foreground lg:grid-cols-2">
-          <div className="flex flex-col gap-6 p-8 md:p-14">
-            <h2 id="cta-heading" className="font-display text-4xl uppercase text-balance md:text-5xl">
-              Planning a project? Get pricing in 24 hours
-            </h2>
-            <p className="max-w-md leading-relaxed text-white/80 text-pretty">
-              Tell us the capacity and site type. Our sales team replies with module recommendations, pricing and
-              delivery timelines.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/contact"
-                className="rounded-full bg-sage px-6 py-3.5 font-semibold text-forest transition-colors hover:bg-white"
-              >
-                Request a quote
-              </Link>
-              <a
-                href={COMPLETE_DATASHEET}
-                className="inline-flex items-center gap-2 rounded-full border border-white/40 px-6 py-3.5 font-semibold transition-colors hover:bg-white hover:text-forest"
-              >
-                <Download className="h-4 w-4" aria-hidden="true" />
-                Range datasheet
-              </a>
+        <Reveal className="relative overflow-hidden rounded-3xl bg-primary text-primary-foreground">
+          <div className="grid md:grid-cols-2">
+            <div className="flex flex-col gap-6 p-8 md:p-14">
+              <h2 id="cta-heading" className="text-balance text-4xl font-semibold md:text-5xl">
+                {"Planning a project? Let's size it together."}
+              </h2>
+              <p className="text-pretty leading-relaxed text-primary-foreground/75">
+                Tell us about your site and our team will recommend the right panels and send pricing within one
+                working day.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/contact"
+                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary-foreground px-7 text-sm font-medium text-primary transition-transform hover:scale-[1.03]"
+                >
+                  Get a quote
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                </Link>
+                <a
+                  href={SITE.phoneHref}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-primary-foreground/25 px-7 text-sm font-medium transition-colors hover:bg-primary-foreground/10"
+                >
+                  <Phone className="size-4" aria-hidden="true" />
+                  {SITE.phoneDisplay}
+                </a>
+              </div>
             </div>
-            <a href={SITE.phoneHref} className="mt-2 inline-flex items-center gap-2 text-sm text-white/75 hover:text-white">
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              Or call toll-free {SITE.phoneDisplay}
-            </a>
+            <div className="relative min-h-64 md:min-h-full">
+              <Image
+                src="/images/stock/utility-solar-farm.png"
+                alt=""
+                fill
+                sizes="(min-width: 768px) 616px, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
-          <div className="relative min-h-72">
-            <Image
-              src={FACTORY_PHOTOS.moduleOnLine.src}
-              alt={FACTORY_PHOTOS.moduleOnLine.alt}
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   )

@@ -211,6 +211,14 @@ h6 {
   animation: slideDown 0.3s ease-out forwards;
 }
 
+/* Homepage uses clean sentence-case sans headings instead of the display face */
+.home h1,
+.home h2,
+.home h3 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.03em;
+}
+
 /* ---- TOPCon landing page utilities (refresh) ---- */
 
 /* Certification marquee */
