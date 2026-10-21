@@ -2,8 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { Resend } from "resend"
+import { LEAD_RECIPIENT_EMAIL } from "@/lib/topcon/constants"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 interface ContactFormData {
   name: string
@@ -15,98 +16,104 @@ interface ContactFormData {
   product?: string
   quantity?: string
   message: string
+  /** Accepted for backwards compatibility with existing callers; no longer verified. */
   recaptchaToken?: string
+  /** Honeypot field. Real users never fill it. */
+  website?: string
 }
 
-async function verifyRecaptcha(token: string): Promise<boolean> {
-  if (!token) return false
-
-  try {
-    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-    })
-
-    const data = await response.json()
-
-    // reCAPTCHA v3 returns a score from 0.0 to 1.0
-    // Consider scores above 0.5 as legitimate
-    return data.success && data.score >= 0.5
-  } catch (error) {
-    console.error("[v0] reCAPTCHA verification failed:", error)
-    return false
-  }
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
 }
+
+const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 export async function submitContactForm(data: ContactFormData) {
+  // Bots that fill the hidden honeypot get a fake success so they don't retry.
+  if (data.website) return { success: true }
+
+  const name = data.name?.trim().slice(0, 120)
+  const email = data.email?.trim().slice(0, 160)
+  const phone = data.phone?.trim().slice(0, 30)
+  const message = data.message?.trim().slice(0, 4000)
+
+  if (!name || name.length < 2) return { success: false, error: "Please enter your name." }
+  if (!email || !isValidEmail(email)) return { success: false, error: "Please enter a valid email address." }
+  if (!phone || phone.replace(/\D/g, "").length < 10)
+    return { success: false, error: "Please enter a valid phone number." }
+  if (!message) return { success: false, error: "Please enter a message." }
+
+  const inquiryType = data.inquiryType?.trim().slice(0, 40) || "general"
+  const fields = {
+    company: data.company?.trim().slice(0, 160) || null,
+    subject: data.subject?.trim().slice(0, 200) || null,
+    product: data.product?.trim().slice(0, 120) || null,
+    quantity: data.quantity?.trim().slice(0, 60) || null,
+  }
+
   try {
-    if (data.recaptchaToken) {
-      const isValid = await verifyRecaptcha(data.recaptchaToken)
-      if (!isValid) {
-        return {
-          success: false,
-          error: "Security verification failed. Please try again.",
-        }
-      }
-    }
-
     const supabase = await createClient()
-
-    // Store in database
     const { error: dbError } = await supabase.from("contact_submissions").insert({
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      company: data.company || null,
-      inquiry_type: data.inquiryType || "general",
-      product: data.product || null,
-      quantity: data.quantity || null,
-      message: data.message,
+      name,
+      email,
+      phone,
+      company: fields.company,
+      inquiry_type: inquiryType,
+      product: fields.product,
+      quantity: fields.quantity,
+      message: fields.subject ? `Subject: ${fields.subject}\n\n${message}` : message,
     })
 
     if (dbError) {
-      console.error("Database error:", dbError)
-      return {
-        success: false,
-        error: "Failed to save your enquiry. Please try again.",
-      }
+      console.error("Contact form DB error:", dbError)
+      return { success: false, error: "We couldn't save your enquiry. Please try again or call us." }
     }
+  } catch (error) {
+    console.error("Contact form unexpected error:", error)
+    return { success: false, error: "Something went wrong. Please try again." }
+  }
 
-    // Send email notification using Resend
+  if (resend) {
+    const row = (label: string, value: string | null) =>
+      value
+        ? `<tr><td style="padding:10px 20px;font-weight:bold;width:130px;vertical-align:top">${label}</td><td style="padding:10px 20px">${escapeHtml(value).replace(/\n/g, "<br>")}</td></tr>`
+        : ""
     try {
-      await resend.emails.send({
-        from: "Shweta Solar <onboarding@resend.dev>",
-        to: "rasinrohit@gmail.com",
-        subject: `New Contact Form Submission - ${data.inquiryType || "General"}`,
+      const { error } = await resend.emails.send({
+        from: "Shweta Solar Website <onboarding@resend.dev>",
+        to: LEAD_RECIPIENT_EMAIL,
+        replyTo: email,
+        subject: `New website enquiry (${inquiryType}): ${name}`,
         html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${data.name}</p>
-          <p><strong>Email:</strong> ${data.email}</p>
-          <p><strong>Phone:</strong> ${data.phone}</p>
-          ${data.company ? `<p><strong>Company:</strong> ${data.company}</p>` : ""}
-          ${data.inquiryType ? `<p><strong>Inquiry Type:</strong> ${data.inquiryType}</p>` : ""}
-          ${data.subject ? `<p><strong>Subject:</strong> ${data.subject}</p>` : ""}
-          ${data.product ? `<p><strong>Product:</strong> ${data.product}</p>` : ""}
-          ${data.quantity ? `<p><strong>Quantity:</strong> ${data.quantity} kW</p>` : ""}
-          <p><strong>Message:</strong></p>
-          <p>${data.message}</p>
+          <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden">
+            <div style="background:#004636;color:#ffffff;padding:18px 20px">
+              <h1 style="margin:0;font-size:17px">New website enquiry</h1>
+              <p style="margin:4px 0 0;font-size:13px;color:#a9b489">shwetasolar.in</p>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:14px;color:#1a1a1a">
+              ${row("Name", name)}
+              ${row("Phone", phone)}
+              ${row("Email", email)}
+              ${row("Type", inquiryType)}
+              ${row("Company", fields.company)}
+              ${row("Subject", fields.subject)}
+              ${row("Product", fields.product)}
+              ${row("Quantity", fields.quantity)}
+              ${row("Message", message)}
+            </table>
+          </div>
         `,
       })
+      if (error) console.error("Contact form email error:", error)
     } catch (emailError) {
-      console.error("Email sending failed:", emailError)
-      // Don't fail the entire operation if email fails
-      // The data is already saved in the database
-    }
-
-    return { success: true }
-  } catch (error) {
-    console.error("Form submission error:", error)
-    return {
-      success: false,
-      error: "An unexpected error occurred. Please try again.",
+      console.error("Contact form email exception:", emailError)
     }
   }
+
+  return { success: true }
 }

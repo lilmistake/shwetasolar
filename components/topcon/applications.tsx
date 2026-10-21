@@ -21,7 +21,7 @@ export function Applications() {
           <Reveal>
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-border shadow-lg">
               <Image
-                src="/images/topcon/commercial-install.png"
+                src="/images/factory/automated-factory-floor.jpg"
                 alt="Rooftop installation of Shweta Solar TOPCon modules on a commercial building"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

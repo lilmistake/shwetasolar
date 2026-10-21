@@ -9,7 +9,7 @@ const BENEFITS = [
   {
     icon: Sun,
     title: "More power per sq. ft.",
-    body: "Up to 24.5% efficiency means fewer panels, lower balance-of-system cost, and more output from the same roof or land.",
+    body: "Up to 24.39% efficiency means fewer panels, lower balance-of-system cost, and more output from the same roof or land.",
   },
   {
     icon: Layers,
@@ -67,7 +67,7 @@ export function Benefits() {
             className="group relative overflow-hidden rounded-3xl border border-border bg-forest text-white md:col-span-3 md:row-span-2"
           >
             <Image
-              src="/images/topcon/cell-macro.png"
+              src="/images/factory/topcon-cell-busbar-macro.jpg"
               alt="Macro detail of a TOPCon solar cell surface"
               fill
               sizes="(max-width: 768px) 100vw, 40vw"

@@ -227,7 +227,7 @@ export function BlogSidebar({ currentSlug, allPosts }: BlogSidebarProps) {
               size="sm"
               className="w-full border-forest text-forest hover:bg-forest hover:text-cream bg-transparent"
             >
-              <Link href="/products/topcon">TOPCon Panels</Link>
+              <Link href="/products">TOPCon panels</Link>
             </Button>
             <Button
               asChild
@@ -235,7 +235,7 @@ export function BlogSidebar({ currentSlug, allPosts }: BlogSidebarProps) {
               size="sm"
               className="w-full border-forest text-forest hover:bg-forest hover:text-cream bg-transparent"
             >
-              <Link href="/products/mono-perc">Mono PERC</Link>
+              <Link href="/products">Full module range</Link>
             </Button>
           </div>
         </CardContent>

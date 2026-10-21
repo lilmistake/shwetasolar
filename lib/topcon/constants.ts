@@ -1,6 +1,6 @@
 // Shared contact + campaign constants for the TOPCon landing page.
 
-export const PHONE_DISPLAY = "1800 120 477120"
+export const PHONE_DISPLAY = "1800 120 477 120"
 export const PHONE_HREF = "tel:1800120477120"
 
 export const WHATSAPP_NUMBER = "919289969501"
@@ -11,7 +11,7 @@ export const SALES_EMAIL = "sales@shwetasolar.in"
 export const LEAD_RECIPIENT_EMAIL = "rasinrohit@gmail.com"
 
 export const LOGO_SRC = "/images/logo.webp"
-export const HERO_IMAGE = "/images/topcon.jpg"
+export const HERO_IMAGE = "/images/factory/topcon-module-on-line.jpg"
 
 export const SOCIALS = {
   facebook: "https://www.facebook.com/people/Shweta-Solar/61580012213135/",

@@ -1,140 +1,108 @@
-import { Download, FileText, ImageIcon, Award, BookOpen, Calculator, Phone } from "lucide-react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { CTAWidget } from "@/components/cta-widget"
 import type { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
+import { Download, FileText } from "lucide-react"
+import { Breadcrumbs } from "@/components/site/breadcrumbs"
+import { COMPLETE_DATASHEET, FAMILIES, RANGE_SUMMARY, SEGMENTS } from "@/lib/products"
+import { FACTORY_PHOTOS, SITE } from "@/lib/site"
 
 export const metadata: Metadata = {
-  title: "Resource Downloads - Datasheets, Manuals & Certifications",
-  description:
-    "Download Shweta Solar product datasheets, installation manuals, IEC certifications, test reports, and brand assets. Access technical documentation for Mono PERC and TopCon solar panels.",
-  openGraph: {
-    title: "Download Solar Panel Resources - Technical Docs & Certifications",
-    description:
-      "Free downloads: Product catalogues, installation guides, IEC 61215/61730 certifications, ISO certificates, and high-resolution brand assets for Shweta Solar panels.",
-  },
+  title: "TOPCon Solar Panel Datasheets (PDF Download)",
+  description: `Download Shweta Solar n-type TOPCon module datasheets: residential, commercial, utility and the complete ${RANGE_SUMMARY.minW}–${RANGE_SUMMARY.maxW} W range. Electrical, mechanical and warranty specifications.`,
+  alternates: { canonical: "/resources/downloads" },
 }
 
-const downloadCategories = [
+const DOCS = [
   {
-    title: "Product Documentation",
-    icon: FileText,
-    items: [
-      { name: "Company Profile", size: "2.4 MB", format: "PDF" },
-      { name: "Product Catalogue 2024", size: "5.8 MB", format: "PDF" },
-      { name: "Mono PERC Datasheet", size: "1.2 MB", format: "PDF" },
-      { name: "TopCon Datasheet", size: "1.3 MB", format: "PDF" },
-    ],
+    title: "Complete range datasheet",
+    body: `All ${FAMILIES.length} module families, ${RANGE_SUMMARY.minW}–${RANGE_SUMMARY.maxW} W, in one document.`,
+    href: COMPLETE_DATASHEET,
+    featured: true,
   },
-  {
-    title: "Installation & Maintenance",
-    icon: BookOpen,
-    items: [
-      { name: "Installation Manual", size: "3.2 MB", format: "PDF" },
-      { name: "Module Cleaning Instructions", size: "890 KB", format: "PDF" },
-      { name: "Pallet Unpacking Instructions", size: "1.1 MB", format: "PDF" },
-      { name: "Maintenance Guidelines", size: "2.0 MB", format: "PDF" },
-    ],
-  },
-  {
-    title: "Certifications & Test Reports",
-    icon: Award,
-    items: [
-      { name: "IEC 61215 Certification", size: "1.8 MB", format: "PDF" },
-      { name: "IEC 61730 Certification", size: "1.6 MB", format: "PDF" },
-      { name: "ISO 9001:2015 Certificate", size: "950 KB", format: "PDF" },
-      { name: "Performance Test Report", size: "2.5 MB", format: "PDF" },
-      { name: "Quality Assurance Report", size: "1.9 MB", format: "PDF" },
-    ],
-  },
-  {
-    title: "Brand Assets",
-    icon: ImageIcon,
-    items: [
-      { name: "Brand Guidelines", size: "4.2 MB", format: "PDF" },
-      { name: "Logo Package (High-Res)", size: "8.5 MB", format: "ZIP" },
-      { name: "Product Images", size: "12.3 MB", format: "ZIP" },
-      { name: "Marketing Materials", size: "6.7 MB", format: "ZIP" },
-    ],
-  },
+  ...SEGMENTS.map((s) => ({
+    title: `${s.name} datasheet`,
+    body: `${s.powerRange} · ${s.summary}`,
+    href: s.datasheet,
+    featured: false,
+  })),
 ]
 
 export default function DownloadsPage() {
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4">
-          <h1 className="font-display text-5xl md:text-7xl font-bold mb-6 text-balance">Resource Downloads</h1>
-          <p className="text-xl md:text-2xl max-w-3xl leading-relaxed text-pretty">
-            Access technical documentation, certifications, and brand assets
-          </p>
-        </div>
-      </section>
-
-      {/* Downloads Grid */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {downloadCategories.map((category) => (
-              <Card key={category.title} className="p-8 hover:shadow-xl transition-shadow">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center">
-                    <category.icon className="h-6 w-6 text-forest" />
-                  </div>
-                  <h2 className="font-display text-2xl font-bold text-forest">{category.title}</h2>
-                </div>
-                <div className="space-y-3">
-                  {category.items.map((item) => (
-                    <div
-                      key={item.name}
-                      className="flex items-center justify-between p-4 bg-sage/5 rounded-lg hover:bg-sage/10 transition-colors"
-                    >
-                      <div className="flex-1">
-                        <p className="font-medium text-forest">{item.name}</p>
-                        <p className="text-sm text-olive">
-                          {item.format} • {item.size}
-                        </p>
-                      </div>
-                      <Button size="sm" variant="outline" className="ml-4 bg-transparent">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            ))}
+    <>
+      <section className="bg-background pt-20">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:px-6 md:py-20 lg:grid-cols-5 lg:items-end">
+          <div className="flex flex-col gap-6 lg:col-span-3">
+            <Breadcrumbs
+              items={[
+                { name: "Home", path: "/" },
+                { name: "Datasheets", path: "/resources/downloads" },
+              ]}
+            />
+            <h1 className="font-display text-5xl uppercase leading-[0.95] text-forest text-balance md:text-6xl">
+              Module datasheets
+            </h1>
+            <p className="max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
+              Electrical ratings, mechanical drawings, packing and warranty terms for every Shweta Solar TOPCon module.
+              Free to download, no sign-up.
+            </p>
+          </div>
+          <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl lg:col-span-2 lg:block">
+            <Image src={FACTORY_PHOTOS.busbarMacro.src} alt={FACTORY_PHOTOS.busbarMacro.alt} fill sizes="40vw" className="object-cover" />
           </div>
         </div>
       </section>
 
-      {/* Solar Calculator CTA */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <CTAWidget
-            icon={<Calculator className="h-16 w-16" />}
-            title="Need Help Sizing Your Solar System?"
-            description="Use our interactive solar calculator to estimate your energy needs and potential savings"
-            buttonText="Open Solar Calculator"
-            buttonHref="/resources/calculator"
-            variant="gradient"
-          />
-        </div>
+      <section aria-label="Datasheet downloads" className="bg-muted py-16 md:py-20">
+        <ul className="mx-auto grid max-w-7xl gap-4 px-4 md:grid-cols-2 md:px-6">
+          {DOCS.map((d) => (
+            <li key={d.href} className={d.featured ? "md:col-span-2" : undefined}>
+              <a
+                href={d.href}
+                download
+                className={`group flex h-full items-center gap-5 rounded-2xl p-6 transition-colors md:p-8 ${
+                  d.featured ? "bg-forest text-primary-foreground hover:bg-olive" : "bg-card hover:bg-background"
+                }`}
+              >
+                <span
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${
+                    d.featured ? "bg-white/10 text-sage" : "bg-muted text-forest"
+                  }`}
+                >
+                  <FileText className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className={`font-display text-2xl uppercase ${d.featured ? "" : "text-forest"}`}>{d.title}</span>
+                  <span className={`text-sm leading-relaxed ${d.featured ? "text-white/75" : "text-muted-foreground"}`}>
+                    {d.body}
+                  </span>
+                </span>
+                <span className="flex items-center gap-2 text-sm font-semibold">
+                  <Download className="h-4 w-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">PDF</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <CTAWidget
-            icon={<Phone className="h-16 w-16" />}
-            title="Need Technical Support?"
-            description="Our expert team is ready to help you with product selection, installation guidance, and technical questions"
-            buttonText="Contact Our Team"
-            buttonHref="/contact"
-            variant="outline"
-          />
+      <section className="bg-background py-16">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 md:flex-row md:items-center md:px-6">
+          <div className="flex flex-col gap-2">
+            <h2 className="font-display text-3xl uppercase text-forest">Need a PAN file or test report?</h2>
+            <p className="text-muted-foreground">Our engineering team shares simulation files and project documents on request.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/contact" className="rounded-full bg-forest px-6 py-3.5 font-semibold text-primary-foreground transition-colors hover:bg-olive">
+              Contact sales
+            </Link>
+            <a href={SITE.phoneHref} className="rounded-full border border-forest px-6 py-3.5 font-semibold text-forest transition-colors hover:bg-forest hover:text-primary-foreground">
+              {SITE.phoneDisplay}
+            </a>
+          </div>
         </div>
       </section>
-    </div>
+    </>
   )
 }

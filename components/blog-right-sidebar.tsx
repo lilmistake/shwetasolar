@@ -185,7 +185,7 @@ export function BlogRightSidebar({ relatedPosts, recentPosts, currentCategory }:
         </h3>
         <div className="space-y-2">
           <Link
-            href="/products/mono-perc"
+            href="/products"
             className="flex items-center justify-between p-3 rounded-lg hover:bg-white transition-all group"
           >
             <span className="text-sm font-medium text-forest">Our Products</span>

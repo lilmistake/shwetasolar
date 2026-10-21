@@ -231,7 +231,7 @@ While PERC technology remains a solid choice for many applications, TOPCon repre
 
 ---
 
-*Ready to upgrade to TOPCon technology? [Explore our products](/products/topcon) or [contact our team](/contact) for a customized solution.*`,
+*Ready to upgrade to TOPCon technology? [Explore our products](/products) or [contact our team](/contact) for a customized solution.*`,
   },
   {
     slug: "sustainability-manufacturing",

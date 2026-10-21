@@ -38,7 +38,7 @@ export default function NotFound() {
         <div className="mt-12 pt-8 border-t border-sage/20">
           <p className="text-olive mb-4">Quick Links:</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/products/mono-perc" className="text-forest hover:text-olive transition-colors font-medium">
+            <Link href="/products" className="text-forest hover:text-olive transition-colors font-medium">
               Products
             </Link>
             <Link href="/about" className="text-forest hover:text-olive transition-colors font-medium">
