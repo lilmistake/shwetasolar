@@ -12,26 +12,40 @@ const ease = [0.22, 1, 0.36, 1] as const
 
 const AUDIENCES = [
   {
-    eyebrow: "Businesses & factories",
-    title: "Cut your power bill with panels made to last.",
+    eyebrow: "EPCs & developers",
+    title: "Supply you can plan a project around.",
     points: [
-      "More power from limited roof space",
-      "30-year performance warranty",
-      "Approved for subsidy and net-metering projects",
+      "1.2 GW a year, dispatched pan-India from the NCR",
+      "Every panel ships with its own serialised test report",
+      "395 W to 725 W, all under one BIS licence",
+    ],
+    cta: { label: "Partner with us", href: "/contact" },
+    image: { src: "/images/stock/epc-installers.png", alt: "Installers mounting a solar panel on a rooftop" },
+  },
+  {
+    eyebrow: "Businesses & factories",
+    title: "Lower energy costs from the roof you already have.",
+    points: [
+      "540 W and 600 W panels sized for factory roofs",
+      "30-year performance warranty, in writing",
+      "ALMM-listed for net-metering and government projects",
     ],
     cta: { label: "See rooftop panels", href: "/products/commercial" },
     image: { src: "/images/stock/industrial-rooftop-aerial.png", alt: "Factory rooftop solar installation" },
   },
   {
-    eyebrow: "EPCs & installers",
-    title: "A supplier you can plan projects around.",
+    eyebrow: "Solar brands (OEM)",
+    title: "Your brand, built on our line.",
     points: [
-      "1.2 GW a year for steady, on-time supply",
-      "Every panel ships with its own test report",
-      "Pricing, datasheets and dispatch from one team",
+      "Private-label modules with your name on them",
+      "Your cells or ours, same automated process",
+      "Same 100% testing as every Shweta panel",
     ],
-    cta: { label: "Partner with us", href: "/topcon" },
-    image: { src: "/images/stock/epc-installers.png", alt: "Installers mounting a solar panel on a rooftop" },
+    cta: { label: "Discuss OEM supply", href: "/contact" },
+    image: {
+      src: "/images/factory/topcon-module-on-line.jpg",
+      alt: "Finished solar module moving along the production line",
+    },
   },
 ]
 
@@ -45,11 +59,11 @@ export function AudienceSection() {
           <div className="flex max-w-2xl flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground">Who we work with</p>
             <h2 id="audience-heading" className="text-balance text-4xl font-semibold text-foreground md:text-6xl">
-              Built for the people who build solar.
+              One factory, three ways to work with us.
             </h2>
           </div>
           <p className="max-w-sm text-pretty leading-relaxed text-muted-foreground">
-            Whether you run the site or build the plant, we make the panel the easy part.
+            Whether you install solar, run on it, or sell it under your own name, we make the panel the easy part.
           </p>
         </Reveal>
 
@@ -62,7 +76,7 @@ export function AudienceSection() {
                 delay={i * 0.1}
                 className={cn(
                   "relative min-h-[30rem] overflow-hidden rounded-3xl transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] md:min-h-0",
-                  isActive ? "md:flex-[1.7]" : "md:flex-1",
+                  isActive ? "md:flex-[2.2]" : "md:flex-1",
                 )}
               >
                 <article

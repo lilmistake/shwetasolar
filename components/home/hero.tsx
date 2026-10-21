@@ -28,7 +28,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       aria-labelledby="hero-heading"
-      className="relative isolate flex min-h-svh flex-col overflow-hidden bg-forest text-primary-foreground"
+      className="relative isolate flex min-h-svh flex-col overflow-hidden bg-ink text-primary-foreground"
     >
       <motion.div style={{ y: imageY }} className="absolute inset-0 -z-20" aria-hidden="true">
         <motion.div
@@ -49,11 +49,11 @@ export function Hero() {
       </motion.div>
 
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-forest from-10% via-forest/70 via-40% to-transparent to-75%"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/85 via-ink/45 via-45% to-transparent to-80%"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-forest/90 to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-ink/80 to-transparent"
         aria-hidden="true"
       />
 
@@ -99,8 +99,8 @@ export function Hero() {
           transition={{ duration: 0.7, ease, delay: 0.95 }}
           className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-primary-foreground/75"
         >
-          High-efficiency modules designed and manufactured in Uttar Pradesh, for factories, businesses and the EPC
-          teams who build their plants.
+          High-efficiency TOPCon modules from our fully automated plant in Hapur, supplied to EPCs, developers and
+          businesses across India.
         </motion.p>
 
         <motion.div

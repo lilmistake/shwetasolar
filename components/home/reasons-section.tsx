@@ -8,12 +8,12 @@ const REASONS = [
   {
     icon: SunMedium,
     title: "Power from both sides",
-    text: "Glass on the front and back catches reflected light too, so you get extra energy from the same space.",
+    text: "Glass on both faces catches reflected light too, adding up to 25% more energy on ground-mount and white roofs.",
   },
   {
     icon: Factory,
-    title: "Made in India",
-    text: "Built in Uttar Pradesh and government-approved, so our panels qualify for subsidy and public projects.",
+    title: "Made in India, approved",
+    text: "BIS licensed and on the government's ALMM List-I, so our panels qualify for subsidy and public projects.",
   },
   {
     icon: ScanLine,
