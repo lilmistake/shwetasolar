@@ -17,7 +17,7 @@ const AUDIENCES = [
       "395 W to 725 W, all under one BIS licence",
     ],
     cta: { label: "Partner with us", href: "/contact" },
-    image: { src: "/images/stock/epc-installers.png", alt: "Installers mounting a solar panel on a rooftop" },
+    image: { src: "/images/real/install-crew.jpg", alt: "Installation crew laying solar panels on a metal rooftop" },
   },
   {
     eyebrow: "Businesses & factories",
@@ -28,7 +28,7 @@ const AUDIENCES = [
       "ALMM-listed for net-metering and government projects",
     ],
     cta: { label: "See rooftop panels", href: "/products/commercial" },
-    image: { src: "/images/stock/industrial-rooftop-aerial.png", alt: "Factory rooftop solar installation" },
+    image: { src: "/images/real/commercial-rooftop.jpg", alt: "Rows of solar panels across a large commercial rooftop" },
   },
 ]
 

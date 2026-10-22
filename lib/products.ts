@@ -63,7 +63,7 @@ export const SEGMENTS: Segment[] = [
       "Small off-grid systems": "/images/stock/off-grid-system.png",
     },
     datasheet: "/datasheets/shweta-solar-topcon-residential-2026.pdf",
-    image: { src: "/images/factory/module-final-inspection.jpg", alt: "Technician inspecting a finished residential TOPCon module" },
+    image: { src: "/images/real/stringer-soldering.jpg", alt: "Cell stringer soldering TOPCon cells under an amber heating glow" },
   },
   {
     slug: "commercial",
@@ -75,7 +75,7 @@ export const SEGMENTS: Segment[] = [
       "For factories, warehouses, institutions and large residential buildings: high power per module in a size two people can still carry onto a roof.",
     useCases: ["Factory rooftops", "Warehouses", "Institutions", "Large residential buildings"],
     useCaseImages: {
-      "Factory rooftops": "/images/stock/factory-rooftop.png",
+      "Factory rooftops": "/images/real/install-crew.jpg",
       Warehouses: "/images/stock/warehouse-rooftop.png",
       Institutions: "/images/stock/institution-rooftop.png",
       "Large residential buildings": "/images/stock/apartment-rooftop.png",
@@ -99,7 +99,7 @@ export const SEGMENTS: Segment[] = [
       "Open-access projects": "/images/stock/open-access.png",
     },
     datasheet: "/datasheets/shweta-solar-topcon-utility-2026.pdf",
-    image: { src: "/images/factory/automated-factory-floor.jpg", alt: "Automated production line building utility-scale modules" },
+    image: { src: "/images/real/module-handling-heads.jpg", alt: "Automated heads working over a finished module on the production line" },
   },
 ]
 

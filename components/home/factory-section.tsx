@@ -37,8 +37,8 @@ const TILES = [
   {
     step: "04",
     title: "Tested one by one",
-    text: "Every panel ships with its own test report.",
-    photo: FACTORY_PHOTOS.inspection,
+    text: "Every panel goes through our sun simulator and ships with its own test report.",
+    photo: { src: "/images/real/sun-simulator.jpg", alt: "Shweta Solar sun simulator testing a module's power output" },
     className: "",
     sizes: "(min-width: 1024px) 300px, (min-width: 640px) 50vw, 100vw",
   },

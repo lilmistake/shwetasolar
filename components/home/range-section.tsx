@@ -13,7 +13,7 @@ const CARD_COPY: Record<SegmentSlug, { title: string; text: string; image: { src
   commercial: {
     title: "Factories & businesses",
     text: "High output per panel, still easy for two people to carry onto a roof.",
-    image: { src: "/images/stock/industrial-rooftop-aerial.png", alt: "Solar panels across a factory rooftop" },
+    image: { src: "/images/real/commercial-rooftop.jpg", alt: "Solar panels across a commercial rooftop" },
   },
   utility: {
     title: "Solar farms",
