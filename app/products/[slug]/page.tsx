@@ -43,9 +43,9 @@ function badgesFor(f: ModuleFamily, all: ModuleFamily[]) {
   const badges: string[] = []
   if (f.weightKg === Math.min(...all.map((x) => x.weightKg))) badges.push("Lightest")
   if (f.maxEfficiency === Math.max(...all.map((x) => x.maxEfficiency))) badges.push("Most efficient")
-  if (f.lengthMm === Math.min(...all.map((x) => x.lengthMm)) && badges.length === 0) badges.push("Compact length")
-  if (f.widthMm === Math.max(...all.map((x) => x.widthMm)) && badges.length < 2) badges.push("Wide format, more watts")
-  return badges.slice(0, 2)
+  if (f.widthMm === Math.max(...all.map((x) => x.widthMm))) badges.push("Wide format")
+  if (f.lengthMm === Math.min(...all.map((x) => x.lengthMm))) badges.push("Compact length")
+  return badges.slice(0, 1)
 }
 
 const percent = (s: string) => Number.parseFloat(s.replace(/[^\d.]/g, ""))
@@ -103,7 +103,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
         }
       />
 
-      <section aria-labelledby="built-for-heading" className="bg-background pb-20 md:pb-28">
+      <section aria-labelledby="built-for-heading" className="bg-background pb-14 md:pb-20">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
           <Reveal>
             <h2 id="built-for-heading" className="text-balance text-3xl font-semibold text-foreground md:text-4xl">
@@ -116,26 +116,30 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      <section aria-labelledby="families-heading" className="bg-muted/50 py-20 md:py-28">
-        <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 md:px-6">
-          <Reveal className="flex max-w-2xl flex-col gap-4">
-            <p className="text-sm font-medium text-muted-foreground">
-              {families.length} module {families.length === 1 ? "family" : "families"}
-            </p>
-            <h2 id="families-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
-              Pick the panel that fits your roof
-            </h2>
-            <p className="text-pretty leading-relaxed text-muted-foreground">
-              Each outline is drawn to the same scale, so you can compare sizes at a glance.
+      <section aria-labelledby="families-heading" className="bg-forest py-20 md:py-28">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
+          <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="flex max-w-2xl flex-col gap-4">
+              <p className="text-sm font-medium text-primary-foreground/60">
+                {families.length} module {families.length === 1 ? "family" : "families"}
+              </p>
+              <h2 id="families-heading" className="text-balance text-4xl font-semibold text-primary-foreground md:text-5xl">
+                Pick the panel that fits your roof
+              </h2>
+            </div>
+            <p className="max-w-xs text-pretty text-sm leading-relaxed text-primary-foreground/70">
+              Panels are drawn side by side at the same scale, so you can compare sizes at a glance.
             </p>
           </Reveal>
-          <div className="flex flex-col gap-6">
+          <ul className="grid gap-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {families.map((f, i) => (
-              <Reveal key={f.model} delay={0.05 + i * 0.05}>
-                <FamilyCard family={f} scaleLengthMm={scaleLengthMm} badges={badgesFor(f, families)} />
-              </Reveal>
+              <li key={f.model}>
+                <Reveal delay={0.05 + i * 0.08} className="h-full">
+                  <FamilyCard family={f} scaleLengthMm={scaleLengthMm} badges={badgesFor(f, families)} />
+                </Reveal>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

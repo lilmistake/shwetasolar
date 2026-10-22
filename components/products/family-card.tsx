@@ -12,9 +12,9 @@ export function FamilyCard({
   badges: string[]
 }) {
   const keyStats = [
-    { value: `${f.maxEfficiency}%`, label: "Max efficiency" },
+    { value: `${f.maxEfficiency}%`, label: "Efficiency" },
     { value: `${f.weightKg} kg`, label: "Weight" },
-    { value: `${f.bifacialMaxW} W`, label: "With bifacial gain" },
+    { value: `${f.bifacialMaxW} W`, label: "Bifacial peak" },
   ]
 
   const fullSpecs: [string, string][] = [
@@ -28,37 +28,32 @@ export function FamilyCard({
   ]
 
   return (
-    <article
-      id={f.model.toLowerCase()}
-      className="grid scroll-mt-28 overflow-hidden rounded-3xl border border-border bg-card md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-    >
-      <div className="flex items-end justify-center bg-muted px-6 pb-8 pt-12">
+    <article id={f.model.toLowerCase()} className="flex h-full scroll-mt-28 flex-col gap-8">
+      <div className="flex h-72 items-end justify-center">
         <ModuleOutline family={f} scaleLengthMm={scaleLengthMm} />
       </div>
 
-      <div className="flex flex-col gap-8 p-6 md:p-10">
-        <div className="flex flex-col gap-4">
-          {badges.length > 0 && (
-            <ul className="flex flex-wrap gap-2">
-              {badges.map((b) => (
-                <li key={b} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                  {b}
-                </li>
-              ))}
-            </ul>
-          )}
-          <h3 className="text-sm font-medium tracking-wide text-muted-foreground">{f.model}</h3>
-          <p className="text-5xl font-semibold tabular-nums text-foreground md:text-6xl">
+      <div className="flex flex-1 flex-col gap-6 rounded-3xl bg-card p-6 md:p-8">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-medium tracking-wide text-muted-foreground">{f.model}</h3>
+            {badges.map((b) => (
+              <span key={b} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                {b}
+              </span>
+            ))}
+          </div>
+          <p className="text-4xl font-semibold tabular-nums text-foreground md:text-5xl">
             {f.minW}–{f.maxW}
-            <span className="ml-2 text-2xl text-muted-foreground">W</span>
+            <span className="ml-1.5 text-xl text-muted-foreground">W</span>
           </p>
         </div>
 
-        <dl className="grid grid-cols-3 gap-4">
+        <dl className="grid grid-cols-3 gap-3 border-t border-border pt-5">
           {keyStats.map((s) => (
             <div key={s.label} className="flex flex-col gap-1">
               <dt className="order-2 text-xs text-muted-foreground">{s.label}</dt>
-              <dd className="order-1 text-xl font-semibold tabular-nums text-foreground md:text-2xl">{s.value}</dd>
+              <dd className="order-1 text-lg font-semibold tabular-nums text-foreground">{s.value}</dd>
             </div>
           ))}
         </dl>
@@ -68,9 +63,9 @@ export function FamilyCard({
             Full specifications
             <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
           </summary>
-          <dl className="mt-4 grid gap-x-8 sm:grid-cols-2">
+          <dl className="mt-3 flex flex-col">
             {fullSpecs.map(([label, value]) => (
-              <div key={label} className="flex justify-between gap-4 border-b border-border py-2.5 text-sm">
+              <div key={label} className="flex justify-between gap-4 border-b border-border py-2.5 text-sm last:border-b-0">
                 <dt className="text-muted-foreground">{label}</dt>
                 <dd className="text-right font-medium text-foreground">{value}</dd>
               </div>
