@@ -51,4 +51,9 @@ export const FACTORY_PHOTOS = {
   symmetry: { src: "/images/factory/stringer-symmetry.jpg", alt: "Symmetrical dual-lane stringer machine under red inspection light" },
   vacuum: { src: "/images/factory/vacuum-cell-transfer.jpg", alt: "Vacuum suction cups transferring a row of solar cells" },
   gripperClose: { src: "/images/factory/gripper-cell-closeup.jpg", alt: "Close-up of a precision gripper on a TOPCon solar cell" },
+  crackInspection: { src: "/images/real/crack-inspection.webp", alt: "Shweta Solar operator reviewing EL crack-inspection scans of solar modules" },
+  visualInspection: { src: "/images/real/visual-inspection.webp", alt: "Finished solar modules tilted on a lit visual-inspection station" },
+  soldering: { src: "/images/real/stringer-soldering.webp", alt: "Cell stringer soldering TOPCon cells under an amber heating glow" },
+  sunSimulator: { src: "/images/real/sun-simulator.jpg", alt: "Shweta Solar sun simulator testing a module's power output" },
+  team: { src: "/images/real/team.webp", alt: "The Shweta Solar factory team on the production hall floor in Hapur" },
 } as const

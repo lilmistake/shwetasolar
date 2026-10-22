@@ -8,7 +8,7 @@ const CARD_COPY: Record<SegmentSlug, { title: string; text: string; image: { src
   residential: {
     title: "Homes & small rooftops",
     text: "Lighter, compact panels that fit tight roofs and qualify for PM Surya Ghar.",
-    image: { src: "/images/stock/home-rooftop.png", alt: "Solar panels on the terrace of a modern home" },
+    image: { src: "/images/real/small-home.jpg", alt: "Solar panels across the tiled roof of a home" },
   },
   commercial: {
     title: "Factories & businesses",
@@ -18,7 +18,7 @@ const CARD_COPY: Record<SegmentSlug, { title: string; text: string; image: { src
   utility: {
     title: "Solar farms",
     text: "Our most powerful panels, made for ground-mount plants and trackers.",
-    image: { src: "/images/stock/utility-solar-farm.png", alt: "Rows of solar panels across a large solar farm" },
+    image: { src: "/images/real/solar-farm.jpg", alt: "Aerial view of solar panel rows across a solar farm" },
   },
 }
 

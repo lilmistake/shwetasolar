@@ -63,7 +63,7 @@ export const SEGMENTS: Segment[] = [
       "Small off-grid systems": "/images/stock/off-grid-system.png",
     },
     datasheet: "/datasheets/shweta-solar-topcon-residential-2026.pdf",
-    image: { src: "/images/real/stringer-soldering.jpg", alt: "Cell stringer soldering TOPCon cells under an amber heating glow" },
+    image: { src: "/images/real/small-home.jpg", alt: "Solar panels across the tiled roof of a home" },
   },
   {
     slug: "commercial",
@@ -99,7 +99,7 @@ export const SEGMENTS: Segment[] = [
       "Open-access projects": "/images/stock/open-access.png",
     },
     datasheet: "/datasheets/shweta-solar-topcon-utility-2026.pdf",
-    image: { src: "/images/real/module-handling-heads.jpg", alt: "Automated heads working over a finished module on the production line" },
+    image: { src: "/images/real/solar-farm.jpg", alt: "Aerial view of solar panel rows across a ground-mount solar farm" },
   },
 ]
 

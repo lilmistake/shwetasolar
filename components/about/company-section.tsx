@@ -50,8 +50,8 @@ export function CompanySection() {
 
         <Reveal delay={0.1} className="relative isolate min-h-80 overflow-hidden rounded-3xl">
           <Image
-            src={FACTORY_PHOTOS.twinHeads.src}
-            alt={FACTORY_PHOTOS.twinHeads.alt}
+            src={FACTORY_PHOTOS.team.src}
+            alt={FACTORY_PHOTOS.team.alt}
             fill
             sizes="(min-width: 1024px) 600px, 100vw"
             className="object-cover"
