@@ -1,11 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Download } from "lucide-react"
+import { ArrowRight, Download } from "lucide-react"
 import { PageHero } from "@/components/site/page-hero"
 import { Reveal } from "@/components/topcon/reveal"
 import { ClosingCta } from "@/components/home/closing-cta"
-import { PowerRangeBar } from "@/components/products/power-range-bar"
-import { SegmentCard } from "@/components/products/segment-card"
+import { FamilyCard, badgesFor } from "@/components/products/family-card"
 import { COMPLETE_DATASHEET, FAMILIES, RANGE_SUMMARY, SEGMENTS, WARRANTY } from "@/lib/products"
 import { FACTORY_PHOTOS, SITE } from "@/lib/site"
 import { faqSchema, jsonLd } from "@/lib/seo"
@@ -44,6 +43,11 @@ const FAQS = [
 ]
 
 export default function ProductsPage() {
+  const groups = SEGMENTS.map((segment) => ({
+    segment,
+    families: FAMILIES.filter((f) => f.segment === segment.slug),
+  })).filter((g) => g.families.length > 0)
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faqSchema(FAQS))} />
@@ -55,104 +59,91 @@ export default function ProductsPage() {
         intro={`${FAMILIES.length} bifacial glass–glass module families across ${RANGE_SUMMARY.bins} power classes, from compact residential panels to 725 W utility modules.`}
         image={FACTORY_PHOTOS.moduleOnLine}
         actions={
-          <a
-            href={COMPLETE_DATASHEET}
-            className="inline-flex h-12 items-center gap-2 self-start rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-forest/90"
-          >
-            <Download className="size-4" aria-hidden="true" />
-            Complete range datasheet
-          </a>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/contact"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive"
+            >
+              Get a quote
+            </Link>
+            <a
+              href={COMPLETE_DATASHEET}
+              download
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border px-7 text-sm font-semibold text-foreground transition-colors hover:border-foreground/40"
+            >
+              <Download className="size-4" aria-hidden="true" />
+              Complete datasheet
+            </a>
+          </div>
         }
       />
 
-      <section aria-labelledby="segments-heading" className="bg-background pb-16 md:pb-24">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
-          <Reveal className="flex flex-col gap-4">
-            <p className="text-sm font-medium text-muted-foreground">By application</p>
-            <h2 id="segments-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
-              Find the right module
-            </h2>
-          </Reveal>
-          <ul className="grid gap-4 md:grid-cols-3">
-            {SEGMENTS.map((s, i) => (
-              <Reveal as="li" key={s.slug} delay={0.05 + i * 0.05}>
-                <SegmentCard segment={s} />
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <nav aria-label="Jump to application" className="bg-background pb-12">
+        <ul className="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 md:px-6">
+          {groups.map(({ segment, families }) => (
+            <li key={segment.slug}>
+              <a
+                href={`#${segment.slug}`}
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-5 text-sm font-medium text-foreground transition-colors hover:border-foreground/40"
+              >
+                {segment.name}
+                <span className="text-muted-foreground">{families.length}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-      <section aria-labelledby="compare-heading" className="bg-muted py-16 md:py-24">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
+      <section aria-labelledby="range-heading" className="bg-forest py-20 md:py-28">
+        <div className="mx-auto flex max-w-7xl flex-col gap-16 px-4 md:px-6">
           <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="flex flex-col gap-4">
-              <p className="text-sm font-medium text-muted-foreground">Full range</p>
-              <h2 id="compare-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
-                Compare every family
+            <div className="flex max-w-2xl flex-col gap-4">
+              <p className="text-sm font-medium text-primary-foreground/60">{FAMILIES.length} module families</p>
+              <h2 id="range-heading" className="text-balance text-4xl font-semibold text-primary-foreground md:text-5xl">
+                The full range
               </h2>
             </div>
-            <p className="max-w-sm text-pretty text-sm leading-relaxed text-muted-foreground">
-              Front-side STC ratings across {RANGE_SUMMARY.minW}–{RANGE_SUMMARY.maxW} W. Scroll sideways on mobile.
+            <p className="max-w-xs text-pretty text-sm leading-relaxed text-primary-foreground/70">
+              Each group is drawn to scale, so you can compare panel sizes at a glance.
             </p>
           </Reveal>
-          <Reveal delay={0.1} className="overflow-x-auto rounded-3xl border border-border bg-card">
-            <table className="w-full min-w-[900px] text-left text-sm">
-              <caption className="sr-only">Shweta Solar TOPCon module families compared</caption>
-              <thead>
-                <tr className="text-xs text-muted-foreground">
-                  {["Model", "Power", "Efficiency", "Cells", "Dimensions (mm)", "Weight", ""].map((h, i) => (
-                    <th key={h || i} scope="col" className="whitespace-nowrap px-5 py-4 font-medium">
-                      {h || <span className="sr-only">Datasheet</span>}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              {SEGMENTS.map((seg) => (
-                <tbody key={seg.slug} className="border-t border-border">
-                  <tr>
-                    <th colSpan={7} scope="colgroup" className="bg-muted/60 px-5 py-2.5 text-xs font-semibold text-foreground">
-                      <Link href={`/products/${seg.slug}`} className="hover:underline">
-                        {seg.name}
-                      </Link>
-                    </th>
-                  </tr>
-                  {FAMILIES.filter((f) => f.segment === seg.slug).map((f) => (
-                    <tr key={f.model} className="border-t border-border">
-                      <th scope="row" className="whitespace-nowrap px-5 py-4 font-semibold text-foreground">
-                        <Link href={`/products/${seg.slug}#${f.model.toLowerCase()}`} className="hover:underline">
-                          {f.model}
-                        </Link>
-                      </th>
-                      <td className="w-64 px-5 py-4">
-                        <div className="flex flex-col gap-2">
-                          <span className="whitespace-nowrap font-medium text-foreground">
-                            {f.minW}–{f.maxW} W
-                          </span>
-                          <PowerRangeBar minW={f.minW} maxW={f.maxW} showScale={false} />
-                        </div>
-                      </td>
-                      <td className="px-5 py-4 text-foreground">{f.maxEfficiency}%</td>
-                      <td className="px-5 py-4 text-foreground">{f.cells}</td>
-                      <td className="whitespace-nowrap px-5 py-4 text-foreground">
-                        {f.lengthMm} × {f.widthMm} × {f.depthMm}
-                      </td>
-                      <td className="whitespace-nowrap px-5 py-4 text-foreground">{f.weightKg} kg</td>
-                      <td className="px-5 py-4 text-right">
-                        <a
-                          href={seg.datasheet}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:border-foreground/40"
-                        >
-                          <Download className="size-3.5" aria-hidden="true" />
-                          PDF
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              ))}
-            </table>
-          </Reveal>
+
+          {groups.map(({ segment, families }) => {
+            const scaleLengthMm = Math.max(...families.map((f) => f.lengthMm))
+            return (
+              <div key={segment.slug} id={segment.slug} className="flex scroll-mt-28 flex-col gap-6">
+                <Reveal className="flex flex-wrap items-end justify-between gap-4">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-2xl font-semibold text-primary-foreground md:text-3xl">{segment.name}</h3>
+                    <p className="max-w-xl text-pretty text-sm leading-relaxed text-primary-foreground/70">
+                      {segment.description}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/products/${segment.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary-foreground hover:underline"
+                  >
+                    View {segment.name.toLowerCase()}
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Link>
+                </Reveal>
+                <Reveal delay={0.05} className="overflow-hidden rounded-2xl bg-card">
+                  <ul className="-mb-px -mr-px grid md:grid-cols-2 lg:grid-cols-3">
+                    {families.map((f) => (
+                      <li key={f.model} className="border-b border-r border-border transition-colors hover:bg-muted/30">
+                        <FamilyCard
+                          family={f}
+                          scaleLengthMm={scaleLengthMm}
+                          badges={badgesFor(f, families)}
+                          datasheetHref={segment.datasheet}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
+              </div>
+            )
+          })}
         </div>
       </section>
 

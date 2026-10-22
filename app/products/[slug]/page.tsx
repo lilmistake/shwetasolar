@@ -5,7 +5,7 @@ import { ChevronDown, Download, Layers, ShieldCheck, Snowflake, Thermometer } fr
 import { PageHero } from "@/components/site/page-hero"
 import { Reveal } from "@/components/topcon/reveal"
 import { ClosingCta } from "@/components/home/closing-cta"
-import { FamilyCard } from "@/components/products/family-card"
+import { FamilyCard, badgesFor } from "@/components/products/family-card"
 import { SegmentCard } from "@/components/products/segment-card"
 import { UseCaseTiles } from "@/components/products/use-case-tiles"
 import {
@@ -39,14 +39,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-function badgesFor(f: ModuleFamily, all: ModuleFamily[]) {
-  const badges: string[] = []
-  if (f.weightKg === Math.min(...all.map((x) => x.weightKg))) badges.push("Lightest")
-  if (f.maxEfficiency === Math.max(...all.map((x) => x.maxEfficiency))) badges.push("Most efficient")
-  if (f.widthMm === Math.max(...all.map((x) => x.widthMm))) badges.push("Wide format")
-  if (f.lengthMm === Math.min(...all.map((x) => x.lengthMm))) badges.push("Compact length")
-  return badges.slice(0, 1)
-}
 
 const percent = (s: string) => Number.parseFloat(s.replace(/[^\d.]/g, ""))
 

@@ -3,6 +3,15 @@ import { Download } from "lucide-react"
 import type { ModuleFamily } from "@/lib/products"
 import { ModuleOutline } from "@/components/products/module-outline"
 
+export function badgesFor(f: ModuleFamily, all: ModuleFamily[]) {
+  const badges: string[] = []
+  if (f.weightKg === Math.min(...all.map((x) => x.weightKg))) badges.push("Lightest")
+  if (f.maxEfficiency === Math.max(...all.map((x) => x.maxEfficiency))) badges.push("Most efficient")
+  if (f.widthMm === Math.max(...all.map((x) => x.widthMm))) badges.push("Wide format")
+  if (f.lengthMm === Math.min(...all.map((x) => x.lengthMm))) badges.push("Compact length")
+  return badges.slice(0, 1)
+}
+
 export function FamilyCard({
   family: f,
   scaleLengthMm,
