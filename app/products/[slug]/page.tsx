@@ -58,10 +58,6 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
   const families = familiesFor(segment.slug as SegmentSlug)
   const others = SEGMENTS.filter((s) => s.slug !== segment.slug)
   const scaleLengthMm = Math.max(...families.map((f) => f.lengthMm))
-  const powerScale = {
-    min: Math.min(...families.map((f) => f.minW)),
-    max: Math.max(...families.map((f) => f.maxW)),
-  }
 
   const year1 = 100 - percent(WARRANTY.firstYearDegradation)
   const finalYear = year1 - percent(WARRANTY.annualDegradation) * (WARRANTY.performanceYears - 1)
@@ -135,20 +131,20 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
               Panels are drawn side by side at the same scale, so you can compare sizes at a glance.
             </p>
           </Reveal>
-          <ul className="grid items-start gap-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-            {families.map((f, i) => (
-              <li key={f.model}>
-                <Reveal delay={0.05 + i * 0.08} className="h-full">
+          <Reveal delay={0.05} className="overflow-hidden rounded-2xl bg-card">
+            <ul className="-mb-px -mr-px grid md:grid-cols-2 lg:grid-cols-3">
+              {families.map((f) => (
+                <li key={f.model} className="border-b border-r border-border transition-colors hover:bg-muted/30">
                   <FamilyCard
                     family={f}
                     scaleLengthMm={scaleLengthMm}
                     badges={badgesFor(f, families)}
-                    powerScale={powerScale}
+                    datasheetHref={segment.datasheet}
                   />
-                </Reveal>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </section>
 
