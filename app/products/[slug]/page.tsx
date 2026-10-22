@@ -131,7 +131,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
               Panels are drawn side by side at the same scale, so you can compare sizes at a glance.
             </p>
           </Reveal>
-          <ul className="grid gap-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+          <ul className="grid items-start gap-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {families.map((f, i) => (
               <li key={f.model}>
                 <Reveal delay={0.05 + i * 0.08} className="h-full">
