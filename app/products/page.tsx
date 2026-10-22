@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/products" },
   openGraph: {
     title: "Shweta Solar TOPCon module range, 395–725 W",
-    images: [{ url: FACTORY_PHOTOS.moduleOnLine.src, alt: FACTORY_PHOTOS.moduleOnLine.alt }],
+    images: [{ url: FACTORY_PHOTOS.solarTown.src, alt: FACTORY_PHOTOS.solarTown.alt }],
   },
 }
 
@@ -57,7 +57,7 @@ export default function ProductsPage() {
         crumbs={[{ name: "Home", path: "/" }, { name: "Products", path: "/products" }]}
         title={`n-type TOPCon modules, ${RANGE_SUMMARY.minW}–${RANGE_SUMMARY.maxW} W`}
         intro={`${FAMILIES.length} bifacial glass–glass module families across ${RANGE_SUMMARY.bins} power classes, from compact residential panels to 725 W utility modules.`}
-        image={FACTORY_PHOTOS.moduleOnLine}
+        image={FACTORY_PHOTOS.solarTown}
         actions={
           <div className="flex flex-wrap gap-3">
             <Link

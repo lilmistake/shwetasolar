@@ -56,4 +56,5 @@ export const FACTORY_PHOTOS = {
   soldering: { src: "/images/real/stringer-soldering.webp", alt: "Cell stringer soldering TOPCon cells under an amber heating glow" },
   sunSimulator: { src: "/images/real/sun-simulator.jpg", alt: "Shweta Solar sun simulator testing a module's power output" },
   team: { src: "/images/real/team.webp", alt: "The Shweta Solar factory team on the production hall floor in Hapur" },
+  solarTown: { src: "/images/real/solar-town.jpg", alt: "Hillside town with solar panels across many of its tiled rooftops" },
 } as const
