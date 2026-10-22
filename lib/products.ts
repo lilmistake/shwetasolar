@@ -41,6 +41,7 @@ export interface Segment {
   summary: string
   description: string
   useCases: string[]
+  useCaseImages?: Record<string, string>
   datasheet: string
   image: { src: string; alt: string }
 }
@@ -55,6 +56,12 @@ export const SEGMENTS: Segment[] = [
     description:
       "For homes, PM Surya Ghar rooftops, solar pumps and small standalone systems, where module size and weight decide what is practical on the roof.",
     useCases: ["Home rooftops", "PM Surya Ghar", "Solar pumps", "Small off-grid systems"],
+    useCaseImages: {
+      "Home rooftops": "/images/stock/home-rooftop.png",
+      "PM Surya Ghar": "/images/stock/pm-surya-ghar.png",
+      "Solar pumps": "/images/stock/solar-pump.png",
+      "Small off-grid systems": "/images/stock/off-grid-system.png",
+    },
     datasheet: "/datasheets/shweta-solar-topcon-residential-2026.pdf",
     image: { src: "/images/factory/module-final-inspection.jpg", alt: "Technician inspecting a finished residential TOPCon module" },
   },
