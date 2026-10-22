@@ -74,6 +74,12 @@ export const SEGMENTS: Segment[] = [
     description:
       "For factories, warehouses, institutions and large residential buildings: high power per module in a size two people can still carry onto a roof.",
     useCases: ["Factory rooftops", "Warehouses", "Institutions", "Large residential buildings"],
+    useCaseImages: {
+      "Factory rooftops": "/images/stock/factory-rooftop.png",
+      Warehouses: "/images/stock/warehouse-rooftop.png",
+      Institutions: "/images/stock/institution-rooftop.png",
+      "Large residential buildings": "/images/stock/apartment-rooftop.png",
+    },
     datasheet: "/datasheets/shweta-solar-topcon-commercial-2026.pdf",
     image: { src: "/images/factory/topcon-module-on-line.jpg", alt: "Commercial TOPCon module on the production line" },
   },
@@ -86,6 +92,12 @@ export const SEGMENTS: Segment[] = [
     description:
       "For solar farms, ground-mount arrays and tracker-based plants, where modules are machine-placed and cost per watt decides the design.",
     useCases: ["Solar parks", "Ground-mount arrays", "Single-axis trackers", "Open-access projects"],
+    useCaseImages: {
+      "Solar parks": "/images/stock/solar-park.png",
+      "Ground-mount arrays": "/images/stock/ground-mount.png",
+      "Single-axis trackers": "/images/stock/single-axis-tracker.png",
+      "Open-access projects": "/images/stock/open-access.png",
+    },
     datasheet: "/datasheets/shweta-solar-topcon-utility-2026.pdf",
     image: { src: "/images/factory/automated-factory-floor.jpg", alt: "Automated production line building utility-scale modules" },
   },

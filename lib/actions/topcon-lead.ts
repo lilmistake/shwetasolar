@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Resend } from "resend"
 import { SALES_EMAIL, LEAD_RECIPIENT_EMAIL, BUYER_TYPES, type BuyerTypeValue } from "@/lib/topcon/constants"
+import { cleanLine, cleanPhone, cleanText, escapeHtml, htmlBlock, isValidEmail } from "@/lib/email-sanitize"
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
@@ -44,28 +45,24 @@ async function verifyRecaptcha(token?: string): Promise<boolean> {
   }
 }
 
-function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
-
 export async function submitTopConLead(lead: TopConLead): Promise<LeadResult> {
   // --- Server-side validation ---
-  const name = lead.name?.trim()
-  const email = lead.email?.trim()
-  const phone = lead.phone?.trim()
+  const name = cleanLine(lead.name, 120)
+  const email = cleanLine(lead.email, 160)
+  const phone = cleanPhone(lead.phone)
 
   if (!name || name.length < 2) return { success: false, error: "Please enter your name." }
   if (!email || !isValidEmail(email)) return { success: false, error: "Please enter a valid email address." }
-  if (!phone || phone.replace(/\D/g, "").length < 10)
-    return { success: false, error: "Please enter a valid phone number." }
+  if (phone.replace(/\D/g, "").length < 10) return { success: false, error: "Please enter a valid phone number." }
 
   const captchaOk = await verifyRecaptcha(lead.recaptchaToken)
   if (!captchaOk) return { success: false, error: "Security verification failed. Please try again." }
 
   const buyer = buyerLabel(lead.buyerType || "")
-  const capacity = lead.capacity?.trim() || ""
-  const city = lead.city?.trim() || ""
-  const messageText = lead.message?.trim() || ""
+  const capacity = cleanLine(lead.capacity, 60)
+  const city = cleanLine(lead.city, 80)
+  const messageText = cleanText(lead.message, 4000)
+  const h = escapeHtml
 
   // --- 1) Persist to Supabase (source of truth) ---
   try {
@@ -114,13 +111,13 @@ export async function submitTopConLead(lead: TopConLead): Promise<LeadResult> {
               <p style="margin:4px 0 0;font-size:13px;color:#a9b489">shwetasolar.in/topcon landing page</p>
             </div>
             <table style="width:100%;border-collapse:collapse;font-size:14px;color:#1a1a1a">
-              <tr><td style="padding:12px 24px;font-weight:bold;width:140px">Name</td><td style="padding:12px 24px">${name}</td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Phone</td><td style="padding:12px 24px"><a href="tel:${phone}">${phone}</a></td></tr>
-              <tr><td style="padding:12px 24px;font-weight:bold">Email</td><td style="padding:12px 24px"><a href="mailto:${email}">${email}</a></td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Buyer type</td><td style="padding:12px 24px">${buyer}</td></tr>
-              ${city ? `<tr><td style="padding:12px 24px;font-weight:bold">City</td><td style="padding:12px 24px">${city}</td></tr>` : ""}
-              ${capacity ? `<tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Capacity</td><td style="padding:12px 24px">${capacity}</td></tr>` : ""}
-              ${messageText ? `<tr><td style="padding:12px 24px;font-weight:bold;vertical-align:top">Message</td><td style="padding:12px 24px">${messageText.replace(/\n/g, "<br>")}</td></tr>` : ""}
+              <tr><td style="padding:12px 24px;font-weight:bold;width:140px">Name</td><td style="padding:12px 24px">${h(name)}</td></tr>
+              <tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Phone</td><td style="padding:12px 24px"><a href="tel:${h(phone)}">${h(phone)}</a></td></tr>
+              <tr><td style="padding:12px 24px;font-weight:bold">Email</td><td style="padding:12px 24px"><a href="mailto:${h(email)}">${h(email)}</a></td></tr>
+              <tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Buyer type</td><td style="padding:12px 24px">${h(buyer)}</td></tr>
+              ${city ? `<tr><td style="padding:12px 24px;font-weight:bold">City</td><td style="padding:12px 24px">${h(city)}</td></tr>` : ""}
+              ${capacity ? `<tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Capacity</td><td style="padding:12px 24px">${h(capacity)}</td></tr>` : ""}
+              ${messageText ? `<tr><td style="padding:12px 24px;font-weight:bold;vertical-align:top">Message</td><td style="padding:12px 24px">${htmlBlock(messageText)}</td></tr>` : ""}
             </table>
             <div style="padding:16px 24px;background:#004636;color:#a9b489;font-size:12px">Reply directly to this email to reach the customer.</div>
           </div>

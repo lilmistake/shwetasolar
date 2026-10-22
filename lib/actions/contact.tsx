@@ -3,8 +3,13 @@
 import { createClient } from "@/lib/supabase/server"
 import { Resend } from "resend"
 import { LEAD_RECIPIENT_EMAIL } from "@/lib/topcon/constants"
+import { FAMILIES } from "@/lib/products"
+import { cleanLine, cleanPhone, cleanText, htmlBlock, isValidEmail } from "@/lib/email-sanitize"
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+
+const INQUIRY_TYPES = ["product", "partnership", "investor", "other", "general"] as const
+const PRODUCT_MODELS = new Set(FAMILIES.map((f) => f.model))
 
 interface ContactFormData {
   name: string
@@ -22,38 +27,32 @@ interface ContactFormData {
   website?: string
 }
 
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;")
-}
-
-const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-
 export async function submitContactForm(data: ContactFormData) {
   // Bots that fill the hidden honeypot get a fake success so they don't retry.
   if (data.website) return { success: true }
 
-  const name = data.name?.trim().slice(0, 120)
-  const email = data.email?.trim().slice(0, 160)
-  const phone = data.phone?.trim().slice(0, 30)
-  const message = data.message?.trim().slice(0, 4000)
+  const name = cleanLine(data.name, 120)
+  const email = cleanLine(data.email, 160)
+  const phone = cleanPhone(data.phone)
+  const message = cleanText(data.message, 4000)
 
   if (!name || name.length < 2) return { success: false, error: "Please enter your name." }
   if (!email || !isValidEmail(email)) return { success: false, error: "Please enter a valid email address." }
-  if (!phone || phone.replace(/\D/g, "").length < 10)
-    return { success: false, error: "Please enter a valid phone number." }
+  if (phone.replace(/\D/g, "").length < 10) return { success: false, error: "Please enter a valid phone number." }
   if (!message) return { success: false, error: "Please enter a message." }
 
-  const inquiryType = data.inquiryType?.trim().slice(0, 40) || "general"
+  const rawInquiry = cleanLine(data.inquiryType, 40)
+  const inquiryType = (INQUIRY_TYPES as readonly string[]).includes(rawInquiry) ? rawInquiry : "general"
+
+  // Product must be one of our real model numbers; anything else is dropped.
+  const rawProduct = cleanLine(data.product, 40)
+  const product = PRODUCT_MODELS.has(rawProduct) ? rawProduct : null
+
   const fields = {
-    company: data.company?.trim().slice(0, 160) || null,
-    subject: data.subject?.trim().slice(0, 200) || null,
-    product: data.product?.trim().slice(0, 120) || null,
-    quantity: data.quantity?.trim().slice(0, 60) || null,
+    company: cleanLine(data.company, 160) || null,
+    subject: cleanLine(data.subject, 200) || null,
+    product,
+    quantity: cleanLine(data.quantity, 60) || null,
   }
 
   try {
@@ -81,14 +80,14 @@ export async function submitContactForm(data: ContactFormData) {
   if (resend) {
     const row = (label: string, value: string | null) =>
       value
-        ? `<tr><td style="padding:10px 20px;font-weight:bold;width:130px;vertical-align:top">${label}</td><td style="padding:10px 20px">${escapeHtml(value).replace(/\n/g, "<br>")}</td></tr>`
+        ? `<tr><td style="padding:10px 20px;font-weight:bold;width:130px;vertical-align:top">${label}</td><td style="padding:10px 20px">${htmlBlock(value)}</td></tr>`
         : ""
     try {
       const { error } = await resend.emails.send({
         from: "Shweta Solar Website <onboarding@resend.dev>",
         to: LEAD_RECIPIENT_EMAIL,
         replyTo: email,
-        subject: `New website enquiry (${inquiryType}): ${name}`,
+        subject: `New website enquiry (${inquiryType})${product ? ` · ${product}` : ""}: ${name}`,
         html: `
           <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden">
             <div style="background:#004636;color:#ffffff;padding:18px 20px">
@@ -100,9 +99,9 @@ export async function submitContactForm(data: ContactFormData) {
               ${row("Phone", phone)}
               ${row("Email", email)}
               ${row("Type", inquiryType)}
+              ${row("Product", fields.product)}
               ${row("Company", fields.company)}
               ${row("Subject", fields.subject)}
-              ${row("Product", fields.product)}
               ${row("Quantity", fields.quantity)}
               ${row("Message", message)}
             </table>

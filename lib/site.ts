@@ -14,10 +14,12 @@ export const SITE = {
   capacity: "1.2 GW",
   region: "Uttar Pradesh",
   corporateGeo: { lat: 28.6975308, lng: 77.4442717 },
-  factoryGeo: { lat: 28.678944, lng: 77.643083 },
+  factoryGeo: { lat: 28.6789277, lng: 77.6434396 },
+  factoryMapUrl: "https://maps.app.goo.gl/ToLQCdQmVeza8jRd6",
   corporateMapEmbed:
     "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d874.934100454796!2d77.4442717!3d28.6975308!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cf12c2c7a8b37%3A0xdc082a9319e20eca!2sShweta%20Solar%20System%20Pvt.%20Ltd.%20Corporate%20Office!5e0!3m2!1sen!2sin!4v1760470739906!5m2!1sen!2sin",
-  factoryMapEmbed: "https://www.google.com/maps?q=28.678944,77.643083&output=embed",
+  factoryMapEmbed:
+    "https://www.google.com/maps?q=Shweta+Solar+System+Pvt.+Ltd.+Manufacturing+Unit@28.6789277,77.6434396&z=16&output=embed",
   social: {
     facebook: "https://www.facebook.com/people/Shweta-Solar/61580012213135/",
     instagram: "https://www.instagram.com/shwetasolar/",

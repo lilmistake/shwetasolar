@@ -1,8 +1,9 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
-import { Building2, Clock, Mail, MessageCircle, Package, Phone, Users } from "lucide-react"
+import { Suspense, useEffect, useState } from "react"
+import { ArrowUpRight, Building2, Clock, Mail, MessageCircle, Package, Phone, Users } from "lucide-react"
+import { ProductSelect, ProductSelectFallback } from "@/components/contact/product-select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -25,8 +26,18 @@ const CHANNELS = [
 ]
 
 const LOCATIONS = [
-  { title: "Corporate office", detail: "Near Delhi, with quick access to NCR", src: SITE.corporateMapEmbed },
-  { title: "Manufacturing facility", detail: `${SITE.capacity} TOPCon production line`, src: SITE.factoryMapEmbed },
+  {
+    title: "Corporate office",
+    detail: "Near Delhi, with quick access to NCR",
+    src: SITE.corporateMapEmbed,
+    href: `https://www.google.com/maps/search/?api=1&query=${SITE.corporateGeo.lat},${SITE.corporateGeo.lng}`,
+  },
+  {
+    title: "Manufacturing facility",
+    detail: `${SITE.capacity} TOPCon production line`,
+    src: SITE.factoryMapEmbed,
+    href: SITE.factoryMapUrl,
+  },
 ]
 
 const fieldClass = "h-12 rounded-xl bg-background"
@@ -86,8 +97,10 @@ export default function ContactPage() {
       email: formData.get("email") as string,
       phone: formData.get("phone") as string,
       company: formData.get("company") as string,
-      inquiryType: selectedInquiry,
+      inquiryType: selectedInquiry || (formData.get("product") ? "product" : ""),
       subject: formData.get("subject") as string,
+      product: (formData.get("product") as string) || undefined,
+      website: (formData.get("website") as string) || undefined,
       message: formData.get("message") as string,
       recaptchaToken,
     })
@@ -192,8 +205,20 @@ export default function ContactPage() {
             </div>
 
             <div className="flex flex-col gap-2">
+              <Label htmlFor="product">Product of interest</Label>
+              <Suspense fallback={<ProductSelectFallback />}>
+                <ProductSelect />
+              </Suspense>
+            </div>
+
+            <div className="flex flex-col gap-2">
               <Label htmlFor="message">Message *</Label>
               <Textarea id="message" name="message" required rows={5} className="rounded-xl bg-background" />
+            </div>
+
+            <div aria-hidden="true" className="absolute -left-[9999px] size-px overflow-hidden">
+              <label htmlFor="website">Leave this field empty</label>
+              <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
             </div>
 
             {error && (
@@ -265,9 +290,21 @@ export default function ContactPage() {
           <div className="grid gap-4 md:grid-cols-2">
             {LOCATIONS.map((loc) => (
               <article key={loc.title} className="flex flex-col overflow-hidden rounded-3xl border border-border bg-muted">
-                <div className="flex flex-col gap-1 p-6">
-                  <h3 className="text-lg font-semibold text-foreground">{loc.title}</h3>
-                  <p className="text-sm text-muted-foreground">{loc.detail}</p>
+                <div className="flex items-start justify-between gap-4 p-6">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-lg font-semibold text-foreground">{loc.title}</h3>
+                    <p className="text-sm text-muted-foreground">{loc.detail}</p>
+                  </div>
+                  <a
+                    href={loc.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
+                  >
+                    Directions
+                    <ArrowUpRight className="size-4" aria-hidden="true" />
+                    <span className="sr-only">to the {loc.title.toLowerCase()} (opens Google Maps)</span>
+                  </a>
                 </div>
                 <iframe
                   src={loc.src}
