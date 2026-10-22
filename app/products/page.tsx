@@ -95,7 +95,7 @@ export default function ProductsPage() {
       </nav>
 
       <section aria-labelledby="range-heading" className="bg-forest py-20 md:py-28">
-        <div className="mx-auto flex max-w-7xl flex-col gap-16 px-4 md:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 md:px-6">
           <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="flex max-w-2xl flex-col gap-4">
               <p className="text-sm font-medium text-primary-foreground/60">{FAMILIES.length} module families</p>
@@ -128,7 +128,7 @@ export default function ProductsPage() {
                   </Link>
                 </Reveal>
                 <Reveal delay={0.05} className="overflow-hidden rounded-2xl bg-card">
-                  <ul className="-mb-px -mr-px grid md:grid-cols-2 lg:grid-cols-3">
+                  <ul className="-mb-px -mr-px grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {families.map((f) => (
                       <li key={f.model} className="border-b border-r border-border transition-colors hover:bg-muted/30">
                         <FamilyCard

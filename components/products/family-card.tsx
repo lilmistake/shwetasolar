@@ -31,44 +31,45 @@ export function FamilyCard({
   ]
 
   return (
-    <article id={f.model.toLowerCase()} className="flex h-full scroll-mt-28 flex-col gap-6 p-6 md:p-8">
-      <div className="relative flex h-80 items-end justify-center rounded-xl bg-muted px-6 pb-6 pt-10">
+    <article id={f.model.toLowerCase()} className="flex h-full scroll-mt-28 flex-col gap-4 p-5">
+      <div className="relative flex h-44 items-end justify-center rounded-lg bg-muted px-4 pb-3 pt-6">
         {badges.map((b) => (
           <span
             key={b}
-            className="absolute left-4 top-4 rounded-full bg-forest px-3 py-1 text-xs font-semibold text-primary-foreground"
+            className="absolute left-3 top-3 rounded-full bg-forest px-2.5 py-0.5 text-xs font-semibold text-primary-foreground"
           >
             {b}
           </span>
         ))}
-        <ModuleOutline family={f} scaleLengthMm={scaleLengthMm} tone="light" />
+        <ModuleOutline family={f} scaleLengthMm={scaleLengthMm} tone="light" maxHeightPx={112} />
       </div>
 
-      <div className="flex flex-col gap-1">
-        <p className="text-sm text-muted-foreground">
-          {f.platform} TOPCon · {f.busbars}
+      <div className="flex items-end justify-between gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h3 className="text-lg font-semibold tracking-wide text-foreground">{f.model}</h3>
+          <p className="text-xs text-muted-foreground">
+            {f.platform} TOPCon · {f.busbars}
+          </p>
+        </div>
+        <p className="shrink-0 text-2xl font-semibold tabular-nums text-foreground">
+          {f.minW}–{f.maxW}
+          <span className="ml-1 text-sm font-medium text-muted-foreground">W</span>
         </p>
-        <h3 className="text-xl font-semibold tracking-wide text-foreground">{f.model}</h3>
       </div>
 
-      <p className="text-3xl font-semibold tabular-nums text-foreground">
-        {f.minW}–{f.maxW}
-        <span className="ml-1 text-base font-medium text-muted-foreground">W</span>
-      </p>
-
-      <dl className="flex flex-col border-t border-border">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-t border-border pt-3">
         {specs.map(([label, value]) => (
-          <div key={label} className="flex justify-between gap-4 border-b border-border py-3 text-sm">
-            <dt className="text-muted-foreground">{label}</dt>
-            <dd className="text-right font-medium tabular-nums text-foreground">{value}</dd>
+          <div key={label} className="flex flex-col gap-0.5">
+            <dt className="text-xs text-muted-foreground">{label}</dt>
+            <dd className="text-sm font-medium tabular-nums text-foreground">{value}</dd>
           </div>
         ))}
       </dl>
 
-      <div className="mt-auto flex gap-2">
+      <div className="mt-auto flex gap-2 pt-1">
         <Link
           href={`/contact?product=${encodeURIComponent(f.model)}`}
-          className="inline-flex h-11 flex-1 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive"
+          className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive"
         >
           Get a quote
         </Link>
@@ -76,7 +77,7 @@ export function FamilyCard({
           href={datasheetHref}
           download
           aria-label={`Download ${f.model} datasheet`}
-          className="inline-flex size-11 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-foreground/40"
+          className="inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-foreground/40"
         >
           <Download className="size-4" aria-hidden="true" />
         </a>

@@ -8,12 +8,14 @@ export function ModuleOutline({
   family: f,
   scaleLengthMm,
   tone = "dark",
+  maxHeightPx = MAX_HEIGHT_PX,
 }: {
   family: ModuleFamily
   scaleLengthMm: number
   tone?: "dark" | "light"
+  maxHeightPx?: number
 }) {
-  const height = Math.round((f.lengthMm / scaleLengthMm) * MAX_HEIGHT_PX)
+  const height = Math.round((f.lengthMm / scaleLengthMm) * maxHeightPx)
   const width = Math.round((f.widthMm / f.lengthMm) * height)
   const rowsPerHalf = f.cells / COLUMNS / 2
   const light = tone === "light"
