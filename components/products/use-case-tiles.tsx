@@ -1,47 +1,24 @@
-import {
-  BatteryCharging,
-  Building,
-  Building2,
-  Droplets,
-  Factory,
-  FileCheck,
-  Home,
-  type LucideIcon,
-  Mountain,
-  RotateCw,
-  School,
-  Sun,
-  Warehouse,
-  Zap,
-} from "lucide-react"
+import Image from "next/image"
 import type { Segment } from "@/lib/products"
-
-const ICONS: Record<string, LucideIcon> = {
-  "Home rooftops": Home,
-  "PM Surya Ghar": FileCheck,
-  "Solar pumps": Droplets,
-  "Small off-grid systems": BatteryCharging,
-  "Factory rooftops": Factory,
-  Warehouses: Warehouse,
-  Institutions: School,
-  "Large residential buildings": Building2,
-  "Solar parks": Sun,
-  "Ground-mount arrays": Mountain,
-  "Single-axis trackers": RotateCw,
-  "Open-access projects": Zap,
-}
 
 export function UseCaseTiles({ segment }: { segment: Segment }) {
   return (
     <ul className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
       {segment.useCases.map((u) => {
-        const Icon = ICONS[u] ?? Building
+        const src = segment.useCaseImages?.[u]
         return (
-          <li key={u} className="flex items-center gap-4 rounded-2xl bg-primary/10 p-4 md:p-5">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Icon className="size-5" aria-hidden="true" />
-            </span>
-            <span className="font-semibold leading-snug text-foreground">{u}</span>
+          <li key={u} className="relative flex aspect-[4/5] items-end overflow-hidden rounded-2xl bg-forest">
+            {src && (
+              <Image
+                src={src}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/20 to-transparent" aria-hidden="true" />
+            <p className="relative p-4 text-lg font-semibold text-primary-foreground md:p-5 md:text-xl">{u}</p>
           </li>
         )
       })}

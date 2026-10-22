@@ -58,6 +58,10 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
   const families = familiesFor(segment.slug as SegmentSlug)
   const others = SEGMENTS.filter((s) => s.slug !== segment.slug)
   const scaleLengthMm = Math.max(...families.map((f) => f.lengthMm))
+  const powerScale = {
+    min: Math.min(...families.map((f) => f.minW)),
+    max: Math.max(...families.map((f) => f.maxW)),
+  }
 
   const year1 = 100 - percent(WARRANTY.firstYearDegradation)
   const finalYear = year1 - percent(WARRANTY.annualDegradation) * (WARRANTY.performanceYears - 1)
@@ -103,7 +107,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
         }
       />
 
-      <section aria-labelledby="built-for-heading" className="bg-background pb-14 md:pb-20">
+      <section aria-labelledby="built-for-heading" className="bg-background pb-20 md:pb-28">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
           <Reveal>
             <h2 id="built-for-heading" className="text-balance text-3xl font-semibold text-foreground md:text-4xl">
@@ -135,7 +139,12 @@ export default async function SegmentPage({ params }: { params: Promise<{ slug: 
             {families.map((f, i) => (
               <li key={f.model}>
                 <Reveal delay={0.05 + i * 0.08} className="h-full">
-                  <FamilyCard family={f} scaleLengthMm={scaleLengthMm} badges={badgesFor(f, families)} />
+                  <FamilyCard
+                    family={f}
+                    scaleLengthMm={scaleLengthMm}
+                    badges={badgesFor(f, families)}
+                    powerScale={powerScale}
+                  />
                 </Reveal>
               </li>
             ))}

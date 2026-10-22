@@ -6,10 +6,12 @@ export function FamilyCard({
   family: f,
   scaleLengthMm,
   badges,
+  powerScale,
 }: {
   family: ModuleFamily
   scaleLengthMm: number
   badges: string[]
+  powerScale: { min: number; max: number }
 }) {
   const keyStats = [
     { value: `${f.maxEfficiency}%`, label: "Efficiency" },
@@ -27,33 +29,53 @@ export function FamilyCard({
     ["Per pallet", `${f.palletPcs} pcs`],
   ]
 
+  const span = Math.max(powerScale.max - powerScale.min, 1)
+  const barStart = ((f.minW - powerScale.min) / span) * 100
+  const barWidth = Math.max(((f.maxW - f.minW) / span) * 100, 6)
+
   return (
-    <article id={f.model.toLowerCase()} className="flex h-full scroll-mt-28 flex-col gap-8">
-      <div className="flex h-72 items-end justify-center">
+    <article
+      id={f.model.toLowerCase()}
+      className="flex h-full scroll-mt-28 flex-col rounded-3xl bg-primary-foreground/5 p-2 ring-1 ring-primary-foreground/10"
+    >
+      <div className="flex items-start justify-between gap-3 px-4 pt-4">
+        <h3 className="text-lg font-semibold tracking-wide text-primary-foreground">{f.model}</h3>
+        {badges.map((b) => (
+          <span key={b} className="rounded-full bg-primary-foreground px-3 py-1 text-xs font-semibold text-forest">
+            {b}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex h-72 items-end justify-center px-4 pb-6 pt-4">
         <ModuleOutline family={f} scaleLengthMm={scaleLengthMm} />
       </div>
 
-      <div className="flex flex-1 flex-col gap-6 rounded-3xl bg-card p-6 md:p-8">
+      <div className="flex flex-1 flex-col gap-6 rounded-2xl bg-card p-6">
         <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-sm font-medium tracking-wide text-muted-foreground">{f.model}</h3>
-            {badges.map((b) => (
-              <span key={b} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                {b}
-              </span>
-            ))}
-          </div>
-          <p className="text-4xl font-semibold tabular-nums text-foreground md:text-5xl">
+          <p className="text-4xl font-semibold tabular-nums text-foreground">
             {f.minW}–{f.maxW}
-            <span className="ml-1.5 text-xl text-muted-foreground">W</span>
+            <span className="ml-1.5 text-lg text-muted-foreground">W</span>
           </p>
+          <div className="flex flex-col gap-1.5">
+            <div className="relative h-1.5 rounded-full bg-muted" aria-hidden="true">
+              <span
+                className="absolute inset-y-0 rounded-full bg-primary"
+                style={{ left: `${barStart}%`, width: `${barWidth}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-xs tabular-nums text-muted-foreground">
+              <span>{powerScale.min} W</span>
+              <span>{powerScale.max} W</span>
+            </div>
+          </div>
         </div>
 
-        <dl className="grid grid-cols-3 gap-3 border-t border-border pt-5">
+        <dl className="grid grid-cols-3 gap-2">
           {keyStats.map((s) => (
-            <div key={s.label} className="flex flex-col gap-1">
+            <div key={s.label} className="flex flex-col gap-1 rounded-xl bg-muted/60 p-3">
               <dt className="order-2 text-xs text-muted-foreground">{s.label}</dt>
-              <dd className="order-1 text-lg font-semibold tabular-nums text-foreground">{s.value}</dd>
+              <dd className="order-1 font-semibold tabular-nums text-foreground">{s.value}</dd>
             </div>
           ))}
         </dl>
