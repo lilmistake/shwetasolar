@@ -7,9 +7,9 @@ export default function NotFound() {
     <div className="min-h-screen bg-gradient-to-br from-cream via-sage/10 to-cream flex items-center justify-center px-4">
       <div className="max-w-2xl w-full text-center">
         <div className="mb-8">
-          <h1 className="font-display text-9xl md:text-[12rem] font-bold text-forest mb-4">404</h1>
+          <h1 className="font-semibold tracking-tight text-9xl md:text-[12rem] font-bold text-forest mb-4">404</h1>
           <div className="h-2 w-32 bg-olive mx-auto rounded-full mb-8" />
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-forest mb-4">Page Not Found</h2>
+          <h2 className="font-semibold tracking-tight text-3xl md:text-5xl font-bold text-forest mb-4">Page Not Found</h2>
           <p className="text-lg md:text-xl text-olive max-w-lg mx-auto leading-relaxed">
             The page you're looking for seems to have wandered off the grid. Let's get you back on track.
           </p>
@@ -38,7 +38,7 @@ export default function NotFound() {
         <div className="mt-12 pt-8 border-t border-sage/20">
           <p className="text-olive mb-4">Quick Links:</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/products/mono-perc" className="text-forest hover:text-olive transition-colors font-medium">
+            <Link href="/products" className="text-forest hover:text-olive transition-colors font-medium">
               Products
             </Link>
             <Link href="/about" className="text-forest hover:text-olive transition-colors font-medium">

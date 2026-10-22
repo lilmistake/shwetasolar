@@ -18,9 +18,9 @@ const item = {
 }
 
 const stats = [
-  { value: 24.5, decimals: 1, suffix: "%", label: "Peak efficiency" },
+  { value: 24.39, decimals: 2, suffix: "%", label: "Peak efficiency" },
   { value: 30, suffix: "yr", label: "Performance warranty" },
-  { value: 600, suffix: "W", label: "Up to power output" },
+  { value: 725, suffix: "W", label: "Up to power output" },
 ]
 
 export function LpHero() {
@@ -62,7 +62,7 @@ export function LpHero() {
           </motion.h1>
 
           <motion.p variants={item} className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-white/75">
-            Premium bifacial TOPCon modules from an Indian manufacturer — up to 24.5% efficiency and a 30-year
+            Premium bifacial TOPCon modules from an Indian manufacturer — up to 24.39% efficiency and a 30-year
             performance warranty. Engineered for dealers, EPCs, and serious rooftop projects.
           </motion.p>
 
@@ -76,7 +76,7 @@ export function LpHero() {
           {/* trust chips */}
           <motion.ul variants={item} className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/70">
             <li className="flex items-center gap-2">
-              <Award className="h-4 w-4 text-sage" aria-hidden /> BIS &amp; IEC Certified
+              <Award className="h-4 w-4 text-sage" aria-hidden /> BIS licensed &amp; ALMM List-I
             </li>
             <li className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-sage" aria-hidden /> 30-Year Warranty
@@ -97,12 +97,12 @@ export function LpHero() {
           <div className="relative mx-auto aspect-square w-full max-w-md">
             <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-tr from-sage/30 to-transparent blur-2xl" />
             <Image
-              src="/images/topcon/hero-module.png"
+              src="/images/factory/topcon-module-on-line.jpg"
               alt="Shweta Solar N-Type TOPCon glass-to-glass bifacial solar module"
               fill
               priority
               sizes="(max-width: 1024px) 90vw, 480px"
-              className="relative z-10 object-contain drop-shadow-2xl"
+              className="relative z-10 rounded-[2rem] object-cover shadow-2xl"
             />
           </div>
         </motion.div>

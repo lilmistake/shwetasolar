@@ -1,325 +1,234 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ArrowLeft, Check, Zap, Award, TrendingUp, Sun, Shield } from "lucide-react"
-import { EnquirySection } from "@/components/enquiry-section"
-
-const productsData = {
-  "mono-perc": {
-    name: "Mono PERC",
-    tagline: "Proven Performance",
-    description:
-      "Industry-standard monocrystalline PERC (Passivated Emitter and Rear Cell) technology delivering reliable efficiency and exceptional value for residential and commercial installations.",
-    longDescription:
-      "Mono PERC solar panels represent the most widely adopted solar technology in the market today. By adding a passivation layer on the rear of the cell, PERC technology reduces electron recombination and increases light absorption, resulting in higher efficiency compared to traditional monocrystalline panels. This proven technology offers an excellent balance of performance, reliability, and cost-effectiveness.",
-    efficiency: "Up to 21.5%",
-    power: "540W - 550W",
-    warranty: "25 Years",
-    image: "/mono-perc-solar-panel.jpg",
-    features: [
-      {
-        title: "Cost-Effective Solution",
-        description: "Best value for money with proven ROI for residential and commercial projects",
-      },
-      {
-        title: "Proven Reliability",
-        description: "Decades of field testing and millions of installations worldwide",
-      },
-      {
-        title: "Wide Temperature Tolerance",
-        description: "Performs consistently across various climate conditions",
-      },
-      {
-        title: "Excellent Low-Light Performance",
-        description: "Generates power even in cloudy or overcast conditions",
-      },
-    ],
-    specifications: {
-      "Cell Type": "Monocrystalline PERC",
-      "Module Efficiency": "20.0% - 21.5%",
-      "Power Output": "540W - 550W",
-      "Voltage at Pmax": "41.2V - 41.8V",
-      "Current at Pmax": "13.1A - 13.2A",
-      "Open Circuit Voltage": "49.5V - 50.1V",
-      "Short Circuit Current": "13.9A - 14.0A",
-      "Temperature Coefficient (Pmax)": "-0.35%/°C",
-      "Operating Temperature": "-40°C to +85°C",
-      "Maximum System Voltage": "1500V DC",
-      Dimensions: "2278mm × 1134mm × 35mm",
-      Weight: "27.5kg",
-      Frame: "Anodized Aluminum Alloy",
-      Glass: "3.2mm Tempered Glass",
-      "Junction Box": "IP68 Rated",
-      Connectors: "MC4 Compatible",
-    },
-    applications: [
-      "Residential rooftop installations",
-      "Commercial and industrial projects",
-      "Ground-mounted solar farms",
-      "Off-grid and hybrid systems",
-      "Agricultural solar applications",
-    ],
-    benefits: [
-      "Lower initial investment compared to premium technologies",
-      "Proven track record with extensive field data",
-      "Wide availability and easy replacement",
-      "Compatible with most inverters and mounting systems",
-      "Excellent performance-to-cost ratio",
-    ],
-  },
-  topcon: {
-    name: "TopCon",
-    tagline: "Next-Generation Efficiency",
-    description:
-      "Advanced Tunnel Oxide Passivated Contact technology with superior efficiency and lower degradation rates. The future of solar energy.",
-    longDescription:
-      "TopCon (Tunnel Oxide Passivated Contact) technology represents the next evolution in solar panel design. By using ultra-thin tunnel oxide layers and highly doped polysilicon, TopCon cells achieve superior passivation on both sides of the cell, resulting in higher efficiency and lower degradation rates. This technology is rapidly becoming the new industry standard for high-performance solar installations.",
-    efficiency: "Up to 23.5%",
-    power: "580W - 600W",
-    warranty: "30 Years",
-    image: "/topcon-solar-panel-advanced.jpg",
-    features: [
-      {
-        title: "Higher Efficiency",
-        description: "22-23.5% efficiency means more power from the same roof space",
-      },
-      {
-        title: "Lower Degradation",
-        description: "Only 1% first-year degradation, maintaining performance longer",
-      },
-      {
-        title: "Better Temperature Coefficient",
-        description: "Superior performance in hot climates with -0.30%/°C coefficient",
-      },
-      {
-        title: "Enhanced Durability",
-        description: "Advanced cell structure provides better resistance to environmental stress",
-      },
-    ],
-    specifications: {
-      "Cell Type": "N-Type TopCon",
-      "Module Efficiency": "22.0% - 23.5%",
-      "Power Output": "580W - 600W",
-      "Voltage at Pmax": "42.5V - 43.2V",
-      "Current at Pmax": "13.6A - 13.9A",
-      "Open Circuit Voltage": "51.2V - 51.8V",
-      "Short Circuit Current": "14.5A - 14.7A",
-      "Temperature Coefficient (Pmax)": "-0.30%/°C",
-      "Operating Temperature": "-40°C to +85°C",
-      "Maximum System Voltage": "1500V DC",
-      Dimensions: "2278mm × 1134mm × 35mm",
-      Weight: "28.5kg",
-      Frame: "Anodized Aluminum Alloy",
-      Glass: "3.2mm Anti-Reflective Tempered Glass",
-      "Junction Box": "IP68 Rated",
-      Connectors: "MC4 Compatible",
-      "Bifacial Factor": "70% - 75%",
-    },
-    applications: [
-      "High-efficiency commercial installations",
-      "Space-constrained residential projects",
-      "Utility-scale solar farms",
-      "Bifacial ground-mount systems",
-      "Premium residential installations",
-    ],
-    benefits: [
-      "Up to 10% more energy generation than PERC",
-      "Better performance in high-temperature environments",
-      "Lower levelized cost of energy (LCOE) over lifetime",
-      "Bifacial capability for additional energy capture",
-      "Future-proof technology with strong industry backing",
-    ],
-  },
-}
+import { ChevronDown, Download, Layers, ShieldCheck, Snowflake, Thermometer } from "lucide-react"
+import { PageHero } from "@/components/site/page-hero"
+import { Reveal } from "@/components/topcon/reveal"
+import { ClosingCta } from "@/components/home/closing-cta"
+import { FamilyCard, badgesFor } from "@/components/products/family-card"
+import { SegmentCard } from "@/components/products/segment-card"
+import { UseCaseTiles } from "@/components/products/use-case-tiles"
+import {
+  COMMON_SPECS,
+  SEGMENTS,
+  WARRANTY,
+  familiesFor,
+  getSegment,
+  type ModuleFamily,
+  type SegmentSlug,
+} from "@/lib/products"
+import { jsonLd, productSchema } from "@/lib/seo"
 
 export function generateStaticParams() {
-  return [{ slug: "mono-perc" }, { slug: "topcon" }]
+  return SEGMENTS.map((s) => ({ slug: s.slug }))
 }
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = productsData[params.slug as keyof typeof productsData]
-
-  if (!product) {
-    notFound()
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const segment = getSegment(slug)
+  if (!segment) return {}
+  return {
+    title: `${segment.name} TOPCon Solar Panels ${segment.powerRange}`,
+    description: segment.description,
+    alternates: { canonical: `/products/${segment.slug}` },
+    openGraph: {
+      title: `${segment.name} TOPCon solar modules, ${segment.powerRange}`,
+      description: segment.description,
+      images: [{ url: segment.image.src, alt: segment.image.alt }],
+    },
   }
+}
+
+
+const percent = (s: string) => Number.parseFloat(s.replace(/[^\d.]/g, ""))
+
+export default async function SegmentPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const segment = getSegment(slug)
+  if (!segment) notFound()
+
+  const families = familiesFor(segment.slug as SegmentSlug)
+  const others = SEGMENTS.filter((s) => s.slug !== segment.slug)
+  const scaleLengthMm = Math.max(...families.map((f) => f.lengthMm))
+
+  const year1 = 100 - percent(WARRANTY.firstYearDegradation)
+  const finalYear = year1 - percent(WARRANTY.annualDegradation) * (WARRANTY.performanceYears - 1)
+
+  const highlights = [
+    { icon: Layers, title: "Glass on both sides", text: "Bifacial glass–glass build collects light reflected from the roof." },
+    { icon: ShieldCheck, title: "IP68 junction box", text: "Sealed against dust and monsoon rain." },
+    { icon: Snowflake, title: "5400 Pa front load", text: "Rated for heavy wind and snow loads." },
+    { icon: Thermometer, title: "−40 °C to +85 °C", text: "Built for Indian summers on hot rooftops." },
+  ]
 
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <Button asChild variant="ghost" className="mb-8 text-cream hover:text-cream hover:bg-white/10">
-              <Link href="/products">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Products
-              </Link>
-            </Button>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="font-display text-5xl md:text-7xl font-bold mb-4 text-balance">{product.name}</h1>
-                <p className="text-2xl mb-6 text-cream/90">{product.tagline}</p>
-                <p className="text-lg leading-relaxed mb-8">{product.description}</p>
-                <div className="flex flex-wrap gap-4">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <Zap className="h-6 w-6 mb-2" />
-                    <p className="text-sm text-cream/80">Efficiency</p>
-                    <p className="text-xl font-bold">{product.efficiency}</p>
-                  </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <TrendingUp className="h-6 w-6 mb-2" />
-                    <p className="text-sm text-cream/80">Power Output</p>
-                    <p className="text-xl font-bold">{product.power}</p>
-                  </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <Award className="h-6 w-6 mb-2" />
-                    <p className="text-sm text-cream/80">Warranty</p>
-                    <p className="text-xl font-bold">{product.warranty}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(families.map((f) => productSchema(f, segment)))} />
 
-      {/* Overview Section */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-8 text-center">
-              Technology Overview
-            </h2>
-            <p className="text-lg text-olive leading-relaxed text-center">{product.longDescription}</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-12 text-center">Key Features</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {product.features.map((feature, index) => (
-                <Card key={index} className="p-6 bg-sage/10 border-sage/20">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-forest text-cream rounded-full p-3 flex-shrink-0">
-                      <Check className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-display text-xl font-bold text-forest mb-2">{feature.title}</h3>
-                      <p className="text-olive leading-relaxed">{feature.description}</p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Technical Specifications */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-12 text-center">
-              Technical Specifications
-            </h2>
-            <Card className="overflow-hidden bg-white">
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                {Object.entries(product.specifications).map(([key, value], index) => (
-                  <div
-                    key={key}
-                    className={`p-4 ${index % 2 === 0 ? "bg-sage/5" : "bg-white"} ${
-                      index < Object.entries(product.specifications).length - 2 ? "border-b border-sage/20" : ""
-                    } ${index % 2 === 0 ? "md:border-r border-sage/20" : ""}`}
-                  >
-                    <p className="text-sm text-olive mb-1 font-medium">{key}</p>
-                    <p className="text-forest font-bold">{value}</p>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Applications Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-12 text-center">
-              Ideal Applications
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {product.applications.map((application, index) => (
-                <Card key={index} className="p-6 text-center bg-gradient-to-br from-sage/10 to-cream border-sage/20">
-                  <Sun className="h-12 w-12 text-forest mx-auto mb-4" />
-                  <p className="text-olive font-medium">{application}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-gradient-to-br from-sage/20 to-cream">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-forest mb-12 text-center">
-              Why Choose {product.name}?
-            </h2>
-            <div className="space-y-4">
-              {product.benefits.map((benefit, index) => (
-                <div key={index} className="flex items-start gap-4 bg-white p-4 rounded-lg shadow-sm">
-                  <div className="bg-forest text-cream rounded-full p-2 flex-shrink-0 mt-1">
-                    <Check className="h-4 w-4" />
-                  </div>
-                  <p className="text-olive leading-relaxed">{benefit}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4 text-center">
-          <Shield className="h-16 w-16 mx-auto mb-6" />
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">Ready to Go Solar?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
-            Get a customized quote for {product.name} solar panels and start saving on your energy bills today
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild size="lg" className="bg-cream text-forest hover:bg-white">
-              <Link href="/contact">Request a Quote</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="border-cream text-cream hover:bg-white/10 bg-transparent"
+      <PageHero
+        eyebrow="Products"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Products", path: "/products" },
+          { name: segment.name, path: `/products/${segment.slug}` },
+        ]}
+        title={segment.name}
+        intro={segment.description}
+        image={segment.image}
+        actions={
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/contact"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive"
             >
-              <Link href="/resources/calculator">Calculate Savings</Link>
-            </Button>
+              Get a quote
+            </Link>
+            <a
+              href={segment.datasheet}
+              download
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border px-7 text-sm font-semibold text-foreground transition-colors hover:border-foreground/40"
+            >
+              <Download className="size-4" aria-hidden="true" />
+              Datasheet
+            </a>
           </div>
+        }
+      />
+
+      <section aria-labelledby="built-for-heading" className="bg-background pb-20 md:pb-28">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
+          <Reveal>
+            <h2 id="built-for-heading" className="text-balance text-3xl font-semibold text-foreground md:text-4xl">
+              Made for
+            </h2>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <UseCaseTiles segment={segment} />
+          </Reveal>
         </div>
       </section>
 
-      <EnquirySection />
-    </div>
+      <section aria-labelledby="families-heading" className="bg-forest py-20 md:py-28">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 md:px-6">
+          <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="flex max-w-2xl flex-col gap-4">
+              <p className="text-sm font-medium text-primary-foreground/60">
+                {families.length} module {families.length === 1 ? "family" : "families"}
+              </p>
+              <h2 id="families-heading" className="text-balance text-4xl font-semibold text-primary-foreground md:text-5xl">
+                Pick the panel that fits your roof
+              </h2>
+            </div>
+            <p className="max-w-xs text-pretty text-sm leading-relaxed text-primary-foreground/70">
+              Panels are drawn side by side at the same scale, so you can compare sizes at a glance.
+            </p>
+          </Reveal>
+          <Reveal delay={0.05} className="overflow-hidden rounded-2xl bg-card">
+            <ul className="-mb-px -mr-px grid md:grid-cols-2 lg:grid-cols-3">
+              {families.map((f) => (
+                <li key={f.model} className="border-b border-r border-border transition-colors hover:bg-muted/30">
+                  <FamilyCard
+                    family={f}
+                    scaleLengthMm={scaleLengthMm}
+                    badges={badgesFor(f, families)}
+                    datasheetHref={segment.datasheet}
+                  />
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      <section aria-labelledby="shared-heading" className="bg-background py-20 md:py-28">
+        <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 md:px-6">
+          <Reveal className="flex max-w-2xl flex-col gap-4">
+            <p className="text-sm font-medium text-muted-foreground">Every panel in the range</p>
+            <h2 id="shared-heading" className="text-balance text-4xl font-semibold text-foreground md:text-5xl">
+              Built to last 30 years
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.05}>
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {highlights.map((h) => (
+                <li key={h.title} className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <h.icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="font-semibold text-foreground">{h.title}</h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{h.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal delay={0.1} className="flex flex-col gap-8 rounded-3xl bg-forest p-8 text-primary-foreground md:p-12">
+            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <h3 className="text-2xl font-semibold md:text-3xl">Warranty you can plan around</h3>
+              <p className="text-sm text-primary-foreground/70">
+                {WARRANTY.productYears}-year product warranty · {WARRANTY.performanceYears}-year linear power warranty
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="relative h-3 overflow-hidden rounded-full bg-primary-foreground/15">
+                <div
+                  className="absolute inset-y-0 left-0 rounded-full bg-primary-foreground/60"
+                  style={{ width: `${(WARRANTY.productYears / WARRANTY.performanceYears) * 100}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-sm tabular-nums">
+                <span>
+                  <span className="block text-2xl font-semibold">{year1}%</span>
+                  <span className="text-primary-foreground/70">power after year 1</span>
+                </span>
+                <span className="text-center">
+                  <span className="block text-2xl font-semibold">{WARRANTY.productYears} yr</span>
+                  <span className="text-primary-foreground/70">product cover</span>
+                </span>
+                <span className="text-right">
+                  <span className="block text-2xl font-semibold">{finalYear.toFixed(1)}%</span>
+                  <span className="text-primary-foreground/70">power at year {WARRANTY.performanceYears}</span>
+                </span>
+              </div>
+            </div>
+          </Reveal>
+
+          <details className="group rounded-2xl border border-border bg-card">
+            <summary className="flex cursor-pointer list-none items-center justify-between p-6 font-medium text-foreground [&::-webkit-details-marker]:hidden">
+              All shared specifications
+              <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <dl className="grid gap-x-10 px-6 pb-6 sm:grid-cols-2">
+              {COMMON_SPECS.map((s) => (
+                <div key={s.label} className="flex justify-between gap-6 border-t border-border py-3 text-sm">
+                  <dt className="text-muted-foreground">{s.label}</dt>
+                  <dd className="text-right font-medium text-foreground">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        </div>
+      </section>
+
+      <section aria-labelledby="others-heading" className="border-t border-border bg-background py-16 md:py-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-6">
+          <h2 id="others-heading" className="text-3xl font-semibold text-foreground">
+            Other applications
+          </h2>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {others.map((o) => (
+              <li key={o.slug}>
+                <SegmentCard segment={o} compact />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <ClosingCta />
+    </>
   )
 }

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 const FAQS = [
   {
     q: "What makes TOPCon different from PERC / Mono?",
-    a: "TOPCon uses an N-type cell with a tunnel-oxide passivated contact layer. Compared with PERC, it delivers higher efficiency (up to 24.5%), a better temperature coefficient, lower degradation and Zero LID — so more lifetime energy from the same footprint.",
+    a: "TOPCon uses an N-type cell with a tunnel-oxide passivated contact layer. Compared with PERC, it delivers higher efficiency (up to 24.39%), a better temperature coefficient, lower degradation and Zero LID — so more lifetime energy from the same footprint.",
   },
   {
     q: "Are these modules bifacial?",
@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     q: "What is the real lifespan and degradation?",
-    a: "Glass-to-glass construction is built for 30 years of service and is backed by a 30-year performance warranty, alongside a 15-year product warranty. Zero LID and a low annual degradation rate keep long-term output strong.",
+    a: "Glass-to-glass construction is built for 30 years of service and is backed by a 30-year performance warranty, alongside a 12-year product warranty. Zero LID and a low annual degradation rate keep long-term output strong.",
   },
   {
     q: "Are they subsidy / ALMM eligible?",

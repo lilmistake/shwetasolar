@@ -7,14 +7,14 @@ import { Reveal, fadeUp, staggerParent } from "@/components/topcon/reveal"
 
 const SPECS: { label: string; value: string }[] = [
   { label: "Cell Type", value: "N-Type TOPCon" },
-  { label: "Power Output", value: "450 W – 600 W" },
-  { label: "Module Efficiency", value: "Up to 24.5%" },
-  { label: "Dimensions", value: "2278 × 1134 × 35 mm" },
-  { label: "Weight", value: "29.5 kg" },
+  { label: "Power Output", value: "395 W – 725 W" },
+  { label: "Module Efficiency", value: "Up to 24.39%" },
+  { label: "Module Families", value: "10 (108 to 156 cells)" },
+  { label: "Cell Format", value: "G12R / G12 half-cut, 16BB" },
   { label: "Operating Temp.", value: "−40°C to +85°C" },
   { label: "Max System Voltage", value: "1500 V DC" },
   { label: "Temp. Coefficient", value: "−0.29%/°C" },
-  { label: "Product Warranty", value: "15 years" },
+  { label: "Product Warranty", value: "12 years" },
   { label: "Performance Warranty", value: "30 years" },
   { label: "Construction", value: "Bifacial G2G" },
   { label: "Bifaciality", value: "Up to 80% ± 5%" },
@@ -36,7 +36,7 @@ export function Specs() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-4 max-w-md text-pretty text-white/70">
-                Full technical data for our 450–600W N-Type TOPCon glass-to-glass bifacial modules. Need the complete
+                Full technical data for our 395–725 W N-Type TOPCon glass-to-glass bifacial modules. Need the complete
                 datasheet and test reports?
               </p>
             </Reveal>

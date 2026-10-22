@@ -1,254 +1,201 @@
 "use client"
 
 import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Calculator } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calculator, Zap, DollarSign, Leaf, TrendingDown } from "lucide-react"
-import { motion } from "framer-motion"
+import { PageHero } from "@/components/site/page-hero"
+import { ClosingCta } from "@/components/home/closing-cta"
+
+type Results = {
+  systemSizeKW: string
+  panelsNeeded: number
+  systemCost: number
+  annualSavings: number
+  paybackPeriod: string
+  co2Offset: string
+  monthlyConsumption: string
+  offsetPercentage: number
+  roofLimited: boolean
+}
+
+const PEAK_SUN_HOURS: Record<string, number> = {
+  north: 5.0,
+  south: 5.5,
+  east: 4.5,
+  west: 5.5,
+  central: 5.2,
+}
+
+const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`
+
+function estimate(bill: number, area: number, region: string): Results {
+  const costPerUnit = 7
+  const monthlyConsumption = bill / costPerUnit
+  const annualConsumption = monthlyConsumption * 12
+  const annualGenPerKW = (PEAK_SUN_HOURS[region] ?? 5.0) * 365 * 0.78
+
+  const idealKW = annualConsumption / annualGenPerKW
+  const maxKWByRoof = area / 100
+  const systemSizeKW = Math.max(0, Math.min(idealKW, maxKWByRoof))
+
+  const systemCost = systemSizeKW * 1000 * 45
+  const annualGeneration = systemSizeKW * annualGenPerKW
+  const usableGeneration = Math.min(annualGeneration, annualConsumption)
+  const annualSavings = usableGeneration * costPerUnit
+
+  return {
+    systemSizeKW: systemSizeKW.toFixed(2),
+    panelsNeeded: Math.ceil(systemSizeKW / 0.54),
+    systemCost,
+    annualSavings,
+    paybackPeriod: annualSavings > 0 ? (systemCost / annualSavings).toFixed(1) : "0",
+    co2Offset: ((annualGeneration * 0.82) / 1000).toFixed(2),
+    monthlyConsumption: monthlyConsumption.toFixed(0),
+    offsetPercentage: annualConsumption > 0 ? Math.round((usableGeneration / annualConsumption) * 100) : 0,
+    roofLimited: maxKWByRoof < idealKW,
+  }
+}
 
 export default function SolarCalculatorPage() {
   const [monthlyBill, setMonthlyBill] = useState("")
   const [roofArea, setRoofArea] = useState("")
   const [location, setLocation] = useState("")
-  const [results, setResults] = useState<any>(null)
+  const [results, setResults] = useState<Results | null>(null)
 
-  const calculateSolar = () => {
-    const bill = Number.parseFloat(monthlyBill)
-    const area = Number.parseFloat(roofArea)
+  const canCalculate = Number(monthlyBill) > 0 && Number(roofArea) > 0 && Boolean(location)
 
-    // All three inputs are required for an accurate estimate
-    if (!bill || !area || !location) return
-
-    // --- Consumption ---
-    const avgCostPerUnit = 7 // INR per kWh
-    const monthlyConsumption = bill / avgCostPerUnit // kWh/month
-    const annualConsumption = monthlyConsumption * 12 // kWh/year
-
-    // --- Location: average daily peak sun hours by region in India ---
-    const peakSunHoursByRegion: Record<string, number> = {
-      north: 5.0,
-      south: 5.5,
-      east: 4.5,
-      west: 5.5,
-      central: 5.2,
-    }
-    const peakSunHours = peakSunHoursByRegion[location] ?? 5.0
-
-    // Annual generation per installed kW, including a ~78% performance ratio
-    const performanceRatio = 0.78
-    const annualGenPerKW = peakSunHours * 365 * performanceRatio // kWh per kW per year
-
-    // --- System sizing ---
-    // Size needed to offset the yearly consumption
-    const idealSystemKW = annualConsumption / annualGenPerKW
-
-    // Roof constraint: ~100 sq ft of usable roof per kW installed
-    const sqftPerKW = 100
-    const maxSystemByRoof = area / sqftPerKW
-
-    // Actual recommended system is limited by whichever is smaller
-    const systemSizeKW = Math.max(0, Math.min(idealSystemKW, maxSystemByRoof))
-    const roofLimited = maxSystemByRoof < idealSystemKW
-
-    const panelsNeeded = Math.ceil(systemSizeKW / 0.54) // 540W panels
-
-    // --- Cost estimation ---
-    const costPerWatt = 45 // INR
-    const systemCost = systemSizeKW * 1000 * costPerWatt
-
-    // --- Generation, savings & offset ---
-    const annualGeneration = systemSizeKW * annualGenPerKW // kWh/year produced
-    // Only the energy that offsets consumption translates into bill savings
-    const usableGeneration = Math.min(annualGeneration, annualConsumption)
-    const offsetPercentage = annualConsumption > 0 ? (usableGeneration / annualConsumption) * 100 : 0
-    const annualSavings = usableGeneration * avgCostPerUnit
-    const paybackPeriod = annualSavings > 0 ? systemCost / annualSavings : 0
-
-    // --- Environmental impact (all generation displaces grid power) ---
-    const co2Offset = annualGeneration * 0.82 // kg CO2 per kWh (India grid factor)
-
-    setResults({
-      systemSizeKW: systemSizeKW.toFixed(2),
-      panelsNeeded,
-      systemCost: systemCost.toFixed(0),
-      annualSavings: annualSavings.toFixed(0),
-      paybackPeriod: paybackPeriod.toFixed(1),
-      co2Offset: (co2Offset / 1000).toFixed(2), // Convert to tonnes
-      monthlyConsumption: monthlyConsumption.toFixed(0),
-      offsetPercentage: Math.round(offsetPercentage),
-      roofLimited,
-    })
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!canCalculate) return
+    setResults(estimate(Number(monthlyBill), Number(roofArea), location))
   }
 
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-forest to-olive text-cream">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Calculator className="h-12 w-12" />
-            <h1 className="font-display text-5xl md:text-7xl font-bold text-balance">Solar Calculator</h1>
+    <>
+      <PageHero
+        eyebrow="Resources"
+        crumbs={[
+          { name: "Home", path: "/" },
+          { name: "Solar Calculator", path: "/resources/calculator" },
+        ]}
+        title="Solar calculator"
+        intro="Estimate the system size, cost and savings for your rooftop in under a minute."
+      />
+
+      <section aria-label="Calculator" className="bg-background pb-16 md:pb-24">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 md:px-6 lg:grid-cols-5">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-6 rounded-3xl border border-border bg-muted p-7 md:p-10 lg:col-span-2"
+          >
+            <h2 className="text-2xl font-semibold text-foreground">Your details</h2>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="monthlyBill">Average monthly electricity bill (₹)</Label>
+              <Input
+                id="monthlyBill"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                placeholder="e.g. 5000"
+                value={monthlyBill}
+                onChange={(e) => setMonthlyBill(e.target.value)}
+                className="h-12 rounded-xl bg-background"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="roofArea">Available roof area (sq ft)</Label>
+              <Input
+                id="roofArea"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                placeholder="e.g. 500"
+                value={roofArea}
+                onChange={(e) => setRoofArea(e.target.value)}
+                className="h-12 rounded-xl bg-background"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="location">Region</Label>
+              <Select value={location} onValueChange={setLocation}>
+                <SelectTrigger id="location" className="h-12 w-full rounded-xl bg-background">
+                  <SelectValue placeholder="Select your region" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="north">North India</SelectItem>
+                  <SelectItem value="south">South India</SelectItem>
+                  <SelectItem value="east">East India</SelectItem>
+                  <SelectItem value="west">West India</SelectItem>
+                  <SelectItem value="central">Central India</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <button
+              type="submit"
+              disabled={!canCalculate}
+              className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-forest px-7 text-sm font-semibold text-primary-foreground transition-colors hover:bg-olive disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Calculator className="size-4" aria-hidden="true" />
+              Calculate
+            </button>
+          </form>
+
+          <div aria-live="polite" className="lg:col-span-3">
+            {results ? (
+              <div className="flex h-full flex-col gap-4">
+                <div className="flex flex-col gap-6 rounded-3xl bg-forest p-7 text-primary-foreground md:p-10">
+                  <p className="text-sm font-medium text-primary-foreground/70">Recommended system</p>
+                  <p className="text-6xl font-semibold md:text-7xl">
+                    {results.systemSizeKW}
+                    <span className="ml-2 text-2xl text-primary-foreground/70">kW</span>
+                  </p>
+                  <p className="leading-relaxed text-primary-foreground/80">
+                    About {results.panelsNeeded} panels, covering roughly {results.offsetPercentage}% of your
+                    electricity use.
+                  </p>
+                  {results.roofLimited && (
+                    <p className="text-sm leading-relaxed text-primary-foreground/70">
+                      Your roof area is the limiting factor. More space would allow a larger system and higher savings.
+                    </p>
+                  )}
+                </div>
+                <dl className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                  {[
+                    ["System cost", inr(results.systemCost)],
+                    ["Annual savings", inr(results.annualSavings)],
+                    ["Payback", `${results.paybackPeriod} yrs`],
+                    ["CO₂ offset / year", `${results.co2Offset} t`],
+                    ["Monthly usage", `${results.monthlyConsumption} kWh`],
+                  ].map(([label, value]) => (
+                    <div key={label} className="flex flex-col gap-2 rounded-3xl border border-border bg-muted p-6">
+                      <dt className="text-sm text-muted-foreground">{label}</dt>
+                      <dd className="text-2xl font-semibold text-foreground">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ) : (
+              <div className="flex h-full min-h-80 flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-border p-10 text-center">
+                <span className="flex size-12 items-center justify-center rounded-2xl bg-muted text-primary">
+                  <Calculator className="size-6" aria-hidden="true" />
+                </span>
+                <p className="max-w-xs text-pretty leading-relaxed text-muted-foreground">
+                  Enter your details to see a personalised estimate.
+                </p>
+              </div>
+            )}
           </div>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-center leading-relaxed text-pretty">
-            Estimate your solar system size, costs, and potential savings
+
+          <p className="text-sm leading-relaxed text-muted-foreground lg:col-span-5">
+            Estimates use average values for tariffs, sunlight and installation cost. Actual results depend on your
+            location, roof orientation, shading and local rates. Contact us for a site assessment and exact quote.
           </p>
         </div>
       </section>
 
-      {/* Calculator Section */}
-      <section className="py-20 bg-cream">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Input Form */}
-            <Card className="p-8">
-              <h2 className="font-display text-3xl font-bold text-forest mb-6">Enter Your Details</h2>
-              <div className="space-y-6">
-                <div>
-                  <Label htmlFor="monthlyBill" className="text-forest font-medium">
-                    Average Monthly Electricity Bill (₹)
-                  </Label>
-                  <Input
-                    id="monthlyBill"
-                    type="number"
-                    placeholder="e.g., 5000"
-                    value={monthlyBill}
-                    onChange={(e) => setMonthlyBill(e.target.value)}
-                    className="mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="roofArea" className="text-forest font-medium">
-                    Available Roof Area (sq ft)
-                  </Label>
-                  <Input
-                    id="roofArea"
-                    type="number"
-                    placeholder="e.g., 500"
-                    value={roofArea}
-                    onChange={(e) => setRoofArea(e.target.value)}
-                    className="mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="location" className="text-forest font-medium">
-                    Location
-                  </Label>
-                  <Select value={location} onValueChange={setLocation}>
-                    <SelectTrigger className="mt-2 bg-cream border-sage">
-                      <SelectValue placeholder="Select your state" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-cream border-sage">
-                      <SelectItem value="north">North India</SelectItem>
-                      <SelectItem value="south">South India</SelectItem>
-                      <SelectItem value="east">East India</SelectItem>
-                      <SelectItem value="west">West India</SelectItem>
-                      <SelectItem value="central">Central India</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button
-                  onClick={calculateSolar}
-                  disabled={!monthlyBill || !roofArea || !location}
-                  className="w-full bg-forest text-cream hover:bg-olive"
-                  size="lg"
-                >
-                  <Calculator className="mr-2 h-5 w-5" />
-                  Calculate Solar Potential
-                </Button>
-              </div>
-            </Card>
-
-            {/* Results */}
-            {results ? (
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-                <Card className="p-6 bg-gradient-to-br from-forest to-olive text-cream">
-                  <Zap className="h-8 w-8 mb-3" />
-                  <h3 className="font-display text-xl font-bold mb-2">Recommended System Size</h3>
-                  <p className="text-4xl font-bold">{results.systemSizeKW} kW</p>
-                  <p className="text-cream/80 mt-2">{results.panelsNeeded} solar panels needed</p>
-                  <p className="text-cream/80 mt-2">Offsets ~{results.offsetPercentage}% of your electricity use</p>
-                  {results.roofLimited && (
-                    <p className="text-cream/70 mt-3 text-sm">
-                      Note: Your available roof area is the limiting factor. A larger roof would allow a bigger system
-                      and higher savings.
-                    </p>
-                  )}
-                </Card>
-
-                <Card className="p-6">
-                  <DollarSign className="h-8 w-8 text-forest mb-3" />
-                  <h3 className="font-display text-xl font-bold text-forest mb-2">Investment & Savings</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-olive">System Cost:</span>
-                      <span className="font-bold text-forest">
-                        ₹{Number.parseInt(results.systemCost).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-olive">Annual Savings:</span>
-                      <span className="font-bold text-forest">
-                        ₹{Number.parseInt(results.annualSavings).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-olive">Payback Period:</span>
-                      <span className="font-bold text-forest">{results.paybackPeriod} years</span>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-6">
-                  <Leaf className="h-8 w-8 text-forest mb-3" />
-                  <h3 className="font-display text-xl font-bold text-forest mb-2">Environmental Impact</h3>
-                  <p className="text-3xl font-bold text-forest">{results.co2Offset} tonnes</p>
-                  <p className="text-olive mt-2">CO₂ offset annually</p>
-                </Card>
-
-                <Card className="p-6">
-                  <TrendingDown className="h-8 w-8 text-forest mb-3" />
-                  <h3 className="font-display text-xl font-bold text-forest mb-2">Energy Consumption</h3>
-                  <p className="text-3xl font-bold text-forest">{results.monthlyConsumption} kWh</p>
-                  <p className="text-olive mt-2">Average monthly usage</p>
-                </Card>
-              </motion.div>
-            ) : (
-              <Card className="p-8 flex items-center justify-center bg-sage/5">
-                <div className="text-center">
-                  <Calculator className="h-16 w-16 text-olive mx-auto mb-4" />
-                  <p className="text-olive text-lg">Enter your details to see personalized solar recommendations</p>
-                </div>
-              </Card>
-            )}
-          </div>
-
-          {/* Disclaimer */}
-          <Card className="mt-8 p-6 bg-sage/10">
-            <p className="text-sm text-olive text-center">
-              <strong>Note:</strong> These calculations are estimates based on average values. Actual system size,
-              costs, and savings may vary based on specific location, roof orientation, shading, and local electricity
-              rates. Contact us for a detailed site assessment and accurate quotation.
-            </p>
-          </Card>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="font-display text-4xl font-bold text-forest mb-6">Ready to Go Solar?</h2>
-          <p className="text-xl text-olive mb-8 max-w-2xl mx-auto">Get a personalized quote from our solar experts</p>
-          <Button asChild size="lg" className="bg-forest text-cream hover:bg-olive">
-            <a href="/contact">Request a Quote</a>
-          </Button>
-        </div>
-      </section>
-    </div>
+      <ClosingCta />
+    </>
   )
 }

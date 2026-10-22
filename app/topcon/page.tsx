@@ -14,16 +14,16 @@ import { LpFooter } from "@/components/topcon/lp-footer"
 import { StickyCta } from "@/components/topcon/sticky-cta"
 
 export const metadata: Metadata = {
-  title: "TOPCon Glass-to-Glass Solar Modules (450–600W, 24.5%) | Shweta Solar",
+  title: "TOPCon Glass-to-Glass Solar Modules (395–725 W, 24.39%) | Shweta Solar",
   description:
-    "N-Type TOPCon G2G bifacial modules — up to 24.5% efficiency, 30-year warranty. Direct from an Indian manufacturer. Request a bulk or rooftop quote.",
+    "N-Type TOPCon G2G bifacial modules — up to 24.39% efficiency, 30-year performance warranty. Direct from an Indian manufacturer. Request a bulk or rooftop quote.",
   alternates: { canonical: "/topcon" },
   openGraph: {
-    title: "TOPCon Glass-to-Glass Solar Modules (450–600W, 24.5%) | Shweta Solar",
+    title: "TOPCon Glass-to-Glass Solar Modules (395–725 W, 24.39%) | Shweta Solar",
     description:
-      "N-Type TOPCon G2G bifacial modules — up to 24.5% efficiency, 30-year warranty. Direct from an Indian manufacturer. Request a bulk or rooftop quote.",
+      "N-Type TOPCon G2G bifacial modules — up to 24.39% efficiency, 30-year performance warranty. Direct from an Indian manufacturer. Request a bulk or rooftop quote.",
     url: "https://shwetasolar.in/topcon",
-    images: [{ url: "/images/topcon.jpg", width: 1200, height: 630, alt: "Shweta Solar TOPCon G2G module" }],
+    images: [{ url: "/images/factory/topcon-module-on-line.jpg", width: 1620, height: 1080, alt: "Shweta Solar TOPCon G2G module" }],
   },
 }
 

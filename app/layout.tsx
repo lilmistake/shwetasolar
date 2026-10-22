@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Poppins } from "next/font/google"
 import "./globals.css"
 import { Navigation } from "@/components/navigation"
@@ -10,58 +10,63 @@ import { NavigationLoader } from "@/components/navigation-loader"
 import { ConditionalChrome, ConditionalMain } from "@/components/conditional-chrome"
 import { Suspense } from "react"
 import Script from "next/script"
+import { SITE } from "@/lib/site"
+import { factorySchema, jsonLd, organizationSchema, websiteSchema } from "@/lib/seo"
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-poppins",
-  display: "swap", // Added font-display swap for better performance
+  display: "swap",
 })
 
+const OG_IMAGE = {
+  url: "/images/factory/automated-factory-floor.jpg",
+  width: 1620,
+  height: 1080,
+  alt: "Automated TOPCon solar module production line at Shweta Solar",
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shwetasolar.in"),
+  metadataBase: new URL(SITE.url),
   title: {
-    default: "Shweta Solar - Leading Solar Panel Manufacturer in India",
+    default: "Shweta Solar | n-type TOPCon Solar Module Manufacturer in India",
     template: "%s | Shweta Solar",
   },
-  description:
-    "Shweta Solar manufactures high-efficiency Mono PERC and TopCon solar panels. Powering India's renewable energy future with sustainable solar solutions.",
+  description: SITE.description,
+  applicationName: SITE.name,
   keywords: [
-    "solar panels",
-    "solar energy",
-    "Mono PERC",
-    "TopCon",
-    "renewable energy",
-    "India",
-    "solar manufacturer",
+    "TOPCon solar panel manufacturer India",
+    "n-type TOPCon bifacial module",
+    "glass to glass solar panel",
+    "ALMM List-I solar module",
+    "BIS certified solar panel",
+    "solar panel manufacturer Uttar Pradesh",
+    "725W solar panel",
+    "725W solar module",
+    "PM Surya Ghar solar panel",
   ],
-  authors: [{ name: "Shweta Solar" }],
-  creator: "Shweta Solar",
-  publisher: "Shweta Solar",
+  authors: [{ name: SITE.name, url: SITE.url }],
+  creator: SITE.name,
+  publisher: SITE.legalName,
+  alternates: { canonical: "/" },
+  category: "Solar energy manufacturing",
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://shwetasolar.in",
-    siteName: "Shweta Solar",
-    title: "Shweta Solar - Leading Solar Panel Manufacturer in India",
-    description:
-      "Shweta Solar manufactures high-efficiency Mono PERC and TopCon solar panels. Powering India's renewable energy future.",
-    images: [
-      {
-        url: "/images/logo.webp",
-        width: 1200,
-        height: 630,
-        alt: "Shweta Solar Logo",
-      },
-    ],
+    url: SITE.url,
+    siteName: SITE.name,
+    title: "Shweta Solar | n-type TOPCon Solar Module Manufacturer in India",
+    description: SITE.description,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     site: "@shwetasolar",
     creator: "@shwetasolar",
-    title: "Shweta Solar - Leading Solar Panel Manufacturer in India",
-    description: "High-efficiency solar panels for India's renewable energy future",
-    images: ["/images/logo.webp"],
+    title: "Shweta Solar | n-type TOPCon Solar Module Manufacturer in India",
+    description: SITE.description,
+    images: [OG_IMAGE.url],
   },
   robots: {
     index: true,
@@ -74,15 +79,13 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
-  },
-  verification: {
-    google: "", // Placeholder for actual verification code
-  },
-    generator: 'v0.app'
+  formatDetection: { telephone: true, email: true },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#004636",
+  width: "device-width",
+  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -91,40 +94,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={poppins.variable}>
+    <html lang="en-IN" className={`${poppins.variable} bg-background`}>
       <head>
-        <link rel="preload" as="image" href="/images/solar-hero.jpg" />
-        <link rel="preload" as="image" href="/images/logo.webp" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "Shweta Solar",
-              url: "https://shwetasolar.in",
-              logo: "https://shwetasolar.in/images/logo.webp",
-              description:
-                "Leading solar panel manufacturer in India specializing in Mono PERC and TopCon solar panels",
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "IN",
-              },
-              contactPoint: {
-                "@type": "ContactPoint",
-                telephone: "+91-1800-120-477120",
-                contactType: "Customer Service",
-                email: "admin@shwetasolar.in",
-              },
-              sameAs: [
-                "https://x.com/shwetasolar",
-                "https://www.instagram.com/shwetasolar/",
-                "https://www.linkedin.com/company/shweta-solar-system/",
-                "https://www.facebook.com/people/Shweta-Solar/61580012213135/",
-              ],
-            }),
-          }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd([organizationSchema(), websiteSchema(), factorySchema()])} />
         <noscript>
           <img
             height="1"
@@ -135,12 +107,9 @@ export default function RootLayout({
           />
         </noscript>
       </head>
-      <body className="antialiased overflow-x-hidden">
+      <body className="antialiased overflow-x-hidden bg-background font-sans text-foreground">
         {/* Google Ads tag — AW-18305200129 */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18305200129"
-          strategy="afterInteractive"
-        />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18305200129" strategy="afterInteractive" />
         <Script id="google-ads-gtag" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];

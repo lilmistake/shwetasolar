@@ -1,8 +1,8 @@
 const HIGHLIGHTS = [
   "N-Type TOPCon Technology",
-  "Up to 24.5% Efficiency",
+  "Up to 24.39% Efficiency",
   "Glass-to-Glass Bifacial",
-  "600W+ Module Power",
+  "395–725 W Module Power",
   "30-Year Performance Warranty",
   "Low Light Performance",
   "Zero PID Degradation",
