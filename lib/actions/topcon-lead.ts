@@ -1,93 +1,115 @@
 "use server"
 
+import { randomUUID } from "node:crypto"
 import { createClient } from "@/lib/supabase/server"
+import { createClient as createServiceClient } from "@supabase/supabase-js"
 import { Resend } from "resend"
-import { SALES_EMAIL, LEAD_RECIPIENT_EMAIL, BUYER_TYPES, type BuyerTypeValue } from "@/lib/topcon/constants"
-import { cleanLine, cleanPhone, cleanText, escapeHtml, htmlBlock, isValidEmail } from "@/lib/email-sanitize"
+import {
+  ATTRIBUTION_KEYS,
+  BUYER_TYPES,
+  LEAD_RECIPIENT_EMAIL,
+  type Attribution,
+  type BuyerTypeValue,
+} from "@/lib/topcon/constants"
+import { cleanLine, cleanPhone, escapeHtml, isValidEmail } from "@/lib/email-sanitize"
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export interface TopConLead {
   name: string
-  email: string
   phone: string
   buyerType: BuyerTypeValue | ""
-  city?: string
-  capacity?: string
-  message?: string
-  recaptchaToken?: string
+  email?: string
+  source?: string
+  attribution?: Attribution
 }
 
 export interface LeadResult {
   success: boolean
+  leadId?: string
   error?: string
-  emailDelivered?: boolean
 }
 
 function buyerLabel(value: string): string {
   return BUYER_TYPES.find((b) => b.value === value)?.label ?? "Not specified"
 }
 
-async function verifyRecaptcha(token?: string): Promise<boolean> {
-  // If no secret configured or no token, skip (don't block leads on missing captcha).
-  if (!token || !process.env.RECAPTCHA_SECRET_KEY) return true
+function normalizePhone(raw: string): string | null {
+  const digits = cleanPhone(raw).replace(/\D/g, "").replace(/^(91|0)(?=\d{10}$)/, "")
+  return /^[6-9]\d{9}$/.test(digits) ? digits : null
+}
+
+function cleanAttribution(input?: Attribution): Attribution {
+  const out: Attribution = {}
+  if (!input) return out
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = cleanLine(input[key], 200)
+    if (value) out[key] = value
+  }
+  return out
+}
+
+function row(label: string, value: string, shaded: boolean) {
+  return `<tr${shaded ? ' style="background:#f5f5f5"' : ""}><td style="padding:10px 24px;font-weight:bold;width:150px">${escapeHtml(label)}</td><td style="padding:10px 24px">${escapeHtml(value)}</td></tr>`
+}
+
+async function notifySales(subject: string, rows: [string, string][]) {
+  if (!resend) {
+    console.warn("[v0] RESEND_API_KEY not set — skipping lead email.")
+    return
+  }
   try {
-    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+    const { error } = await resend.emails.send({
+      from: "Shweta Solar Leads <onboarding@resend.dev>",
+      to: LEAD_RECIPIENT_EMAIL,
+      subject,
+      html: `
+        <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden">
+          <div style="background:#004636;color:#ffffff;padding:20px 24px">
+            <h1 style="margin:0;font-size:18px">${escapeHtml(subject)}</h1>
+            <p style="margin:4px 0 0;font-size:13px;color:#a9b489">shwetasolar.in/topcon landing page</p>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;color:#1a1a1a">
+            ${rows.map(([l, v], i) => row(l, v, i % 2 === 1)).join("")}
+          </table>
+        </div>`,
     })
-    const data = await res.json()
-    return data.success && (data.score === undefined || data.score >= 0.5)
+    if (error) console.error("[v0] TOPCon lead email error:", error)
   } catch (err) {
-    console.error("[v0] reCAPTCHA verification error:", err)
-    return true // fail open — never lose a real lead over captcha errors
+    console.error("[v0] TOPCon lead email exception:", err)
   }
 }
 
+/** Step 1: capture the lead immediately (name, phone, buyer type) so no lead is lost at step 2. */
 export async function submitTopConLead(lead: TopConLead): Promise<LeadResult> {
-  // --- Server-side validation ---
   const name = cleanLine(lead.name, 120)
+  const phone = normalizePhone(lead.phone || "")
   const email = cleanLine(lead.email, 160)
-  const phone = cleanPhone(lead.phone)
+  const source = cleanLine(lead.source, 40) || "quote-form"
 
   if (!name || name.length < 2) return { success: false, error: "Please enter your name." }
-  if (!email || !isValidEmail(email)) return { success: false, error: "Please enter a valid email address." }
-  if (phone.replace(/\D/g, "").length < 10) return { success: false, error: "Please enter a valid phone number." }
-
-  const captchaOk = await verifyRecaptcha(lead.recaptchaToken)
-  if (!captchaOk) return { success: false, error: "Security verification failed. Please try again." }
+  if (!phone) return { success: false, error: "Please enter a valid 10-digit Indian mobile number." }
+  if (email && !isValidEmail(email)) return { success: false, error: "Please enter a valid email address." }
 
   const buyer = buyerLabel(lead.buyerType || "")
-  const capacity = cleanLine(lead.capacity, 60)
-  const city = cleanLine(lead.city, 80)
-  const messageText = cleanText(lead.message, 4000)
-  const h = escapeHtml
+  const attribution = cleanAttribution(lead.attribution)
+  const attributionLines = Object.entries(attribution).map(([k, v]) => `${k}: ${v}`)
+  const leadId = randomUUID()
 
-  // --- 1) Persist to Supabase (source of truth) ---
   try {
     const supabase = await createClient()
-    const composedMessage = [
-      messageText || "TOPCon G2G quote request from landing page.",
-      city ? `City: ${city}` : "",
-      capacity ? `Required capacity: ${capacity}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n")
-
-    const { error: dbError } = await supabase.from("contact_submissions").insert({
+    const { error } = await supabase.from("contact_submissions").insert({
+      id: leadId,
       name,
-      email,
+      email: email || "",
       phone,
-      company: buyer, // buyer segment
+      company: buyer,
       inquiry_type: "topcon_landing",
       product: "TOPCon G2G",
-      quantity: capacity || null,
-      message: composedMessage,
+      message: [`TOPCon G2G lead (${source}).`, ...attributionLines].join("\n"),
     })
-
-    if (dbError) {
-      console.error("[v0] TOPCon lead DB error:", dbError)
+    if (error) {
+      console.error("[v0] TOPCon lead DB error:", error)
       return { success: false, error: "We couldn't save your request. Please try again or call us." }
     }
   } catch (err) {
@@ -95,45 +117,66 @@ export async function submitTopConLead(lead: TopConLead): Promise<LeadResult> {
     return { success: false, error: "Something went wrong. Please try again." }
   }
 
-  // --- 2) Email the sales team (best-effort; lead is already saved) ---
-  let emailDelivered = false
-  if (resend) {
-    try {
-      const { error: emailError } = await resend.emails.send({
-        from: "Shweta Solar Leads <onboarding@resend.dev>",
-        to: LEAD_RECIPIENT_EMAIL,
-        replyTo: LEAD_RECIPIENT_EMAIL,
-        subject: `New TOPCon Lead: ${name} (${buyer})`,
-        html: `
-          <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden">
-            <div style="background:#004636;color:#ffffff;padding:20px 24px">
-              <h1 style="margin:0;font-size:18px">New TOPCon Quote Request</h1>
-              <p style="margin:4px 0 0;font-size:13px;color:#a9b489">shwetasolar.in/topcon landing page</p>
-            </div>
-            <table style="width:100%;border-collapse:collapse;font-size:14px;color:#1a1a1a">
-              <tr><td style="padding:12px 24px;font-weight:bold;width:140px">Name</td><td style="padding:12px 24px">${h(name)}</td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Phone</td><td style="padding:12px 24px"><a href="tel:${h(phone)}">${h(phone)}</a></td></tr>
-              <tr><td style="padding:12px 24px;font-weight:bold">Email</td><td style="padding:12px 24px"><a href="mailto:${h(email)}">${h(email)}</a></td></tr>
-              <tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Buyer type</td><td style="padding:12px 24px">${h(buyer)}</td></tr>
-              ${city ? `<tr><td style="padding:12px 24px;font-weight:bold">City</td><td style="padding:12px 24px">${h(city)}</td></tr>` : ""}
-              ${capacity ? `<tr style="background:#f5f5f5"><td style="padding:12px 24px;font-weight:bold">Capacity</td><td style="padding:12px 24px">${h(capacity)}</td></tr>` : ""}
-              ${messageText ? `<tr><td style="padding:12px 24px;font-weight:bold;vertical-align:top">Message</td><td style="padding:12px 24px">${htmlBlock(messageText)}</td></tr>` : ""}
-            </table>
-            <div style="padding:16px 24px;background:#004636;color:#a9b489;font-size:12px">Reply directly to this email to reach the customer.</div>
-          </div>
-        `,
-      })
-      if (emailError) {
-        console.error("[v0] TOPCon lead email error:", emailError)
-      } else {
-        emailDelivered = true
-      }
-    } catch (err) {
-      console.error("[v0] TOPCon lead email exception:", err)
-    }
-  } else {
-    console.warn("[v0] RESEND_API_KEY not set — skipping lead email.")
+  await notifySales(`New TOPCon Lead: ${name} (${buyer})`, [
+    ["Name", name],
+    ["Phone", phone],
+    ["Buyer type", buyer],
+    ["Source", source],
+    ...(email ? ([["Email", email]] as [string, string][]) : []),
+    ...(Object.entries(attribution) as [string, string][]),
+  ])
+
+  return { success: true, leadId }
+}
+
+/** Step 2 (optional): add capacity and city to a lead captured in the last hour. */
+export async function enrichTopConLead(input: { leadId: string; capacity?: string; city?: string }): Promise<LeadResult> {
+  const leadId = cleanLine(input.leadId, 40)
+  const capacity = cleanLine(input.capacity, 60)
+  const city = cleanLine(input.city, 80)
+
+  if (!/^[0-9a-f-]{36}$/i.test(leadId)) return { success: false, error: "Invalid request." }
+  if (!capacity && !city) return { success: true, leadId }
+
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return { success: false, error: "Server is not configured." }
+
+  const admin = createServiceClient(url, key, { auth: { persistSession: false } })
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+
+  const { data: existing, error: readError } = await admin
+    .from("contact_submissions")
+    .select("name, phone, company, message")
+    .eq("id", leadId)
+    .eq("inquiry_type", "topcon_landing")
+    .gte("created_at", since)
+    .maybeSingle()
+
+  if (readError || !existing) return { success: false, error: "We couldn't update your request." }
+
+  const { error } = await admin
+    .from("contact_submissions")
+    .update({
+      quantity: capacity || null,
+      message: [existing.message, city ? `City: ${city}` : "", capacity ? `Required capacity: ${capacity}` : ""]
+        .filter(Boolean)
+        .join("\n"),
+    })
+    .eq("id", leadId)
+
+  if (error) {
+    console.error("[v0] TOPCon lead enrich error:", error)
+    return { success: false, error: "We couldn't update your request." }
   }
 
-  return { success: true, emailDelivered }
+  await notifySales(`TOPCon Lead Details: ${existing.name}`, [
+    ["Name", existing.name],
+    ["Phone", existing.phone ?? ""],
+    ["Buyer type", existing.company ?? ""],
+    ...(capacity ? ([["Capacity", capacity]] as [string, string][]) : []),
+    ...(city ? ([["City", city]] as [string, string][]) : []),
+  ])
+
+  return { success: true, leadId }
 }

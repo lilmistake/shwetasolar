@@ -1,101 +1,74 @@
-"use client"
-
-import Image from "next/image"
-import { motion } from "framer-motion"
-import { Sun, Layers, ShieldCheck, Thermometer, CloudRain } from "lucide-react"
-import { Reveal, fadeUp, staggerParent } from "@/components/topcon/reveal"
+import { Layers, Maximize, ShieldCheck, Thermometer, CloudSun } from "lucide-react"
+import { SectionCta } from "@/components/topcon/cta-buttons"
 
 const BENEFITS = [
   {
-    icon: Sun,
-    title: "More power per sq. ft.",
-    body: "Up to 24.39% efficiency means fewer panels, lower balance-of-system cost, and more output from the same roof or land.",
+    icon: Layers,
+    title: "Bifacial gain",
+    stat: "Up to 80%",
+    statLabel: "bifaciality",
+    body: "The glass rear captures reflected light, adding extra generation on light roofs and ground mounts.",
+    saving: "More units from the same kW you pay for.",
   },
   {
-    icon: Layers,
-    title: "Generates from both sides",
-    body: "Bifacial glass-to-glass construction captures reflected light for up to 30% more energy over the system lifetime.",
+    icon: Maximize,
+    title: "More power per sq ft",
+    stat: "24.39%",
+    statLabel: "efficiency",
+    body: "Fewer panels for the same capacity, so less structure, cabling and labour on every project.",
+    saving: "Lower balance-of-system cost per watt.",
   },
   {
     icon: ShieldCheck,
-    title: "Built to last 30 years",
-    body: "Glass-to-glass build, a 30-year performance warranty and Zero LID keep degradation low decade after decade.",
+    title: "30-year life",
+    stat: "≤0.4%",
+    statLabel: "annual degradation",
+    body: "Glass-to-glass construction resists moisture, PID and micro-cracks far longer than glass-backsheet.",
+    saving: "5 more years of output than a 25-yr module.",
   },
   {
     icon: Thermometer,
-    title: "Performs in Indian heat",
-    body: "A low −0.29%/°C temperature coefficient holds output steady on 45°C rooftops where lesser modules fade.",
+    title: "Holds up in Indian heat",
+    stat: "−0.29%/°C",
+    statLabel: "temp. coefficient",
+    body: "Loses less power on 45 °C rooftops than PERC modules rated around −0.35%/°C.",
+    saving: "Higher summer generation when tariffs peak.",
   },
   {
-    icon: CloudRain,
-    title: "Low-light & monsoon capable",
-    body: "Strong performance in cloudy, diffused and early-morning conditions for higher real-world yield.",
+    icon: CloudSun,
+    title: "Low-light performance",
+    stat: "Earlier",
+    statLabel: "start-up each day",
+    body: "N-type cells start generating earlier in the morning and keep going through haze and monsoon cloud.",
+    saving: "More kWh across the whole year, not just at noon.",
   },
 ]
 
 export function Benefits() {
   return (
-    <section id="why-topcon" className="bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-olive">The Technology</span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="mt-3 text-balance text-3xl font-bold text-forest md:text-5xl">
-              Why N-Type TOPCon G2G wins
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 text-pretty text-muted-foreground">
-              The specs matter because of what they do for your project economics. Here is what glass-to-glass TOPCon
-              delivers in the field.
-            </p>
-          </Reveal>
+    <section id="why-topcon" className="bg-muted/50">
+      <div className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-24">
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-olive">Why TOPCon G2G</p>
+          <h2 className="mt-3 text-balance font-display text-4xl font-bold leading-none text-forest md:text-6xl">
+            Every spec is a saving on your project.
+          </h2>
         </div>
 
-        <motion.div
-          variants={staggerParent}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.15 }}
-          className="mt-14 grid gap-4 md:grid-cols-6"
-        >
-          {/* Feature tile with image spanning wider */}
-          <motion.div
-            variants={fadeUp}
-            className="group relative overflow-hidden rounded-3xl border border-border bg-forest text-white md:col-span-3 md:row-span-2"
-          >
-            <Image
-              src="/images/factory/topcon-cell-busbar-macro.jpg"
-              alt="Macro detail of a TOPCon solar cell surface"
-              fill
-              sizes="(max-width: 768px) 100vw, 40vw"
-              className="object-cover opacity-60 transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/70 to-transparent" />
-            <div className="relative flex h-full min-h-64 flex-col justify-end p-7">
-              <Layers className="h-7 w-7 text-sage" aria-hidden />
-              <h3 className="mt-4 text-xl font-semibold">{BENEFITS[1].title}</h3>
-              <p className="mt-2 max-w-sm text-sm leading-relaxed text-white/75">{BENEFITS[1].body}</p>
-            </div>
-          </motion.div>
-
-          {BENEFITS.filter((_, i) => i !== 1).map((b) => (
-            <motion.div
-              key={b.title}
-              variants={fadeUp}
-              whileHover={{ y: -4 }}
-              className="rounded-3xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md md:col-span-3"
-            >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-muted">
-                <b.icon className="h-6 w-6 text-olive" aria-hidden />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-forest">{b.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
-            </motion.div>
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {BENEFITS.map((b) => (
+            <li key={b.title} className="flex flex-col rounded-xl border border-border bg-card p-5">
+              <b.icon className="h-6 w-6 text-olive" aria-hidden />
+              <h3 className="mt-4 font-semibold text-forest">{b.title}</h3>
+              <p className="mt-3 font-display text-3xl font-bold leading-none text-forest">{b.stat}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{b.statLabel}</p>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
+              <p className="mt-4 border-t border-border pt-3 text-sm font-semibold text-forest">{b.saving}</p>
+            </li>
           ))}
-        </motion.div>
+        </ul>
+
+        <SectionCta source="benefits" prompt="See what TOPCon G2G costs for your capacity." />
       </div>
     </section>
   )

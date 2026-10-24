@@ -1,11 +1,12 @@
 // Ad-conversion tracking hooks for the TOPCon landing page.
-// Placeholder IDs are marked with TODO — replace with your real GA4 / Google Ads
-// conversion labels. The Meta Pixel is already initialized globally in app/layout.tsx.
+// Every CTA also carries data-track / data-cta-location attributes so GTM click
+// triggers can be configured without code changes.
+// The Meta Pixel is already initialized globally in app/layout.tsx.
 
 type TrackParams = Record<string, string | number | boolean | undefined>
 
 // TODO: Replace with your real Google Ads conversion send_to value, e.g. "AW-XXXXXXXXX/AbC-dEfGh".
-const GOOGLE_ADS_CONVERSION_SEND_TO = "" // e.g. "AW-XXXXXXXXX/XXXXXXXXXXXXXXX"
+const GOOGLE_ADS_CONVERSION_SEND_TO = ""
 
 declare global {
   interface Window {
@@ -15,39 +16,32 @@ declare global {
   }
 }
 
+function emit(gaEvent: string, metaEvent: string, params: TrackParams, metaStandard = false) {
+  if (typeof window === "undefined") return
+  window.gtag?.("event", gaEvent, params)
+  window.fbq?.(metaStandard ? "track" : "trackCustom", metaEvent, params)
+  window.dataLayer?.push({ event: gaEvent, ...params })
+}
+
 /** Fire a lead/conversion event across GA4, Google Ads, Meta Pixel and dataLayer. */
 export function trackLead(params: TrackParams = {}) {
   if (typeof window === "undefined") return
-
-  // GA4 recommended event
-  window.gtag?.("event", "generate_lead", { currency: "INR", ...params })
-
-  // Google Ads conversion (only fires once a real send_to is configured)
+  emit("generate_lead", "Lead", { currency: "INR", ...params }, true)
   if (GOOGLE_ADS_CONVERSION_SEND_TO) {
     window.gtag?.("event", "conversion", { send_to: GOOGLE_ADS_CONVERSION_SEND_TO, ...params })
   }
-
-  // Meta Pixel (already initialized in layout.tsx)
-  window.fbq?.("track", "Lead", params)
-
-  // GTM dataLayer
-  window.dataLayer?.push({ event: "generate_lead", ...params })
 }
 
-/** Fire a click-to-call tracking event. */
-export function trackCallClick(source: string) {
-  if (typeof window === "undefined") return
-  window.gtag?.("event", "call_click", { source })
-  window.fbq?.("trackCustom", "CallClick", { source })
-  window.dataLayer?.push({ event: "call_click", source })
+export function trackCallClick(location: string) {
+  emit("call_click", "CallClick", { location })
 }
 
-/** Fire a WhatsApp click tracking event. */
-export function trackWhatsAppClick(source: string) {
-  if (typeof window === "undefined") return
-  window.gtag?.("event", "whatsapp_click", { source })
-  window.fbq?.("trackCustom", "WhatsAppClick", { source })
-  window.dataLayer?.push({ event: "whatsapp_click", source })
+export function trackWhatsAppClick(location: string) {
+  emit("whatsapp_click", "WhatsAppClick", { location })
+}
+
+export function trackCtaClick(location: string, buyerType?: string) {
+  emit("cta_click", "CtaClick", { location, buyer_type: buyerType })
 }
 
 /** Smooth-scroll to the quote form and optionally pre-select a buyer type. */
@@ -56,6 +50,5 @@ export function goToQuote(buyerType?: string) {
   if (buyerType) {
     window.dispatchEvent(new CustomEvent("topcon:buyer", { detail: buyerType }))
   }
-  const el = document.getElementById("quote")
-  el?.scrollIntoView({ behavior: "smooth", block: "start" })
+  document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" })
 }

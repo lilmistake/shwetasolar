@@ -1,58 +1,33 @@
-"use client"
-
 import Image from "next/image"
-import { useEffect, useState } from "react"
 import { Phone } from "lucide-react"
-import { motion } from "framer-motion"
-import { LOGO_SRC, PHONE_HREF, PHONE_DISPLAY } from "@/lib/topcon/constants"
-import { trackCallClick } from "@/lib/topcon/tracking"
-import { QuoteButton } from "@/components/topcon/cta-buttons"
-import { cn } from "@/lib/utils"
+import { LOGO_SRC, PHONE_DISPLAY } from "@/lib/topcon/constants"
+import { CallLink, QuoteButton } from "@/components/topcon/cta-buttons"
 
+/** Minimal sticky header — logo, click-to-call, and one CTA. No nav links that leak paid traffic. */
 export function LpHeader() {
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "border-b border-white/10 bg-forest/85 backdrop-blur-md" : "bg-transparent",
-      )}
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
-        <a href="#top" className="flex items-center gap-2" aria-label="Shweta Solar home">
-          <Image
-            src={LOGO_SRC || "/placeholder.svg"}
-            alt="Shweta Solar"
-            width={140}
-            height={40}
-            className="h-9 w-auto brightness-0 invert"
-            priority
-          />
-        </a>
-
-        <div className="flex items-center gap-2 md:gap-4">
-          <a
-            href={PHONE_HREF}
-            onClick={() => trackCallClick("header")}
-            className="hidden items-center gap-2 text-sm font-medium text-white/90 transition-colors hover:text-white sm:inline-flex"
+    <header className="sticky top-0 z-50 border-b border-cream/10 bg-forest">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 md:px-6">
+        <Image
+          src={LOGO_SRC}
+          alt="Shweta Solar"
+          width={140}
+          height={40}
+          className="h-8 w-auto brightness-0 invert md:h-9"
+          priority
+        />
+        <div className="flex items-center gap-2 md:gap-5">
+          <CallLink
+            source="header"
+            ariaLabel={`Call ${PHONE_DISPLAY}`}
+            className="inline-flex items-center gap-2 rounded-lg p-2 text-sm font-semibold text-cream hover:bg-cream/10 md:px-3"
           >
-            <Phone className="h-4 w-4 text-sage" aria-hidden="true" />
-            {PHONE_DISPLAY}
-          </a>
-          <QuoteButton source="header">Get a Quote</QuoteButton>
+            <Phone className="h-4 w-4 text-sun" aria-hidden />
+            <span className="hidden sm:inline">{PHONE_DISPLAY}</span>
+          </CallLink>
+          <QuoteButton source="header">Get Price</QuoteButton>
         </div>
       </div>
-    </motion.header>
+    </header>
   )
 }

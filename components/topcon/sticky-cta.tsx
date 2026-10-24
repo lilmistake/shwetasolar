@@ -1,61 +1,40 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
-import { Phone, MessageCircle } from "lucide-react"
-import { PHONE_HREF, WHATSAPP_HREF } from "@/lib/topcon/constants"
-import { trackCallClick, trackWhatsAppClick, goToQuote } from "@/lib/topcon/tracking"
+import { Phone, MessageCircle, FileText } from "lucide-react"
+import { CallLink, WhatsAppLink } from "@/components/topcon/cta-buttons"
+import { goToQuote, trackCtaClick } from "@/lib/topcon/tracking"
 
-/** Always-visible bottom action bar on mobile — critical for paid-ad conversion. */
+/** Always-visible bottom action bar on mobile. Rendered statically so it never shifts layout. */
 export function StickyCta() {
-  const [show, setShow] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 480)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
   return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          initial={{ y: 80 }}
-          animate={{ y: 0 }}
-          exit={{ y: 80 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur md:hidden"
-        >
-          <div className="grid grid-cols-3">
-            <a
-              href={PHONE_HREF}
-              onClick={() => trackCallClick("sticky-bar")}
-              className="flex flex-col items-center justify-center gap-1 py-2.5 text-xs font-medium text-forest"
-            >
-              <Phone className="h-5 w-5" aria-hidden="true" />
-              Call
-            </a>
-            <a
-              href={WHATSAPP_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackWhatsAppClick("sticky-bar")}
-              className="flex flex-col items-center justify-center gap-1 border-x border-border py-2.5 text-xs font-medium text-forest"
-            >
-              <MessageCircle className="h-5 w-5" aria-hidden="true" />
-              WhatsApp
-            </a>
-            <button
-              type="button"
-              onClick={() => goToQuote()}
-              className="flex flex-col items-center justify-center gap-1 bg-sage py-2.5 text-xs font-bold text-forest"
-            >
-              Get Quote
-            </button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <nav
+      aria-label="Quick contact"
+      className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-3 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] md:hidden"
+    >
+      <CallLink source="sticky-bar" className="flex h-14 items-center justify-center gap-2 text-sm font-semibold text-forest">
+        <Phone className="h-4 w-4" aria-hidden />
+        Call
+      </CallLink>
+      <WhatsAppLink
+        source="sticky-bar"
+        className="flex h-14 items-center justify-center gap-2 border-x border-border text-sm font-semibold text-forest"
+      >
+        <MessageCircle className="h-4 w-4" aria-hidden />
+        WhatsApp
+      </WhatsAppLink>
+      <button
+        type="button"
+        onClick={() => {
+          trackCtaClick("sticky-bar")
+          goToQuote()
+        }}
+        data-track="cta"
+        data-cta-location="sticky-bar"
+        className="flex h-14 items-center justify-center gap-2 bg-sun text-sm font-bold text-forest"
+      >
+        <FileText className="h-4 w-4" aria-hidden />
+        Get Quote
+      </button>
+    </nav>
   )
 }

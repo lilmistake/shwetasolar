@@ -95,6 +95,8 @@
   --color-sage: #a9b489;
   --color-olive: #5e7153;
   --color-ink: #0a1424;
+  --color-sun: #ffc233;
+  --color-sun-strong: #f5ad00;
 
   /* Design Tokens */
   --color-background: var(--background);

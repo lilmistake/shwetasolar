@@ -1,81 +1,114 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Store, Building2, Home, ArrowUpRight } from "lucide-react"
-import { QuoteButton } from "@/components/topcon/cta-buttons"
-import { Reveal, fadeUp, staggerParent } from "@/components/topcon/reveal"
+import { useState } from "react"
+import Image from "next/image"
+import { Check } from "lucide-react"
+import { QuoteButton, WhatsAppButton } from "@/components/topcon/cta-buttons"
+import { cn } from "@/lib/utils"
 
 const SEGMENTS = [
   {
-    icon: Store,
-    buyerType: "dealer",
-    title: "Dealers & Distributors",
-    body: "Competitive dealer pricing, flexible MOQ, reliable supply, and channel support. Partner with a manufacturer, not a middleman.",
+    id: "dealer",
+    tab: "Dealer",
+    title: "Higher margins on a module that sells itself.",
+    points: [
+      "Factory-direct dealer pricing — no middleman",
+      "Flexible MOQ and ready stock on popular wattages",
+      "Marketing support and datasheets for your customers",
+      "BIS + ALMM List-I for subsidy-eligible sales",
+    ],
+    cta: "Get Dealer Pricing",
+    image: "/images/real/warehouse-wall.jpg",
+    alt: "Warehouse with rooftop solar panels",
   },
   {
-    icon: Building2,
-    buyerType: "epc",
-    title: "EPC & Commercial / Industrial",
-    body: "Bankable modules, bulk pricing, and dispatch timelines you can plan around. Datasheets and test reports on request.",
+    id: "epc",
+    tab: "EPC & C&I",
+    title: "Bankable modules with dispatch you can plan around.",
+    points: [
+      "Bulk pricing for 100 kW to multi-MW projects",
+      "Committed dispatch dates from a 1.2 GW plant",
+      "Full datasheets, IEC test reports and flash data",
+      "395–725 W range for every roof and ground layout",
+    ],
+    cta: "Get Bulk Pricing",
+    image: "/images/real/commercial-rooftop-aerial.jpg",
+    alt: "Aerial view of a commercial rooftop solar installation",
   },
   {
-    icon: Home,
-    buyerType: "residential",
-    title: "Residential Rooftop",
-    body: "Maximum generation from limited roof space, 30-year backing, and subsidy-eligible options.",
+    id: "residential",
+    tab: "Residential",
+    title: "More units from a small roof, for 30 years.",
+    points: [
+      "Fewer panels for the same kW on limited roof space",
+      "ALMM List-I modules for PM Surya Ghar subsidy",
+      "30-year performance warranty on every panel",
+      "We connect you with an installer near you",
+    ],
+    cta: "Get Rooftop Price",
+    image: "/images/real/home-tiled-roof.jpg",
+    alt: "Solar panels on a tiled home roof",
   },
-]
+] as const
 
 export function BuyerSegments() {
+  const [active, setActive] = useState<(typeof SEGMENTS)[number]["id"]>("dealer")
+  const seg = SEGMENTS.find((s) => s.id === active) ?? SEGMENTS[0]
+
   return (
-    <section id="buyers" className="bg-muted/40">
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-olive">Built for You</span>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h2 className="mt-3 text-balance text-3xl font-bold text-forest md:text-5xl">Which buyer are you?</h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-4 text-pretty text-muted-foreground">
-              One module, three ways to win. Tell us who you are and we&apos;ll tailor your quote.
-            </p>
-          </Reveal>
+    <section id="buyers" className="bg-forest text-cream">
+      <div className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-24">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sun">Built for your business</p>
+        <h2 className="mt-3 text-balance font-display text-4xl font-bold leading-none md:text-6xl">Who are you buying for?</h2>
+
+        <div role="tablist" aria-label="Buyer type" className="mt-8 grid grid-cols-3 gap-1 rounded-lg bg-cream/10 p-1 sm:inline-grid">
+          {SEGMENTS.map((s) => (
+            <button
+              key={s.id}
+              role="tab"
+              id={`tab-${s.id}`}
+              aria-selected={active === s.id}
+              aria-controls={`panel-${s.id}`}
+              onClick={() => setActive(s.id)}
+              data-track="buyer-tab"
+              data-buyer-type={s.id}
+              className={cn(
+                "rounded-md px-3 py-2.5 text-sm font-semibold transition-colors sm:px-6",
+                active === s.id ? "bg-cream text-forest" : "text-cream/75 hover:text-cream",
+              )}
+            >
+              {s.tab}
+            </button>
+          ))}
         </div>
 
-        <motion.div
-          variants={staggerParent}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          className="mt-14 grid gap-6 md:grid-cols-3"
+        <div
+          role="tabpanel"
+          id={`panel-${seg.id}`}
+          aria-labelledby={`tab-${seg.id}`}
+          className="mt-8 grid gap-8 lg:grid-cols-2 lg:items-center"
         >
-          {SEGMENTS.map((s) => (
-            <motion.div
-              key={s.buyerType}
-              variants={fadeUp}
-              whileHover={{ y: -6 }}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card p-7 shadow-sm transition-shadow hover:shadow-lg"
-            >
-              <div
-                className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-sage/10 transition-transform duration-500 group-hover:scale-150"
-                aria-hidden
-              />
-              <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-forest">
-                <s.icon className="h-6 w-6 text-cream" aria-hidden />
-              </div>
-              <h3 className="relative mt-5 flex items-center gap-1 text-lg font-semibold text-forest">
-                {s.title}
-                <ArrowUpRight className="h-4 w-4 text-sage opacity-0 transition-opacity group-hover:opacity-100" aria-hidden />
-              </h3>
-              <p className="relative mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-              <QuoteButton source={`segment-${s.buyerType}`} buyerType={s.buyerType} className="relative mt-6 w-full">
-                Request a Quote
+          <div>
+            <h3 className="text-balance text-2xl font-bold md:text-3xl">{seg.title}</h3>
+            <ul className="mt-6 flex flex-col gap-3">
+              {seg.points.map((p) => (
+                <li key={p} className="flex gap-3 leading-relaxed text-cream/85">
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-sun" aria-hidden />
+                  {p}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <QuoteButton size="lg" source={`tab-${seg.id}`} buyerType={seg.id} arrow>
+                {seg.cta}
               </QuoteButton>
-            </motion.div>
-          ))}
-        </motion.div>
+              <WhatsAppButton size="lg" source={`tab-${seg.id}`} />
+            </div>
+          </div>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+            <Image src={seg.image} alt={seg.alt} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+          </div>
+        </div>
       </div>
     </section>
   )

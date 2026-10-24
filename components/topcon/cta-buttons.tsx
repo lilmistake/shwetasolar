@@ -1,90 +1,76 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { Phone, MessageCircle } from "lucide-react"
-import { motion } from "framer-motion"
+import { Phone, MessageCircle, ArrowRight } from "lucide-react"
 import { PHONE_HREF, PHONE_DISPLAY, WHATSAPP_HREF } from "@/lib/topcon/constants"
-import { trackCallClick, trackWhatsAppClick, goToQuote } from "@/lib/topcon/tracking"
+import { trackCallClick, trackWhatsAppClick, trackCtaClick, goToQuote } from "@/lib/topcon/tracking"
 import { cn } from "@/lib/utils"
 
-/** Primary sage-green quote CTA with an animated sheen sweep. */
+/** Primary bright-accent quote CTA. Scrolls to the form and optionally pre-selects a buyer type. */
 export function QuoteButton({
-  children = "Get a Quote",
+  children = "Get My Best Price",
   buyerType,
   source = "cta",
   className,
   size = "md",
+  arrow = false,
 }: {
   children?: ReactNode
   buyerType?: string
   source?: string
   className?: string
   size?: "md" | "lg"
+  arrow?: boolean
 }) {
   return (
-    <motion.button
+    <button
       type="button"
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      onClick={() => goToQuote(buyerType)}
-      data-source={source}
+      onClick={() => {
+        trackCtaClick(source, buyerType)
+        goToQuote(buyerType)
+      }}
+      data-track="cta"
+      data-cta-location={source}
+      data-buyer-type={buyerType}
       className={cn(
-        "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-sage font-semibold text-forest shadow-lg shadow-sage/20 transition-colors hover:bg-[#b8c49a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage",
-        size === "lg" ? "px-8 py-4 text-base" : "px-6 py-3 text-sm",
+        "inline-flex items-center justify-center gap-2 rounded-lg bg-sun font-semibold text-forest shadow-sm transition-colors hover:bg-sun-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun",
+        size === "lg" ? "px-7 py-4 text-base" : "px-5 py-2.5 text-sm",
         className,
       )}
     >
-      <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-full">
-        <span className="absolute inset-y-0 left-0 w-1/3 -translate-x-[200%] bg-white/40 blur-md transition-transform duration-700 ease-out group-hover:translate-x-[400%]" />
-      </span>
-      <span className="relative">{children}</span>
-    </motion.button>
+      {children}
+      {arrow && <ArrowRight className="h-4 w-4" aria-hidden />}
+    </button>
   )
 }
 
-/** Outlined call button — tuned for dark backgrounds by default. */
-export function CallButton({
+/** Unstyled click-to-call link wrapper. */
+export function CallLink({
+  children,
   className,
   source = "cta",
-  compact = false,
+  ariaLabel,
 }: {
+  children: ReactNode
   className?: string
   source?: string
-  compact?: boolean
+  ariaLabel?: string
 }) {
   return (
     <a
       href={PHONE_HREF}
       onClick={() => trackCallClick(source)}
-      className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10",
-        className,
-      )}
+      data-track="call"
+      data-cta-location={source}
+      aria-label={ariaLabel}
+      className={className}
     >
-      <Phone className="h-4 w-4" />
-      {compact ? "Call" : PHONE_DISPLAY}
-    </a>
-  )
-}
-
-/** Unstyled click-to-call link wrapper — pass your own className/children. */
-export function CallLink({
-  children,
-  className,
-  source = "cta",
-}: {
-  children: ReactNode
-  className?: string
-  source?: string
-}) {
-  return (
-    <a href={PHONE_HREF} onClick={() => trackCallClick(source)} className={className}>
       {children}
     </a>
   )
 }
 
-/** Unstyled WhatsApp link wrapper — pass your own className/children. */
+/** Unstyled WhatsApp link wrapper. */
 export function WhatsAppLink({
   children,
   className,
@@ -100,6 +86,8 @@ export function WhatsAppLink({
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => trackWhatsAppClick(source)}
+      data-track="whatsapp"
+      data-cta-location={source}
       className={className}
     >
       {children}
@@ -107,29 +95,71 @@ export function WhatsAppLink({
   )
 }
 
-/** WhatsApp button. */
-export function WhatsAppButton({
-  className,
-  source = "cta",
-  compact = false,
-}: {
-  className?: string
-  source?: string
-  compact?: boolean
-}) {
+export function CallButton({ className, source = "cta", tone = "dark" }: { className?: string; source?: string; tone?: "dark" | "light" }) {
   return (
-    <a
-      href={WHATSAPP_HREF}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() => trackWhatsAppClick(source)}
+    <CallLink
+      source={source}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1eb355]",
+        "inline-flex items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-semibold transition-colors",
+        tone === "dark"
+          ? "border-cream/25 text-cream hover:bg-cream/10"
+          : "border-forest/20 text-forest hover:bg-forest/5",
         className,
       )}
     >
-      <MessageCircle className="h-4 w-4" />
-      {compact ? "WhatsApp" : "WhatsApp Us"}
-    </a>
+      <Phone className="h-4 w-4" aria-hidden />
+      {PHONE_DISPLAY}
+    </CallLink>
+  )
+}
+
+export function WhatsAppButton({ className, source = "cta", tone = "dark", size = "md" }: { className?: string; source?: string; tone?: "dark" | "light"; size?: "md" | "lg" }) {
+  return (
+    <WhatsAppLink
+      source={source}
+      className={cn(
+        "inline-flex items-center justify-center gap-2 rounded-lg border font-semibold transition-colors",
+        size === "lg" ? "px-6 py-4 text-base" : "px-5 py-3 text-sm",
+        tone === "dark"
+          ? "border-cream/25 text-cream hover:bg-cream/10"
+          : "border-forest/20 text-forest hover:bg-forest/5",
+        className,
+      )}
+    >
+      <MessageCircle className="h-4 w-4" aria-hidden />
+      WhatsApp
+    </WhatsAppLink>
+  )
+}
+
+/** Compact CTA row repeated after each section. */
+export function SectionCta({
+  source,
+  prompt = "Get factory-direct pricing for your project.",
+  tone = "light",
+  buyerType,
+  label = "Get My Best Price",
+}: {
+  source: string
+  prompt?: string
+  tone?: "dark" | "light"
+  buyerType?: string
+  label?: string
+}) {
+  return (
+    <div
+      className={cn(
+        "mt-12 flex flex-col items-center justify-center gap-4 border-t pt-8 text-center sm:flex-row sm:justify-between sm:text-left",
+        tone === "dark" ? "border-cream/10" : "border-border",
+      )}
+    >
+      <p className={cn("text-pretty font-medium", tone === "dark" ? "text-cream/80" : "text-forest")}>{prompt}</p>
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+        <QuoteButton source={source} buyerType={buyerType} arrow>
+          {label}
+        </QuoteButton>
+        <WhatsAppButton source={source} tone={tone} />
+      </div>
+    </div>
   )
 }

@@ -1,80 +1,50 @@
-"use client"
-
-import { motion } from "framer-motion"
-import { ArrowRight, Download } from "lucide-react"
-import { QuoteButton } from "@/components/topcon/cta-buttons"
-import { Reveal, fadeUp, staggerParent } from "@/components/topcon/reveal"
+import { DatasheetCapture } from "@/components/topcon/datasheet-capture"
 
 const SPECS: { label: string; value: string }[] = [
-  { label: "Cell Type", value: "N-Type TOPCon" },
-  { label: "Power Output", value: "395 W – 725 W" },
-  { label: "Module Efficiency", value: "Up to 24.39%" },
-  { label: "Module Families", value: "10 (108 to 156 cells)" },
-  { label: "Cell Format", value: "G12R / G12 half-cut, 16BB" },
-  { label: "Operating Temp.", value: "−40°C to +85°C" },
-  { label: "Max System Voltage", value: "1500 V DC" },
-  { label: "Temp. Coefficient", value: "−0.29%/°C" },
-  { label: "Product Warranty", value: "12 years" },
-  { label: "Performance Warranty", value: "30 years" },
-  { label: "Construction", value: "Bifacial G2G" },
-  { label: "Bifaciality", value: "Up to 80% ± 5%" },
+  { label: "Cell technology", value: "N-Type TOPCon, half-cut, 16/18BB" },
+  { label: "Power range", value: "395 W – 725 W" },
+  { label: "Module efficiency", value: "Up to 24.39%" },
+  { label: "Construction", value: "Bifacial glass-to-glass" },
+  { label: "Bifaciality", value: "Up to 80%" },
+  { label: "Temperature coefficient (Pmax)", value: "−0.29%/°C" },
+  { label: "Max system voltage", value: "1500 V DC" },
+  { label: "Operating temperature", value: "−40 °C to +85 °C" },
+  { label: "Warranty", value: "12-yr product · 30-yr performance" },
 ]
 
 export function Specs() {
   return (
-    <section id="specs" className="relative overflow-hidden bg-forest text-white">
-      <div className="absolute inset-0 bg-grid-forest opacity-60" aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-center">
-          {/* Left: heading + CTA */}
-          <div>
-            <Reveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-sage">Datasheet</span>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="mt-3 text-balance text-3xl font-bold md:text-5xl">Engineering-grade specifications</h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-4 max-w-md text-pretty text-white/70">
-                Full technical data for our 395–725 W N-Type TOPCon glass-to-glass bifacial modules. Need the complete
-                datasheet and test reports?
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <QuoteButton size="lg" source="specs">
-                  <Download className="h-4 w-4" aria-hidden />
-                  Request Datasheet
-                </QuoteButton>
-              </div>
-            </Reveal>
+    <section id="specs" className="bg-muted/50">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 md:px-6 md:py-24 lg:grid-cols-[1fr_1.3fr] lg:gap-14">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-olive">Specifications</p>
+          <h2 className="mt-3 text-balance font-display text-4xl font-bold leading-none text-forest md:text-6xl">
+            The numbers your engineer will ask for.
+          </h2>
+          <p className="mt-4 max-w-md text-pretty leading-relaxed text-muted-foreground">
+            Ten module families from 108 to 156 cells. Get the full datasheet with electrical, mechanical and
+            packing data for every wattage.
+          </p>
+          <div className="mt-8">
+            <DatasheetCapture />
           </div>
-
-          {/* Right: spec grid */}
-          <motion.dl
-            variants={staggerParent}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.1 }}
-            className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-3"
-          >
-            {SPECS.map((spec) => (
-              <motion.div key={spec.label} variants={fadeUp} className="bg-forest p-5">
-                <dt className="text-xs uppercase tracking-wide text-white/50">{spec.label}</dt>
-                <dd className="mt-1.5 font-display text-lg font-semibold text-sage">{spec.value}</dd>
-              </motion.div>
-            ))}
-          </motion.dl>
         </div>
 
-        <Reveal delay={0.1}>
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 border-t border-white/10 pt-8 text-center sm:flex-row">
-            <p className="text-white/70">Ready to price your exact wattage and volume?</p>
-            <QuoteButton source="specs-footer">
-              Get Pricing <ArrowRight className="h-4 w-4" aria-hidden />
-            </QuoteButton>
-          </div>
-        </Reveal>
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <table className="w-full text-left text-sm">
+            <caption className="sr-only">TOPCon G2G module specifications</caption>
+            <tbody>
+              {SPECS.map((s, i) => (
+                <tr key={s.label} className={i > 0 ? "border-t border-border" : undefined}>
+                  <th scope="row" className="px-4 py-3.5 font-normal text-muted-foreground md:px-6">
+                    {s.label}
+                  </th>
+                  <td className="px-4 py-3.5 text-right font-semibold text-forest md:px-6">{s.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   )

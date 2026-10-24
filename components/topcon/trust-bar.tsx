@@ -1,36 +1,39 @@
-const HIGHLIGHTS = [
-  "N-Type TOPCon Technology",
-  "Up to 24.39% Efficiency",
-  "Glass-to-Glass Bifacial",
-  "395–725 W Module Power",
-  "30-Year Performance Warranty",
-  "Low Light Performance",
-  "Zero PID Degradation",
-  "Made in India",
-  "Anti-Reflective Coating",
-  "Extreme Weather Rated",
-  "Industrial & Commercial Grade",
-  "Dealer & EPC Direct Supply",
+import { CLIENT_LOGOS, MW_SUPPLIED } from "@/lib/topcon/constants"
+
+const FACTS = [
+  { value: "1.2 GW", label: "Annual factory capacity" },
+  { value: MW_SUPPLIED, label: "Modules supplied" },
+  { value: "BIS", label: "IS 14286 certified" },
+  { value: "ALMM", label: "List-I enlisted" },
 ]
 
 export function TrustBar() {
   return (
-    <section aria-label="Product highlights" className="border-y border-border bg-muted/60 py-6">
-      <p className="mb-4 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        Next-generation solar technology
-      </p>
-      <div className="relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
-        <div className="flex w-max animate-marquee items-center gap-4 pr-4">
-          {[...HIGHLIGHTS, ...HIGHLIGHTS].map((item, i) => (
-            <span
-              key={`${item}-${i}`}
-              className="flex shrink-0 items-center gap-2 rounded-full border border-forest/15 bg-background px-5 py-2 text-sm font-medium text-forest"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-sage" aria-hidden />
-              {item}
-            </span>
+    <section aria-label="Why buyers trust Shweta Solar" className="border-b border-border bg-background">
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
+        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4">
+          {FACTS.map((f) => (
+            <div key={f.label} className="bg-background px-4 py-5 text-center">
+              <dt className="sr-only">{f.label}</dt>
+              <dd className="font-display text-3xl font-bold leading-none text-forest md:text-4xl">{f.value}</dd>
+              <dd className="mt-2 text-xs text-muted-foreground md:text-sm">{f.label}</dd>
+            </div>
           ))}
-        </div>
+        </dl>
+
+        <p className="mt-8 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Supplying EPCs, distributors and C&amp;I projects across India
+        </p>
+        <ul className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-6">
+          {CLIENT_LOGOS.map((name, i) => (
+            <li
+              key={`${name}-${i}`}
+              className="flex h-12 items-center justify-center rounded-lg border border-dashed border-border px-2 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+            >
+              {name}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
